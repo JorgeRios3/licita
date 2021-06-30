@@ -1,0 +1,43 @@
+{% extends "account_base.html" %}
+{% load widget_tweaks %}
+
+{% block account_title %}Editar cuenta{% endblock %}
+
+{% block account_header %}
+<h1>Editar cuenta</h1>
+{% endblock %}
+
+{% block account_content %}
+<div class="row">
+    <div class="col-lg-6">
+        <p class="p-large">Ingresa los datos que deseas actualizar</p>
+        <div class="login-form">
+            <form action="{% url 'dashboard' %}" method="post">
+                {% for field in user_form.visible_fields %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field|add_class:'form-control' }}
+                        <div class="help-block with-errors"></div>
+                        {% for error in field.errors %}
+                            <span class="help-block">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+                {% for field in profile_form.visible_fields %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field|add_class:'form-control' }}
+                        <div class="help-block with-errors"></div>
+                        {% for error in field.errors %}
+                            <span class="help-block">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}" />
+                <button type="submit" class="btn-solid-reg">Actualizar cuenta</button>
+            </form>
+        </div>
+    </div> <!-- end of col -->
+</div> <!-- end of row -->
+{% endblock %}

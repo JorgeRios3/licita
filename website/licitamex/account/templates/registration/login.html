@@ -1,0 +1,39 @@
+{% extends "account_base.html" %}
+{% load widget_tweaks %}
+
+{% block account_title %}Inicio de sesión{% endblock %}
+
+{% block account_header %}
+<h1>Inicio de sesión</h1>
+{% endblock %}
+
+{% block account_content %}
+    <div class="row">
+        <div class="col-lg-6">
+            {% if form.errors %}
+                <p class="p-large">
+                    Usuario o contraseña incorrectos.
+                    Por favor, vuelva a intentarlo.
+                </p>
+            {% endif %}
+            <div class="login-form">
+                <form action="{% url 'login' %}" method="post">
+                    {% for field in form.visible_fields %}
+                        <div class="form-group">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field|add_class:'form-control' }}
+                            <div class="help-block with-errors"></div>
+                            {% for error in field.errors %}
+                                <span class="help-block">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ next }}" />
+                    <button type="submit" class="btn-solid-reg">Entrar</button>
+                </form>
+                <p><a href="{% url 'password_reset' %}">¿Olvidaste tu contraseña?</a></p> 
+            </div>
+        </div> <!-- end of col -->
+    </div> <!-- end of row -->
+{% endblock %}

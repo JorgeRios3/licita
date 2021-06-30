@@ -1,0 +1,19 @@
+{% extends "account_base.html" %}
+
+{% block account_title %}Sesion finalizada{% endblock %}
+
+{% block account_header %}
+<h1>Sesion finalizada</h1>
+{% endblock %}
+
+{% block account_content %}
+  <div class="row">
+    <div class="col-lg-6">
+        <p class="p-large">
+          Sesion finalizada exitosamente.
+          Para volver a acceder da clic <a href="{% url "login" %}">aqui</a>.
+        </p>
+        
+    </div> <!-- end of col -->
+  </div> <!-- end of row -->
+{% endblock %}

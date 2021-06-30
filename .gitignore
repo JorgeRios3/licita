@@ -35,6 +35,7 @@ MANIFEST
 
 # Installer logs
 pip-log.txt
+secrets.txt
 pip-delete-this-directory.txt
 
 # Unit test / coverage reports
@@ -104,6 +105,8 @@ celerybeat.pid
 # Environments
 .env
 .venv
+.DS_Store
+.terraform
 env/
 venv/
 ENV/

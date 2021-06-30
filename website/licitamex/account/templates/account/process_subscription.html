@@ -1,0 +1,16 @@
+{% extends "account_base.html" %}
+
+{% block account_title %}Paga usando Paypal{% endblock %}
+
+{% block account_header %}
+<h1>Crear cuenta</h1>
+{% endblock %}
+
+{% block account_content %}
+<div class="row">
+    <div class="col-lg-6">
+        <h4>Subscribete usando PayPal</h4>
+    	{{ form.render }}
+    </div> <!-- end of col -->
+</div> <!-- end of row -->
+{% endblock %}

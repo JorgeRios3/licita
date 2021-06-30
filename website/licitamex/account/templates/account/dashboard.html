@@ -1,0 +1,15 @@
+{% extends "account_base.html" %}
+
+{% block account_title %}Mi portal{% endblock %}
+
+{% block account_header %}
+<h1>Mi portal</h1>
+{% endblock %}
+
+{% block account_content %}
+<div class="row">
+    <div class="col-lg-6">
+        <p class="p-large">Informacion de la cuenta de {{request.user.first_name}}</p>
+    </div> <!-- end of col -->
+</div> <!-- end of row -->
+{% endblock %}

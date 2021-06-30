@@ -1,0 +1,7 @@
+Django==3.*
+django-widget-tweaks
+boto3==1.*
+awscli
+mercadopago
+click
+paypalrestsdk

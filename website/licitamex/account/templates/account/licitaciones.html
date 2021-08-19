@@ -1,0 +1,91 @@
+{% extends "account_base.html" %}
+{% load formats %}
+{% block account_header %}
+<h1>Licitaciones</h1>
+{% endblock %}
+
+{% block account_content %}
+<div id="main_container">
+    <div class="row">
+        <div class="col-4">
+            <form>
+                <div class="form-group">
+                <label for="exampleInputEmail1">Buscar Licitacion</label>
+                <input id="search_licitacion" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nombre Licitacion" onkeyup="keyupFunction()">
+                </div>
+            </form>
+        </div>
+        {% if items_qty %}
+        <div class="col-3">
+            <br><br>
+            <form>
+                <div class="form-group">
+                    <span style="font-weight: bold;">Licitaciones Encontradas {{items_qty}}</span>
+                </div>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+    <div id="tabla" class="row">
+        <div class="col-lg-8">
+            <div>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Licitacion</th>
+                        <th scope="col">Entidad</th>
+                        <th scope="col">Descripcion</th>
+                        <th scope="col">Detalles</th>
+                        <th scope="col">Seleccion</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for x in licitaciones %}
+                        <tr id="{{x.id|format_id_rows}}">
+                            <td>
+                            {% if x.licitacion %}
+                            {{x.licitacion}}
+                            {% else %}
+                            {% endif %}
+                            </td>
+                
+                            <td>
+                            {% if x.entidad %}
+                            {{x.entidad}}
+                            {% else %}
+                            {% endif %}
+                            </td>
+                            
+                            <td>
+                            {% if x.entidad == "Jalisco" %}
+                                {{x.tipo}} {{x.familia}}
+                            {% else %}
+                                {% if x.descripcion %}
+                                    {{x.descripcion}}
+                                    {% else %}
+                                {% endif %}
+                            {% endif %}
+                            </td>
+                            <td>
+                                {% if x.urls %}
+                                {{ x.urls|format_urls|safe }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if x.selected %}
+                                <div class="btn btn-danger" onClick="remove_licitacion({{x.id}})">Desactivar</div>
+                                {% else %}
+                                <div class="btn btn-info" onClick="add_licitacion({{x.id}}, '{{x.descripcion}}', '{{x.entidad}}')">Activar</div>
+                                {% endif %}
+                            </td>
+
+                
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div> <!-- end of col -->
+    </div> <!-- end of row -->
+</div>
+{% endblock %}

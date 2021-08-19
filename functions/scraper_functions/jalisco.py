@@ -4,6 +4,8 @@ import time
 import hashlib
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
+import datetime
+
 
 
 url = 'https://encompras.jalisco.gob.mx/SJ3Kweb/secure/'
@@ -46,8 +48,15 @@ def process_table():
             limite = elements[6].text
         except:
             limite = ""
+        try:
+            texto=elements[8].text
+            urls={f"{texto}": url}
+
+        except:
+            urls={}
 
         item = {
+            "id":f"{datetime.datetime.now().timestamp()}",
             'licitacion': licitacion,
             'entidad': 'Jalisco',
             'tipo': tipo,
@@ -56,7 +65,9 @@ def process_table():
             'familia': familia,
             'dependencia': dependencia,
             'publicacion': publicacion,
-            'limite': limite
+            'limite': limite,
+            'urls':urls,
+            "descripcion": f"{tipo} {familia}"
         }
 
         v_table.put_item(Item=item)
@@ -94,9 +105,9 @@ chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--disable-gpu')
 chrome_options.add_argument('--single-process')
 chrome_options.add_argument('--ignore-certificate-errors')
-driver = webdriver.Chrome('./chromedriver', options=chrome_options)
+driver = webdriver.Chrome('/Users/jorge.rios/Downloads/chromedriver', options=chrome_options)
 driver.get(url)
-time.sleep(10)
+time.sleep(5)
 
 iframe_ref = driver.find_elements_by_id("mainFrame")[0]
 driver.switch_to.frame(iframe_ref)
@@ -104,7 +115,7 @@ driver.switch_to.frame(iframe_ref)
 table = driver.find_element_by_class_name("rich-table")
 hash_value = hashlib.sha224(table.text.encode()).hexdigest()
 
-# if check_changes(hash_value):
+#if check_changes(hash_value):
 process_table()
 
 driver.close()

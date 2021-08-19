@@ -9,11 +9,18 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.core.mail import send_mail, BadHeaderError
 from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm, ContactForm
-from .models import Profile
+from .models import Profile, UsuarioLicitaciones
+from django.contrib.auth.models import User
 import paypalrestsdk
 import json
 from paypalrestsdk.notifications import WebhookEvent
 from django.views.generic import TemplateView
+from .dynamo_functions import fetch_items_table
+from .licitaciones import get_user_licitaciones
+from .filtros import get_user_filtros
+from .utils import compare_user
+from .models import CatalogoFiltros, UsuarioFiltros
+from django.http import JsonResponse
 
 
 
@@ -25,10 +32,37 @@ myapi = paypalrestsdk.Api({
 
 
 @login_required
+def configuracion(request):
+    usuario_filtros = get_user_filtros(request.user.id)
+    return render(request, 'account/configuracion.html', {"filtros":usuario_filtros})
+
+
+@login_required
+def licitaciones(request):
+    items = fetch_items_table("licitaciones")["Items"]
+    user_licitaciones = get_user_licitaciones(request.user.id)
+    validated_items = list(map(lambda x: compare_user(x, user_licitaciones), items))
+    return render(request, 'account/licitaciones.html', {"licitaciones":validated_items})
+
+
+def my_login(request):
+    print(request.POST.get("username"))
+    print(request.POST.get("password"))
+    print("si entro")
+    user = authenticate(username=request.POST.get("username"), password=request.POST.get("password"))
+    print(user)
+    if user is not None:
+        login(request, user)
+        return HttpResponseRedirect("http://127.0.0.1:8000/account")
+    else:
+        return HttpResponseRedirect("http://127.0.0.1:8000/account/login/")
+
+@login_required
 def dashboard(request):
+    licitaciones = UsuarioLicitaciones.objects.filter(user=request.user.id)
     return render(request,
                   'account/dashboard.html',
-                  {'section': 'dashboard'})
+                  {'section': 'dashboard', "licitaciones":licitaciones})
 
 
 @require_POST
@@ -119,18 +153,14 @@ def register(request):
                 if ret['status'] == 'APPROVAL_PENDING':
                     # Create inactive user and profile
 
-                    #new_user = user_form.save(commit=False)
-                    #new_user.set_password(user_form.cleaned_data['password'])
-                    #new_user.is_active = False
-                    #new_user.save()
-                    #Profile.objects.create(
-                    #    user=new_user, subscription_id=ret['id'])
-
                     for link in ret['links']:
                         if link['rel'] == 'approve':
                             redirect_url = link['href']
-
+                            user = User.objects.create_user(username=user_form.data['username'], first_name=user_form.data['first_name'], last_name=user_form.data['last_name'], email=user_form.data['email'], password=user_form.data['password'])
+                            user.save()
+                
                     return HttpResponseRedirect(redirect_url)
+                        #return HttpResponseRedirect("http://127.0.0.1:8000/")
 
     else:
         user_form = UserRegistrationForm()

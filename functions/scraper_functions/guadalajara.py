@@ -1,16 +1,22 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+#from selenium import webdriver
+#from selenium.webdriver.chrome.options import Options
 import hashlib
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
+from botocore.exceptions import ClientError
 
+from bs4 import BeautifulSoup
+import requests
+import datetime
 
 url = 'https://transparencia.guadalajara.gob.mx/licitaciones2021'
+page = requests.get(url)
+soup = BeautifulSoup(page.content, features="lxml")
 dynamo = boto3.resource('dynamodb', region_name='us-west-2')
 
 
 def process_table():
-    rows = table.find_elements_by_class_name("odd")
+    rows = soup.find_all('tr', class_='odd')
     v_table = dynamo.Table('licitaciones')
 
     for row in rows:
@@ -27,31 +33,32 @@ def process_table():
             except:
                 descripcion = ''
 
-            urls = row.find_elements_by_tag_name('a')
+            urls = row.find_all('a')
 
             try:
-                base = urls[0].get_attribute("href")
+                base = urls[0].get('href')
             except:
                 base = ''
             try:
-                convocatoria = urls[1].get_attribute("href")
+                convocatoria = urls[1].get('href')
             except:
                 convocatoria = ''
             try:
-                fallo = urls[2].get_attribute("href")
+                fallo = urls[2].get('href')
             except:
                 fallo = ''
 
+            urls={}
+
             item = {
+                "id":f"{datetime.datetime.now().timestamp()}",
                 'licitacion': licitacion,
                 'entidad': 'Guadalajara',
-                'descripcion': descripcion,
-                'base': base,
-                'convocatoria': convocatoria,
-                'fallo': fallo
+                'descripcion': descripcion.replace('“', "").replace('"',"").replace("\n", ""),
+                'urls': {"base": base, "convocatoria": convocatoria, "fallo": fallo}
             }
-
             v_table.put_item(Item=item)
+            print(item)
             print('Registrando ' + licitacion)
 
     return
@@ -82,22 +89,9 @@ def check_changes(hash_value):
     return False
 
 
-chrome_options = Options()
-chrome_options.add_argument("--headless")
-chrome_options.add_argument('--no-sandbox')
-chrome_options.add_argument('--disable-gpu')
-chrome_options.add_argument('--single-process')
-chrome_options.add_argument('--ignore-certificate-errors')
-driver = webdriver.Chrome('./chromedriver', options=chrome_options)
-driver.get(url)
+#hash_value = hashlib.sha224(soup).hexdigest()
+#if check_changes(hash_value):
+#    process_table()
 
-table = driver.find_element_by_class_name("table")
-hash_value = hashlib.sha224(table.text.encode()).hexdigest()
-
-
-if check_changes(hash_value):
-    print('test')
-#process_table()
-
-driver.close()
-driver.quit()
+if __name__ == "__main__":
+    process_table()

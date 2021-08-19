@@ -20,12 +20,13 @@ class UserRegistrationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email')
+        fields = ('username', 'first_name', 'last_name', 'email','password')
         labels = {
             'username': 'Usuario',
             'first_name': 'Nombre(s)',
             'last_name': 'Apellidos',
             'email': 'Correo electronico',
+            'password': 'Contraseña',
         }
     
     #def clean_password2(self):
@@ -38,12 +39,13 @@ class UserRegistrationForm(forms.ModelForm):
 class UserEditForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email')
+        fields = ('username', 'first_name', 'last_name', 'email', 'password')
         labels = {
             'username': 'Usuario',
             'first_name': 'Nombre(s)',
             'last_name': 'Apellidos',
             'email': 'Correo electronico',
+            'password': 'Contraseña',
         }
 
 class ProfileEditForm(forms.ModelForm):

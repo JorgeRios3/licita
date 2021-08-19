@@ -36,8 +36,8 @@ resource "aws_ecs_task_definition" "app" {
 resource "aws_ecs_service" "production" {
   name    = "${var.ecs_cluster_name}-service"
   cluster = aws_ecs_cluster.production.id
-  #task_definition = aws_ecs_task_definition.app.arn
-  task_definition = "arn:aws:ecs:us-west-2:099104132944:task-definition/django-app:46"
+  task_definition = aws_ecs_task_definition.app.arn
+  #task_definition = "935428198338.dkr.ecr.us-west-2.amazonaws.com/djangoapp"
   iam_role        = aws_iam_role.ecs-service-role.arn
   desired_count   = var.app_count
   depends_on      = [aws_alb_listener.ecs-alb-http-listener, aws_iam_role_policy.ecs-service-role-policy]

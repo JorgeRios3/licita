@@ -23,15 +23,24 @@
 {% endblock %}
 
 
-{% block navbarfront %}
+<!--{% block navbarfront %}
 <li class="nav-item">
     <a class="nav-link page-scroll" href="{% url 'index' %}">Home</a>
 </li>
-{% endblock %}
+{% endblock %} -->
 
 
 {% block navbarback %}
     {% if request.user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link page-scroll" href="{% url 'licitaciones' %}">Licitaciones</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link page-scroll" href="{% url 'dashboard' %}">Mis Licitaciones</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link page-scroll" href="{% url 'configuracion' %}">Configuracion</a>
+        </li>
         <li class="nav-item">
             <a class="nav-link page-scroll" href="{% url 'logout' %}">Salir</a>
         </li>

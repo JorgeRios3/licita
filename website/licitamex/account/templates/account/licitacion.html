@@ -1,0 +1,52 @@
+{% extends "account_base.html" %}
+{% load formats %}
+{% block account_header %}
+<h1>Licitaciones</h1>
+{% endblock %}
+
+{% block account_content %}
+<div id="main_container">
+    <div class="row">
+        <div class="col">
+        <h2>Licitacion  {{id}}</h2>
+        </div>
+        <div class="col">
+            <h2>Estatus: {{licitacion.status}}</h2>
+        </div>
+    </div>
+    <div class="row">
+            <div>
+                <b>{{licitacion.description}}</b>
+        </div>
+    </div>
+    <div class="row">
+        <div class=>
+            <label>Agregar Comentario</label>
+        </div>
+    </div>
+    <div class="row">
+        <textarea rows="5" cols="80" id="TITLE">
+        </textarea>
+    </div>
+    <br>
+    <div class="row">
+            <div class="btn btn-info">Agregar Comentario</div>&nbsp;
+            <div class="btn btn-secondary">Agregar Cotizacion</div>
+    </div>
+    <br>
+    <div class="row"><b>Comentarios</b></div>
+    <div class="row">
+        <ul>
+            <li>
+                comentario 1 Fecha 2021/01/23
+            </li>
+            <li>
+                comentario 2 2021/01/24
+            </li>
+            <li>
+                comentario 3 2021/01/25
+            </li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

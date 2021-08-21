@@ -19,14 +19,31 @@ def get_user_filtros(user_id):
     filtros = UsuarioFiltros.objects.filter(user=user)
     return filtros
 
+
+def find_catalogo_filtro(grupo, familia, articulo):
+    return CatalogoFiltros.objects.filter(familia=familia, grupo=grupo, articulo=articulo)
+
+
 def add_filtro(request):
     post_data = json.loads(request.body.decode("utf-8"))
-    id = post_data.get("id", 0)
+    grupo = post_data.get("grupo", '')
+    familia = post_data.get("familia", '')
+    articulo = post_data.get("articulo", '')
     user = User.objects.get(pk=request.user.id)
-    catalogo_filtro = CatalogoFiltros.objects.get(pk=id)
+    catalogo_filtro = find_catalogo_filtro(grupo, familia, articulo)
+    print("este es")
+    print(catalogo_filtro)
+    if not catalogo_filtro:
+        catalogo_filtro = CatalogoFiltros()
+        catalogo_filtro.grupo = grupo
+        catalogo_filtro.familia = familia
+        catalogo_filtro.articulo = articulo
+        catalogo_filtro.save()
+    else:
+        catalogo_filtro=catalogo_filtro[0]
     usuario_filtro = UsuarioFiltros()
     usuario_filtro.user = user
-    usuario_filtro.filtro_id = catalogo_filtro.id
+    usuario_filtro.filtro_id = catalogo_filtro.pk
     usuario_filtro.grupo = catalogo_filtro.grupo
     usuario_filtro.familia = catalogo_filtro.familia
     usuario_filtro.articulo = catalogo_filtro.articulo

@@ -2,6 +2,9 @@
 
 LICITACION_ID=null;
 FILTRO_ID=null;
+grupo=null;
+familia=null;
+articulo=null;
 
 function getCookie(name) {
     let cookieValue = null;
@@ -174,6 +177,29 @@ function remove_filtro(id){
     });
 }
 
+function add_filtro(){
+    console.log("llego al boton");
+    console.log(grupo, familia, articulo)
+    let cookie = getCookie('csrftoken');
+    fetch('http://127.0.0.1:8000/account/add_filtro',{ method: 'POST',
+    headers: {'X-CSRFToken': cookie},
+        mode: 'same-origin',
+        cache: 'default',
+        body: JSON.stringify({grupo, familia, articulo })
+    }).then((res)=>{
+        return res.text();
+    }).then((data)=>{
+        $('.grupoAutoComplete').autoComplete('clear');
+        $('.familiaAutoComplete').autoComplete('clear');
+        $('.articuloAutoComplete').autoComplete('clear');
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(data, "text/html"); 
+        var docArticle = doc.querySelector('#tabla_filtros');
+        $( "#tabla_filtros" ).replaceWith( docArticle );
+        $("#add_filtro_btn").addClass("hide-element");
+    })
+}
+
 $( document ).ready(function() {
     grupo=null;
     familia=null;
@@ -189,6 +215,7 @@ $( document ).ready(function() {
     });
     $(".grupoAutoComplete").on("autocomplete.select", function(evt, item){
         grupo=item["value"];
+        $("#add_filtro_btn").removeClass("hide-element");
     })
 
     $('.familiaAutoComplete').autoComplete({
@@ -224,24 +251,7 @@ $( document ).ready(function() {
         }
     });
     $(".articuloAutoComplete").on("autocomplete.select", function(evt, item){
-        console.log("esto funciono", item);
-        let cookie = getCookie('csrftoken');
-        fetch('http://127.0.0.1:8000/account/add_filtro',{ method: 'POST',
-            headers: {'X-CSRFToken': cookie},
-            mode: 'same-origin',
-            cache: 'default',
-            body: JSON.stringify({"id": item["id"], })
-        }).then((res)=>{
-            return res.text();
-        }).then((data)=>{
-            $('.grupoAutoComplete').autoComplete('clear');
-            $('.familiaAutoComplete').autoComplete('clear');
-            $('.articuloAutoComplete').autoComplete('clear');
-            var parser = new DOMParser();
-            var doc = parser.parseFromString(data, "text/html"); 
-            var docArticle = doc.querySelector('#tabla_filtros');
-            $( "#tabla_filtros" ).replaceWith( docArticle );
-        })
+        articulo=item["value"];
     })
 });
 

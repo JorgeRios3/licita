@@ -1,4 +1,5 @@
 {% extends "account_base.html" %}
+{% load formats %}
 
 {% block account_title %}Mi portal{% endblock %}
 
@@ -46,6 +47,9 @@
         <label><b>Articulo</b></label>
         <input class="form-control articuloAutoComplete" type="text" autocomplete="off" placeholder="Ingresa el artiulo">
     </div>
+    <div class="col">
+      <button class="btn btn-info stick-bottom hide-element" id="add_filtro_btn" onClick="add_filtro()">Agregar Filtro</button>
+  </div>
 </div> <!-- end of row -->
 <br><br>
 <div class="row">
@@ -64,9 +68,9 @@
             <tbody>
               {% for x in filtros %}
               <tr>
-                <th scope="row">{{x.grupo}}</th>
-                <td>{{x.familia}}</td>
-                <td>{{x.articulo}}</td>
+                <th scope="row">{{x.grupo|empty_val}}</th>
+                <td>{{x.familia|empty_val}}</td>
+                <td>{{x.articulo|empty_val}}</td>
                 <td><div class="dropdown">
                   {% if x.activado %}
                   <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

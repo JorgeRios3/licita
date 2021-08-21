@@ -13,3 +13,10 @@ def format_urls(urls):
 @register.filter
 def format_id_rows(val):
     return "r{}".format(val.split(".")[0])
+
+
+@register.filter
+def empty_val(val):
+    if val == None:
+        return ""
+    return val

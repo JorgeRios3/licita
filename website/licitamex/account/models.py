@@ -26,14 +26,14 @@ class UsuarioLicitaciones(models.Model):
 
 
 class CatalogoFiltros(models.Model):
-    grupo = models.CharField(max_length=250)
-    familia = models.CharField(max_length=250)
-    articulo = models.CharField(max_length=250)
+    grupo = models.CharField(max_length=250, null=True)
+    familia = models.CharField(max_length=250, null=True)
+    articulo = models.CharField(max_length=250, null=True)
 
 class UsuarioFiltros(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     filtro_id = models.IntegerField()
-    grupo = models.CharField(max_length=250)
-    familia = models.CharField(max_length=250)
-    articulo = models.CharField(max_length=250)
+    grupo = models.CharField(max_length=250, null=True)
+    familia = models.CharField(max_length=250, null=True)
+    articulo = models.CharField(max_length=250, null=True)
     activado = models.BooleanField(default=True)

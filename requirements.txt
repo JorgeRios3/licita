@@ -5,3 +5,4 @@ awscli
 mercadopago
 click
 paypalrestsdk
+fuzzywuzzy

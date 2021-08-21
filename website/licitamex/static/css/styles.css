@@ -2182,3 +2182,16 @@ a:hover.back-to-top {
 	/* end of extra pages */
 }
 /* end of min-width width 1200px */
+
+
+
+/* new styles */
+
+.stick-bottom{
+	position: absolute;
+    bottom: 0px;
+}
+
+.hide-element{
+	display:none
+}

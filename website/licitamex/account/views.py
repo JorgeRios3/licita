@@ -21,6 +21,7 @@ from .filtros import get_user_filtros
 from .utils import compare_user
 from .models import CatalogoFiltros, UsuarioFiltros
 from django.http import JsonResponse
+from django.views.decorators.cache import never_cache
 
 
 
@@ -38,6 +39,7 @@ def configuracion(request):
 
 
 @login_required
+@never_cache
 def licitaciones(request):
     items = fetch_items_table("licitaciones")["Items"]
     user_licitaciones = get_user_licitaciones(request.user.id)
@@ -159,8 +161,8 @@ def register(request):
                             user = User.objects.create_user(username=user_form.data['username'], first_name=user_form.data['first_name'], last_name=user_form.data['last_name'], email=user_form.data['email'], password=user_form.data['password'])
                             user.save()
                 
-                    return HttpResponseRedirect(redirect_url)
-                        #return HttpResponseRedirect("http://127.0.0.1:8000/")
+                    #return HttpResponseRedirect(redirect_url)
+                    return HttpResponseRedirect("http://127.0.0.1:8000/")
 
     else:
         user_form = UserRegistrationForm()

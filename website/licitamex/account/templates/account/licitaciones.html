@@ -73,9 +73,11 @@
                             </td>
                             <td>
                                 {% if x.selected %}
-                                <div class="btn btn-danger" onClick="remove_licitacion({{x.id}})">Desactivar</div>
+                                <div id="desactivar_licitacion{{x.id|format_id_rows}}" class="btn btn-danger" onClick="desactivar_licitacion({{x.id}})">Desactivar</div>
+                                <div id="loader{{x.id|format_id_rows}}" class="loader hide-element"></div>
                                 {% else %}
-                                <div class="btn btn-info" onClick="add_licitacion({{x.id}}, '{{x.descripcion}}', '{{x.entidad}}')">Activar</div>
+                                <div id="loader{{x.id|format_id_rows}}" class="loader hide-element"></div>
+                                <div id="activar_licitacion{{x.id|format_id_rows}}" class="btn btn-info" onClick="activar_licitacion({{x.id}}, '{{x.descripcion}}', '{{x.entidad}}')">Activar</div>
                                 {% endif %}
                             </td>
 

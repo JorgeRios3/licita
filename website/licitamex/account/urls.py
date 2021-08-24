@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from . import views
 from . import licitaciones
 from . import filtros
+from . import mis_licitaciones
 
 urlpatterns = [
     #POST views
@@ -17,15 +18,15 @@ urlpatterns = [
     path('register-done/', views.RegisterDonePageView.as_view(), name='register_done'),
     path('my_login/', views.my_login, name='my_login'),
     path('licitaciones/', views.licitaciones, name='licitaciones'),
-    path('licitacion/<id>', licitaciones.licitacion, name='licitacion'),
-    path('add_licitacion', licitaciones.add_licitacion, name='add_licitacion'),
-    path('change_status_licitacion', licitaciones.change_status, name="change_status"),
-    path('remove_licitacion', licitaciones.remove_licitacion, name='remove_licitacion'),
+    path('activate_licitacion', licitaciones.activate_licitacion, name='activate_licitacion'),
     path('search_licitacion_by_name', licitaciones.search_licitacion_by_name, name='search_licitacion_by_name'),
+    path('inactive_licitacion', licitaciones.inactive_licitacion, name='inactive_licitacion'),
     path('filter', filtros.filters, name='filters'),
     path('add_filtro', filtros.add_filtro, name='add_filtro'),
     path('change_status_filtro', filtros.change_status_filtro, name="change_status_filtro"),
-
+    path('licitacion/<id>', mis_licitaciones.licitacion, name='licitacion'),
+    path('delete_licitacion', mis_licitaciones.delete_licitacion, name='delete_licitacion'),
+    path('change_status_licitacion', mis_licitaciones.change_status, name="change_status"),
 
     
     #path('process_subscription/', views.process_subscription, name='process_subscription'),

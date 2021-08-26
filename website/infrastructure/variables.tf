@@ -66,11 +66,13 @@ variable "instance_type" {
 }
 variable "docker_image_url_django" {
   description = "Docker image to run in the ECS cluster"
-  default     = "935428198338.dkr.ecr.us-west-2.amazonaws.com/djangoapp"
+  default     = "744313738431.dkr.ecr.us-west-2.amazonaws.com/djangoapp:latest"
+
 }
 variable "docker_image_url_nginx" {
   description = "Docker image to run in the ECS cluster"
-  default     = "935428198338.dkr.ecr.us-west-2.amazonaws.com/nginx"
+  default     = "744313738431.dkr.ecr.us-west-2.amazonaws.com/nginx:latest"
+
 }
 variable "app_count" {
   description = "Number of Docker containers to run"
@@ -118,5 +120,5 @@ variable "rds_instance_class" {
 
 variable "certificate_arn" {
   description = "AWS Certificate Manager ARN for validated domain"
-  default     = "arn:aws:acm:us-west-2:935428198338:certificate/09fdd446-0180-4429-8de6-f32812ff699c"
+  default     = "arn:aws:acm:us-west-2:099104132944:certificate/70b237d3-8e65-42fe-b8f1-d2e1b8c12551"
 }

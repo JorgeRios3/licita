@@ -55,9 +55,10 @@ def my_login(request):
     print(user)
     if user is not None:
         login(request, user)
-        return HttpResponseRedirect("http://127.0.0.1:8000/account")
+        return render(request, 'account/dashboard.html',
+                  {'section': 'dashboard', "licitaciones":licitaciones})
     else:
-        return HttpResponseRedirect("http://127.0.0.1:8000/account/login/")
+        return redirect('login')
 
 @login_required
 def dashboard(request):
@@ -162,7 +163,8 @@ def register(request):
                             user.save()
                 
                     #return HttpResponseRedirect(redirect_url)
-                    return HttpResponseRedirect("http://127.0.0.1:8000/")
+                    #return HttpResponseRedirect("http://127.0.0.1:8000/")
+                    return render(request, 'account/dashboard.html',{})
 
     else:
         user_form = UserRegistrationForm()

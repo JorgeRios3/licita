@@ -30,7 +30,7 @@
                     {% endfor %}
                     {% csrf_token %}
                     <input type="hidden" name="next" value="{{ next }}" />
-                    <button type="submit" class="btn-solid-reg">Entrar</button>
+                    <button class="btn-solid-reg" href="{% url 'my_login' %}">Entrar</button>
                 </form>
                 <p><a href="{% url 'password_reset' %}">¿Olvidaste tu contraseña?</a></p> 
             </div>

@@ -78,7 +78,6 @@ STATICFILES_DIRS = [
 
 WSGI_APPLICATION = 'licitamex.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -139,7 +138,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = f"#{os. getcwd()}/static"
+
 
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGIN_URL = 'login'
@@ -155,14 +155,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 # PAYMENTS
 PAYPAL_RECEIVER_EMAIL = 'sb-kundi2221798@business.example.com'
 PAYPAL_TEST = True
+DOMAIN_URL = "https://consultalicitamex.com/"
 
+if DEBUG:
+    PAYPAL_CLIENT_ID = 'AbWxlPNfqE90HcRy8UXNwkg1llRdhtPS6d7k6X7vZ3iUaW4OIHsq6Neq1U1fh28bBJGEY6VRv4bYPaKo'
+    PAYPAL_CLIENT_SECRET = 'EM7OhADGSL8JZjA-sa8NvtLBq-g7TX6Mi2rIAu4Tc8nPoUZWEcRMZwdgLU0fa4umvhkpn35IXxDxy2W3'
+    PAYPAL_PLAN_MONTHLY_ID = "P-3PP12049MM2328251MDYIRBQ"
+    PAYPAL_MODE = 'sandbox'
+    PAYPAL_WEBHOOK_ID = '6XM493967V1511440'
 
-PAYPAL_CLIENT_ID = 'AbWxlPNfqE90HcRy8UXNwkg1llRdhtPS6d7k6X7vZ3iUaW4OIHsq6Neq1U1fh28bBJGEY6VRv4bYPaKo'
-PAYPAL_CLIENT_SECRET = 'EM7OhADGSL8JZjA-sa8NvtLBq-g7TX6Mi2rIAu4Tc8nPoUZWEcRMZwdgLU0fa4umvhkpn35IXxDxy2W3'
-PAYPAL_PLAN_MONTHLY_ID = "P-3PP12049MM2328251MDYIRBQ"
-PAYPAL_MODE = 'sandbox'
-PAYPAL_WEBHOOK_ID = '6XM493967V1511440'
-
-
-STRIPE_KEY= "pk_test_51JDaEeGD4qF5xv2q8uKOAW6X1dliqfOFGskp3ZZUdhtJhmHR248eRcQx0WB1yrxUwd1fUl86fADAdNPumA4d2p5K00lWmUpm8T"
-STRIPE_SECRET= "sk_test_51JDaEeGD4qF5xv2qlAwTGCgiAHTLCQWIAZPyxrskKKpFENjl8MFfcNAXY1MNBL6tcC0sQGlEbn4xJMy4JqOebBzG00o5B7iniR"
+    STRIPE_KEY= "pk_test_51JTBKjLE0Lev1MBUh2H39chjVuLKmNiP9kH8N1u79oBnJ4GuVBhkbLECEC8dXQmd5KfqZUWwCtCLtK6f5fWMVvvn00l9XsqSKB"
+    STRIPE_SECRET= "sk_test_51JTBKjLE0Lev1MBU6xiH5khoQLWxgVfRFYf3Q2KzD8MFvyH7nQiqcjdu8AguHZSlSTjKivi234DCla9mxY7DRtxt00xaiMRas2"
+    STRIPE_BASIC = "price_1JTECJLE0Lev1MBUzpsyo8Yq"

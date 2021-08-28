@@ -1,10 +1,14 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.contrib.auth import views as auth_views
 from django.views.decorators.csrf import csrf_exempt
 from . import views
 from . import licitaciones
 from . import filtros
 from . import mis_licitaciones
+from django.conf.urls.static import static
+from django.conf import settings
+
+
 
 urlpatterns = [
     #POST views
@@ -15,7 +19,8 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('edit/', views.edit, name='edit'),
     path('contact/', views.contact, name='contact'),
-    path('register-done/', views.RegisterDonePageView.as_view(), name='register_done'),
+    path('cancel/', views.cancel, name='cancel'),
+    re_path(r'^register-done/$', views.RegisterDone, name='register_done'),
     path('my_login/', views.my_login, name='my_login'),
     path('licitaciones/', views.licitaciones, name='licitaciones'),
     path('activate_licitacion', licitaciones.activate_licitacion, name='activate_licitacion'),

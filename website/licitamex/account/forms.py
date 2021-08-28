@@ -3,7 +3,12 @@ from django.contrib.auth.models import User
 from .models import Profile
 
 subscription_options = [
-        ('Basica', 'Membresia basica ($10 MX/Mes)')
+        ('Basica', 'Membresia basica ($10 MX/Mes)'),
+    ]
+
+payment_types = [
+        ('paypal', 'Paypal'),
+        ('stripe', 'Stripe')
     ]
 
 class ContactForm(forms.Form):
@@ -16,6 +21,7 @@ class UserRegistrationForm(forms.ModelForm):
     #password = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
     #password2 = forms.CharField(label='Confirmar contraseña', widget=forms.PasswordInput)
     plans = forms.ChoiceField(choices=subscription_options)
+    tipo = forms.ChoiceField(choices=payment_types)
 
 
     class Meta:
@@ -28,12 +34,6 @@ class UserRegistrationForm(forms.ModelForm):
             'email': 'Correo electronico',
             'password': 'Contraseña',
         }
-    
-    #def clean_password2(self):
-    #    cd = self.cleaned_data
-    #    if cd['password'] != cd['password2']:
-    #        raise forms.ValidationError('Las contraseñas no coinciden')
-    #    return cd['password2']
         
 
 class UserEditForm(forms.ModelForm):

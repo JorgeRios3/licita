@@ -6,3 +6,4 @@ mercadopago
 click
 paypalrestsdk
 fuzzywuzzy
+stripe==2.60.*

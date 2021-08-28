@@ -1,0 +1,38 @@
+<html>
+    <body>
+        <div class="d-flex justify-content-center">
+        <div class="jumbotron">
+            <h1 class="display-3">The Product</h1>
+            <p class="lead">Purchase The Product for only $99.</p>
+            <a href="#" id="buy_now_btn" class="btn btn-primary">Buy Now</a>
+          </div>
+          </div>
+    </body>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script>
+        var checkout_public_key = "{{public_key}}"
+        var checkout_session = "{{checkout}}"
+    </script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        var stripe = Stripe(checkout_public_key);
+
+        const button = document.querySelector('#buy_now_btn');
+
+        button.addEventListener('click', event => {
+            stripe.redirectToCheckout({
+                // Make the id field from the Checkout Session creation API response
+                // available to this file, so you can provide it as parameter here
+                // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
+                sessionId: checkout_session
+            }).then(function (result) {
+                // If `redirectToCheckout` fails due to a browser or network
+                // error, display the localized error message to your customer
+                // using `result.error.message`.
+            });
+        })
+    </script>
+</head>
+</html>

@@ -12,8 +12,7 @@
         "s3:*",
         "rds:*",
         "ses:*",
-        "logs:*",
-        "dynamodb:*"
+        "logs:*"
       ],
       "Resource": "*"
     }

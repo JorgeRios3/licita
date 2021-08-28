@@ -5,6 +5,10 @@ from .models import Profile
 subscription_options = [
         ('Basica', 'Membresia basica ($10 MX/Mes)')
     ]
+payment_types = [
+        ('paypal', 'Paypal'),
+        ('stripe', 'Stripe')
+    ]
 
 class ContactForm(forms.Form):
     name = forms.CharField(max_length = 50, required=True)
@@ -13,9 +17,8 @@ class ContactForm(forms.Form):
     
 
 class UserRegistrationForm(forms.ModelForm):
-    #password = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
-    #password2 = forms.CharField(label='Confirmar contraseña', widget=forms.PasswordInput)
-    plans = forms.ChoiceField(choices=subscription_options)
+    plan = forms.ChoiceField(choices=subscription_options)
+    tipo_de_pago = forms.ChoiceField(choices=payment_types)
 
 
     class Meta:
@@ -27,6 +30,7 @@ class UserRegistrationForm(forms.ModelForm):
             'last_name': 'Apellidos',
             'email': 'Correo electronico',
             'password': 'Contraseña',
+
         }
     
     #def clean_password2(self):

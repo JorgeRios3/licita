@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, reverse
 import json
 from django.core import serializers
+from datetime import datetime
 
 def get_user_licitaciones(user_id):
     user = User.objects.get(pk=user_id)
@@ -16,11 +17,37 @@ def change_status(request):
 
 
 def licitacion(request, id):
-    print("viendo el id", id)
-    licitacion = UsuarioLicitaciones.objects.filter(pk=id)
-    serialized_obj = serializers.serialize('json', licitacion)
-    ob_json = json.loads(serialized_obj)
-    return render(request, 'account/licitacion.html', {"id":id, "licitacion":ob_json[0]["fields"]})
+    if request.method == "GET":
+        licitacion = UsuarioLicitaciones.objects.filter(pk=id)
+        serialized_obj = serializers.serialize('json', licitacion)
+        ob_json = json.loads(serialized_obj)
+        return render(request, 'account/licitacion.html', {"id":id, "licitacion":ob_json[0]["fields"]})
+    if request.method == "POST":
+        post_data = json.loads(request.body.decode("utf-8"))
+        licitacion = UsuarioLicitaciones.objects.filter(pk=id)
+        licitacion=licitacion[0]
+        print(licitacion.comments)
+        comentario = post_data.get("text", "")
+        if comentario.strip() != "":
+            fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            user = User.objects.get(pk=request.user.id)
+            if licitacion.comments.get("comments", "") == "":
+                licitacion.comments = {"comments":[{"date":fecha, "comment":comentario, "user":user.id}]}
+            else:
+                licitacion.comments["comments"].append({"date":fecha, "comment":comentario, "user":user.id})
+        nombre = post_data.get("nombre", "")
+        telefono = post_data.get("telefono", "")
+        email = post_data.get("email", "")
+        direccion = post_data.get("direccion", "")
+        licitacion.datos_comprador={"nombre":nombre, "telefono":telefono, "email":email, "direccion":direccion}
+        licitacion.save()
+        licitacion = UsuarioLicitaciones.objects.filter(pk=id)
+        serialized_obj = serializers.serialize('json', licitacion)
+        ob_json = json.loads(serialized_obj)
+        return render(request, 'account/licitacion.html', {"id":id, "licitacion":ob_json[0]["fields"]})
+
+
+
 
 
 def delete_licitacion(request):

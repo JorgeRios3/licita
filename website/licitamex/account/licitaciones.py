@@ -43,7 +43,7 @@ def activate_licitacion(request):
     licitacion.expired_date = datetime.datetime.now().strftime("%Y-%m-%d")
     licitacion.status = "Abierta"
     licitacion.quotation = "aqui va el documento de la cotizacion del usuario"
-    licitacion.comments = "aqui van los comentarios de como va el avance de la licitacion"
+    licitacion.comments = {"comments":[]}
     licitacion.description = post_data.get("description", "")
     licitacion.entidad = post_data.get("entidad", "")
     licitacion.save()

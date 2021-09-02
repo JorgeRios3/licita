@@ -20,10 +20,10 @@ class UsuarioLicitaciones(models.Model):
     expired_date = models.DateField()
     status = models.CharField(max_length=100)
     quotation = models.CharField(max_length=300)
-    comments = models.CharField(max_length=200)
+    comments = models.JSONField(default='{}')
     description = models.CharField(max_length=500)
     entidad = models.CharField(max_length=100)
-
+    datos_comprador = models.JSONField(default='{}')
 
 class CatalogoFiltros(models.Model):
     grupo = models.CharField(max_length=250, null=True)

@@ -4,3 +4,4 @@ paypalrestsdk
 gunicorn==20.*
 psycopg2-binary==2.8.*
 stripe==2.60.*
+mailjet-rest==1.3.*

@@ -52,3 +52,48 @@ function aceptar_borrar(){
         $("#modal_boton").click();
     });
 }
+
+function agregar_comentario(id){
+    let cookie = getCookie('csrftoken');
+    val = $("#new_comment").val().trim();
+    if (val === ""){
+        return;
+    }
+    fetch('https://consultalicitamex.com/account/licitacion/'+id,{ method: 'POST',
+        headers: {'X-CSRFToken': cookie},
+        mode: 'same-origin',
+        cache: 'default',
+        body: JSON.stringify({"id": id, "text": val})
+    }).then(res => {
+        return res.text();
+    })
+    .then(data => {
+        $("#new_comment").val('');
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(data, "text/html"); 
+        var docArticle = doc.querySelector('#licitacion_container');
+        $( "#licitacion_container" ).replaceWith( docArticle );
+    });
+}
+
+function guardar_datos_comprador(id){
+    let cookie = getCookie('csrftoken');
+    comprador_nombre = $("#comprador_nombre").val();
+    comprador_telefono = $("#comprador_telefono").val();
+    comprador_email = $("#comprador_email").val();
+    comprador_direccion = $("#comprador_direccion").val();
+    fetch('https://consultalicitamex.com/account/licitacion/'+id,{ method: 'POST',
+        headers: {'X-CSRFToken': cookie},
+        mode: 'same-origin',
+        cache: 'default',
+        body: JSON.stringify({"id": id, "nombre": comprador_nombre, "telefono":comprador_telefono, "email":comprador_email, "direccion":comprador_direccion})
+    }).then(res => {
+        return res.text();
+    })
+    .then(data => {
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(data, "text/html"); 
+        var docArticle = doc.querySelector('#comprador_container');
+        $( "#comprador_container" ).replaceWith( docArticle );
+    });
+}

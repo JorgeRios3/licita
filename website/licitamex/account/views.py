@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
@@ -9,17 +8,15 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.core.mail import send_mail, BadHeaderError
 from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm, ContactForm
-from .models import Profile, UsuarioLicitaciones
+from .models import UsuarioLicitaciones, Group
 from django.contrib.auth.models import User
 import paypalrestsdk
 import json
 from paypalrestsdk.notifications import WebhookEvent
-from django.views.generic import TemplateView
 from .dynamo_functions import fetch_items_table
 from .licitaciones import get_user_licitaciones
 from .filtros import get_user_filtros
 from .utils import compare_user
-from .models import CatalogoFiltros, UsuarioFiltros
 from django.http import JsonResponse
 from django.views.decorators.cache import never_cache
 import stripe
@@ -56,6 +53,7 @@ def my_login(request):
     print(user)
     if user is not None:
         login(request, user)
+        licitaciones = UsuarioLicitaciones.objects.filter(user=request.user.id)
         return render(request, 'account/dashboard.html',
                   {'section': 'dashboard', "licitaciones":licitaciones})
     else:
@@ -168,7 +166,7 @@ def register(request):
                                 "payee_preferred": "IMMEDIATE_PAYMENT_REQUIRED"
                             },
                             "return_url": "https://consultalicitamex.com/account/register-done/",
-                            "cancel_url": "https://consultalicitamex.com/account/register-done/"
+                            "cancel_url": "https://consultalicitamex.com/cancel/"
                         }
                     }
                     ret = myapi.post("v1/billing/subscriptions", data)
@@ -180,6 +178,8 @@ def register(request):
                                 redirect_url = link['href']
                                 user = User.objects.create_user(username=user_form.data['username'], first_name=user_form.data['first_name'], last_name=user_form.data['last_name'], email=user_form.data['email'], password=user_form.data['password'])
                                 user.save()
+                                group = Group(admin_user=user, plan_active=True)
+                                group.save()
                     
                         return HttpResponseRedirect(redirect_url)
                     #return HttpResponseRedirect("http://127.0.0.1:8000/")
@@ -233,11 +233,6 @@ def contact(request):
     return render(request, "account/contact.html", {'form': form})
 
 
-class RegisterDonePageView(TemplateView):
-    template_name = 'account/register_done.html'
-
-
-
 def RegisterDone(request):
     user_id = request.GET.get('user_id')
     session_id = request.GET.get('session_id')
@@ -248,7 +243,9 @@ def RegisterDone(request):
     print(session)
     if session["payment_status"] in ["paid", "unpaid"]:
         print("si callo")
-        pass
+        user = User.objects.get(pk=user_id)
+        group = Group(admin_user=user, plan_active=True)
+        group.save()
     return render(request, "account/register_done.html")
 
 def cancel(request):

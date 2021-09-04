@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Group
 
 subscription_options = [
         ('Basica', 'Membresia basica ($10 MX/Mes)'),
@@ -50,5 +50,5 @@ class UserEditForm(forms.ModelForm):
 
 class ProfileEditForm(forms.ModelForm):
     class Meta:
-        model = Profile
+        model = Group
         fields = ('company',)

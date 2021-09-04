@@ -10,3 +10,4 @@ fuzzywuzzy==0.18.*
 boto3==1.18.*
 fuzzywuzzy==0.18.0
 stripe==2.60.*
+mailjet-rest==1.3.*

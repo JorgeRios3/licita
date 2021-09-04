@@ -25,6 +25,7 @@ urlpatterns = [
     path('', views.HomePageView.as_view(), name='index'),
     path('terms-conditions/', views.TermsConditionsPageView.as_view(), name='terms-conditions'),
     path('privacy-policy/', views.PrivacyPolicyPageView.as_view(), name='privacy-policy'),
+    path('add_licitacion', views.add_licitacion, name='add-licitacion'),
 ]
 
 if settings.DEBUG:

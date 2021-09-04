@@ -28,7 +28,7 @@ function add_filtro(){
     console.log("llego al boton");
     console.log(grupo, familia, articulo)
     let cookie = getCookie('csrftoken');
-    fetch('http://127.0.0.1:8000/account/add_filtro',{ method: 'POST',
+    fetch('http://localhost:8000/account/add_filtro',{ method: 'POST',
     headers: {'X-CSRFToken': cookie},
         mode: 'same-origin',
         cache: 'default',
@@ -61,7 +61,7 @@ $( document ).ready(function() {
         queryKey:'grupo',
         resolverSettings: {
             queryKey:'grupo',
-            url: 'http://127.0.0.1:8000/account/filter'
+            url: 'http://localhost:8000/account/filter'
         }
     });
     $(".grupoAutoComplete").on("autocomplete.select", function(evt, item){
@@ -76,7 +76,7 @@ $( document ).ready(function() {
         events: {
             search: function (qry, callback){
                 $.ajax(
-                'http://127.0.0.1:8000/account/filter?familia='+qry+"&grupo="+grupo,
+                'http://localhost:8000/account/filter?familia='+qry+"&grupo="+grupo,
                 ).done(function (res) {
                 callback(res)
                 });
@@ -94,7 +94,7 @@ $( document ).ready(function() {
         events: {
             search: function (qry, callback){
                 $.ajax(
-                'http://127.0.0.1:8000/account/filter?articulo='+qry+"&grupo="+grupo+"&familia="+familia,
+                'http://localhost:8000/account/filter?articulo='+qry+"&grupo="+grupo+"&familia="+familia,
                 ).done(function (res) {
                 callback(res)
                 });

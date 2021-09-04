@@ -1,15 +1,26 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-import time
-import hashlib
-import boto3
-from boto3.dynamodb.conditions import Key, Attr
-import datetime
+try:
+    import json
+    from selenium.webdriver import Chrome
+    from selenium.webdriver.chrome.options import Options
+    import os
+    import shutil
+    import uuid
+    import boto3
+    from boto3.dynamodb.conditions import Key, Attr
+    from datetime import datetime
+    import datetime
+    import time
+    import hashlib
 
 
 
-url = 'https://encompras.jalisco.gob.mx/SJ3Kweb/secure/'
+    print("All Modules are ok ...")
 
+except Exception as e:
+
+    print("Error in Imports ")
+
+#dynamo = boto3.resource('dynamodb', region_name='us-west-2')
 dynamodb = boto3.client('dynamodb', region_name='us-west-2')
 
 def process_table(table):
@@ -73,7 +84,7 @@ def process_table(table):
         lista_auxiliar.append(item)
 
         result = list(filter(lambda x: x["licitacion"]["S"]==item["licitacion"] and x["tipo"]["S"]==item["tipo"], licitaciones_actuales["Items"]))
-        if i==3:
+        if i==4:
             if len(result) == 0:
                 d_val = {
                     "id": {"S": item["id"]},
@@ -102,6 +113,23 @@ def process_table(table):
 
     return
 
+class WebDriver(object):
+
+    def __init__(self):
+        self.options = Options()
+        self.options.binary_location = '/opt/headless-chromium'
+        self.options.add_argument('--headless')
+        self.options.add_argument('--no-sandbox')
+        self.options.add_argument('--disable-gpu')
+        self.options.add_argument('--start-maximized')
+        self.options.add_argument('--start-fullscreen')
+        self.options.add_argument('--single-process')
+        self.options.add_argument('--ignore-certificate-errors')
+        self.options.add_argument('--disable-dev-shm-usage')
+
+    def get(self):
+        driver = Chrome('/opt/chromedriver', options=self.options)
+        return driver
 
 def check_changes(hash_value):
     response = dynamodb.query(TableName='states', Select='ALL_ATTRIBUTES', KeyConditionExpression='entidad = :nombre', ExpressionAttributeValues= { ":nombre":{"S":"Jalisco"}})
@@ -127,24 +155,16 @@ def check_changes(hash_value):
     return False
 
 
-chrome_options = Options()
-chrome_options.add_argument("--headless")
-chrome_options.add_argument('--no-sandbox')
-chrome_options.add_argument('--disable-gpu')
-chrome_options.add_argument('--single-process')
-chrome_options.add_argument('--ignore-certificate-errors')
-driver = webdriver.Chrome('/Users/jorge.rios/Downloads/chromedriver', options=chrome_options)
-driver.get(url)
-time.sleep(5)
+def lambda_handler(event, context):
 
-iframe_ref = driver.find_elements_by_id("mainFrame")[0]
-driver.switch_to.frame(iframe_ref)
-
-table = driver.find_element_by_class_name("rich-table")
-hash_value = hashlib.sha224(table.text.encode()).hexdigest()
-
-#if check_changes(hash_value):
-process_table(table)
-
-driver.close()
-driver.quit()
+    instance_ = WebDriver()
+    driver = instance_.get()
+    driver.get("https://encompras.jalisco.gob.mx/SJ3Kweb/secure/")
+    time.sleep(5)
+    iframe_ref = driver.find_elements_by_id("mainFrame")[0]
+    driver.switch_to.frame(iframe_ref)
+    table = driver.find_element_by_class_name("rich-table")
+    hash_value = hashlib.sha224(table.text.encode()).hexdigest()
+    if check_changes(hash_value):
+        process_table(table)
+    return True

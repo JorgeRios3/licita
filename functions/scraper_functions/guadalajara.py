@@ -1,5 +1,3 @@
-#from selenium import webdriver
-#from selenium.webdriver.chrome.options import Options
 import hashlib
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
@@ -15,11 +13,11 @@ soup = BeautifulSoup(page.content, features="lxml")
 dynamo = boto3.resource('dynamodb', region_name='us-west-2')
 
 
-def process_table():
+def process_table(run_dynamo):
     rows = soup.find_all('tr', class_='odd')
     v_table = dynamo.Table('licitaciones')
 
-    for row in rows:
+    for i,row in enumerate(rows):
         line = row.text
         text = line.split(' ')
         if 'LPL' in text:
@@ -57,14 +55,14 @@ def process_table():
                 'descripcion': descripcion.replace('“', "").replace('"',"").replace("\n", ""),
                 'urls': {"base": base, "convocatoria": convocatoria, "fallo": fallo}
             }
-            v_table.put_item(Item=item)
+            if run_dynamo:
+                v_table.put_item(Item=item)
             print(item)
-            print('Registrando ' + licitacion)
-
+            print(i, 'Registrando ' + licitacion)
     return
 
 
-def check_changes(hash_value):
+def check_changes(hash_value, run_dynamo):
     s_table = dynamo.Table('states')
     response = s_table.query(
         KeyConditionExpression=Key('name').eq('guadalajara'))
@@ -77,21 +75,22 @@ def check_changes(hash_value):
         print(response)
         current = response['Item']
         if current['current'] != hash_value:
-            s_table.update_item(
-                Key={'name': 'guadalajara'},
-                UpdateExpression='SET #new_current = :val',
-                ExpressionAttributeValues={':val': hash_value},
-                ExpressionAttributeNames={'#new_current': 'current'}
-
-            )
+            if run_dynamo:
+                s_table.update_item(
+                    Key={'name': 'guadalajara'},
+                    UpdateExpression='SET #new_current = :val',
+                    ExpressionAttributeValues={':val': hash_value},
+                    ExpressionAttributeNames={'#new_current': 'current'}
+                )
             return True
 
     return False
 
 
-#hash_value = hashlib.sha224(soup).hexdigest()
-#if check_changes(hash_value):
-#    process_table()
+def execute_process(run_dynamo=False):
+    hash_value = hashlib.sha224(soup).hexdigest()
+    if check_changes(hash_value, run_dynamo):
+        process_table(run_dynamo)
 
 if __name__ == "__main__":
-    process_table()
+    execute_process()

@@ -3,13 +3,12 @@ from django.contrib.auth.models import User
 from django.conf import settings
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
+class Group(models.Model):
+    admin_user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
     company = models.CharField(max_length=50, blank=True, null=True)
     subscription_id = models.CharField(max_length=50, blank=True, null=True)
+    plan_active = models.BooleanField(default=False)
 
-    def __str__(self):
-        return f'Perfil de usuario {self.user.username}'
 
 
 class UsuarioLicitaciones(models.Model):

@@ -44,9 +44,9 @@ def add_filtro(request):
     usuario_filtro = UsuarioFiltros()
     usuario_filtro.user = user
     usuario_filtro.filtro_id = catalogo_filtro.pk
-    usuario_filtro.grupo = catalogo_filtro.grupo
-    usuario_filtro.familia = catalogo_filtro.familia
-    usuario_filtro.articulo = catalogo_filtro.articulo
+    usuario_filtro.grupo = catalogo_filtro.grupo 
+    usuario_filtro.familia = catalogo_filtro.familia or ""
+    usuario_filtro.articulo = catalogo_filtro.articulo or ""
     usuario_filtro.activado = True
     usuario_filtro.save()
     usuario_filtros = get_user_filtros(request.user.id)

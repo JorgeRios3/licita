@@ -1,18 +1,26 @@
-import hashlib
-import boto3
-from boto3.dynamodb.conditions import Key, Attr
-from botocore.exceptions import ClientError
+try:
+    import hashlib
+    import boto3
+    from boto3.dynamodb.conditions import Key, Attr
+    from botocore.exceptions import ClientError
 
-from bs4 import BeautifulSoup
-import requests
-import datetime
-import json
+    from bs4 import BeautifulSoup
+    import requests
+    import datetime
+    import json
+
+
+
+    print("All Modules are ok ...")
+
+except Exception as e:
+
+    print("Error in Imports ")
 
 url = 'https://transparencia.guadalajara.gob.mx/licitaciones2021'
 page = requests.get(url)
 soup = BeautifulSoup(page.content, features="html.parser")
 dynamodb = boto3.client('dynamodb', region_name='us-west-2')
-
 
 
 def process_table():
@@ -73,7 +81,7 @@ def process_table():
                 print("agregando")
                 dynamodb.put_item(TableName='licitaciones', Item=d_val)
                 payload = json.dumps({'id': item["id"]})
-                requests.post("http://127.0.0.1:8000/add_licitacion", data=payload)
+                requests.post("https://consultalicitamex.com/add_licitacion", data=payload)
                 #llamada al server para avisar que hay una nueva licitacion
 
     #este for nos va a ayudar a que si en la pagina del gobierno borraron una licitacion nosotros la borremos de dynamo
@@ -83,7 +91,7 @@ def process_table():
             print("lo borro")
             payload = json.dumps({'id': item["id"]})
             dynamodb.delete_item(TableName='licitaciones', Key={"id":item["id"]})
-            requests.post("http://127.0.0.1:8000/remove_licitacion", data=payload)
+            requests.post("https://consultalicitamex.com/remove_licitacion", data=payload)
     return
 
 
@@ -112,7 +120,7 @@ def check_changes(hash_value):
     return False
 
 
-def execute_process():
+def lambda_handler(event, context):
     url = 'https://transparencia.guadalajara.gob.mx/licitaciones2021'
     page = requests.get(url)
     soup = BeautifulSoup(page.content, features="html.parser")
@@ -121,6 +129,4 @@ def execute_process():
     hash_value = hashlib.sha224(rows.encode()).hexdigest()
     if check_changes(hash_value):
         process_table()
-
-if __name__ == "__main__":
-    execute_process()
+    return True

@@ -26,6 +26,7 @@ urlpatterns = [
     path('terms-conditions/', views.TermsConditionsPageView.as_view(), name='terms-conditions'),
     path('privacy-policy/', views.PrivacyPolicyPageView.as_view(), name='privacy-policy'),
     path('add_licitacion', views.add_licitacion, name='add-licitacion'),
+    path('remove_licitacion', views.remove_licitacion, name='remove-licitacion'),
 ]
 
 if settings.DEBUG:

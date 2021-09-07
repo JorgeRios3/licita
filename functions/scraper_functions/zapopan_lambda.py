@@ -21,68 +21,59 @@ except Exception as e:
 
     print("Error in Imports ")
 
-#dynamo = boto3.resource('dynamodb', region_name='us-west-2')
 dynamodb = boto3.client('dynamodb', region_name='us-west-2')
 
 def process_table(table):
     rows = table.find_elements_by_class_name("rich-table-firstrow")
-    licitaciones_actuales = dynamodb.scan(TableName='licitaciones', ProjectionExpression="licitacion, tipo, id", FilterExpression='entidad= :entidad', ExpressionAttributeValues= {":entidad":{"S":"Jalisco"} })
+    licitaciones_actuales = dynamodb.scan(TableName='licitaciones', ProjectionExpression="licitacion, tipo, id", FilterExpression='entidad= :entidad', ExpressionAttributeValues= {":entidad":{"S":"Zapopan"} })
     lista_auxiliar = []
     #este for es para agregar nuevas licitaciones a dynamodb validando contra los actuales en dynamodb
+    rows = table.find_elements_by_id("tabla1")
     for i,row in enumerate(rows):
-        elements = row.find_elements_by_class_name("rich-table-cell")
+        text = row.text
+        if 'Fecha Cierre' in text:
+            continue
+        fields = row.find_elements_by_class_name("txtInfoTabla")
         try:
-            tipo = elements[1].text
+            requisicion = fields[0].text
         except:
-            tipo = ""
+            requisicion = ''
         try:
-            temp = str.splitlines(elements[2].text)
-            solicitud = temp[0]
-            licitacion = temp[1]
+            invitacion = fields[1].text
         except:
-            solicitud = ""
-            licitacion = ""
+            invitacion = ''
         try:
-            temp = elements[3].text.split(" - ")
-            grupo = temp[0]
-            familia = temp[1]
+            descripcion = fields[2].text
         except:
-            grupo = ""
-            familia = ""
+            description = ''
         try:
-            dependencia = elements[4].text
+            fecha_publicacion = fields[3].text
         except:
-            dependencia = ""
+            fecha_publicacion = ''
         try:
-            publicacion = elements[5].text
+            fecha_cierre = fields[4].text
         except:
-            publicacion = ""
+            fecha_cierre = ''
         try:
-            limite = elements[6].text
-        except:
-            limite = ""
-        try:
-            texto=elements[8].text
-            urls={f"{texto}": url}
-
-        except:
             urls={}
-
+            buttons = fields[5].find_elements_by_tag_name('a')
+            for x in buttons:
+                urls[x.text]=f"{url}#{x.get_attribute('id')}"
+        except:
+            urls = {}
         item = {
             "id":f"{datetime.datetime.now().timestamp()}",
-            'licitacion': licitacion,
-            'entidad': 'Jalisco',
-            'tipo': tipo,
-            'solicitud': solicitud,
-            'grupo': grupo,
-            'familia': familia,
-            'dependencia': dependencia,
-            'publicacion': publicacion,
-            'limite': limite,
-            'urls':urls,
-            "descripcion": f"{tipo} {familia}"
+            'licitacion': requisicion,
+            'entidad': 'Zapopan',
+            'invitacion': invitacion,
+            'descripcion': descripcion,
+            'publicacion': fecha_publicacion,
+            'cierre': fecha_cierre,
+            'urls': urls
         }
         lista_auxiliar.append(item)
+        print("viendo item")
+        print(item)
         
         result = list(filter(lambda x: x["licitacion"]["S"]==item["licitacion"] and x["tipo"]["S"]==item["tipo"], licitaciones_actuales["Items"]))
         if len(result) == 0:
@@ -90,13 +81,9 @@ def process_table(table):
                 "id": {"S": item["id"]},
                 "licitacion": {"S": item["licitacion"]},
                 "entidad": {"S": item["entidad"]},
-                "tipo": {"S": item["tipo"]},
-                "solicitud": {"S": item["solicitud"]},
-                "grupo": {"S": item["grupo"]},
-                "familia": {"S": item["familia"]},
-                "dependencia": {"S": item["dependencia"]},
+                "invitacion": {"S": item["invitacion"]},
                 "publicacion": {"S": item["publicacion"]},
-                "limite": {"S": item["limite"]},
+                "cierre": {"S": item["cierre"]},
                 "urls": {"M": {f"{texto}": {"S": url}} },
                 "descripcion": {"S": item["descripcion"]}
             }
@@ -136,21 +123,21 @@ class WebDriver(object):
         return driver
 
 def check_changes(hash_value):
-    response = dynamodb.query(TableName='states', Select='ALL_ATTRIBUTES', KeyConditionExpression='entidad = :nombre', ExpressionAttributeValues= { ":nombre":{"S":"Jalisco"}})
+    response = dynamodb.query(TableName='states', Select='ALL_ATTRIBUTES', KeyConditionExpression='entidad = :nombre', ExpressionAttributeValues= { ":nombre":{"S":"Zapopan"}})
     print("viendo states reponse")
     print(response)
     fecha = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if len(response['Items']) == 0:
-        dynamodb.put_item(TableName='states',Item={'entidad': {"S": 'Jalisco'}, 'actual': {"S":hash_value}, "fecha": {"S": fecha} })
+        dynamodb.put_item(TableName='states',Item={'entidad': {"S": 'Zapopan'}, 'actual': {"S":hash_value}, "fecha": {"S": fecha} })
         return True
     else:
-        response = dynamodb.get_item(TableName='states', Key={'entidad': {"S":'Jalisco'}})
+        response = dynamodb.get_item(TableName='states', Key={'entidad': {"S":'Zapopan'}})
         current = response['Item']
         print("viendo si encontro uno")
         print(current)
         if current['actual']["S"] != hash_value:
             dynamodb.update_item(TableName='states',
-                Key={'entidad': {"S": 'Jalisco'}},
+                Key={'entidad': {"S": 'Zapopan'}},
                 UpdateExpression="set actual=:r, fecha=:f",
                 ExpressionAttributeValues={':r': {"S": hash_value}, ":f":{"S": fecha}}
             )

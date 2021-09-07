@@ -5,7 +5,8 @@ import hashlib
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
 import datetime
-
+import requests
+import json
 
 
 url = 'https://encompras.jalisco.gob.mx/SJ3Kweb/secure/'
@@ -14,7 +15,7 @@ dynamodb = boto3.client('dynamodb', region_name='us-west-2')
 
 def process_table(table):
     rows = table.find_elements_by_class_name("rich-table-firstrow")
-    licitaciones_actuales = dynamodb.scan(TableName='licitaciones', ProjectionExpression="licitacion, tipo", FilterExpression='entidad= :entidad', ExpressionAttributeValues= {":entidad":{"S":"Jalisco"} })
+    licitaciones_actuales = dynamodb.scan(TableName='licitaciones', ProjectionExpression="licitacion, tipo, id", FilterExpression='entidad= :entidad', ExpressionAttributeValues= {":entidad":{"S":"Jalisco"} })
     lista_auxiliar = []
     #este for es para agregar nuevas licitaciones a dynamodb validando contra los actuales en dynamodb
     for i,row in enumerate(rows):
@@ -71,34 +72,37 @@ def process_table(table):
             "descripcion": f"{tipo} {familia}"
         }
         lista_auxiliar.append(item)
-
+        
         result = list(filter(lambda x: x["licitacion"]["S"]==item["licitacion"] and x["tipo"]["S"]==item["tipo"], licitaciones_actuales["Items"]))
-        if i==3:
-            if len(result) == 0:
-                d_val = {
-                    "id": {"S": item["id"]},
-                    "licitacion": {"S": item["licitacion"]},
-                    "entidad": {"S": item["entidad"]},
-                    "tipo": {"S": item["tipo"]},
-                    "solicitud": {"S": item["solicitud"]},
-                    "grupo": {"S": item["grupo"]},
-                    "familia": {"S": item["familia"]},
-                    "dependencia": {"S": item["dependencia"]},
-                    "publicacion": {"S": item["publicacion"]},
-                    "limite": {"S": item["limite"]},
-                    "urls": {"M": {f"{texto}": {"S": url}} },
-                    "descripcion": {"S": item["descripcion"]}
-                }
-                print("agregando")
-                dynamodb.put_item(TableName='licitaciones', Item=d_val)
-                #llamada al server para avisar que hay una nueva licitacion
+        if len(result) == 0:
+            d_val = {
+                "id": {"S": item["id"]},
+                "licitacion": {"S": item["licitacion"]},
+                "entidad": {"S": item["entidad"]},
+                "tipo": {"S": item["tipo"]},
+                "solicitud": {"S": item["solicitud"]},
+                "grupo": {"S": item["grupo"]},
+                "familia": {"S": item["familia"]},
+                "dependencia": {"S": item["dependencia"]},
+                "publicacion": {"S": item["publicacion"]},
+                "limite": {"S": item["limite"]},
+                "urls": {"M": {f"{texto}": {"S": url}} },
+                "descripcion": {"S": item["descripcion"]}
+            }
+            print("agregando")
+            dynamodb.put_item(TableName='licitaciones', Item=d_val)
+            payload = json.dumps({'id': item["id"]})
+            requests.post("http://127.0.0.1:8000/add_licitacion", data=payload)
+            #llamada al server para avisar que hay una nueva licitacion
 
     #este for nos va a ayudar a que si en la pagina del gobierno borraron una licitacion nosotros la borremos de dynamo
     for item in licitaciones_actuales["Items"]:
         result = list(filter(lambda x: x["licitacion"] ==item["licitacion"]["S"] and item["tipo"]["S"]==x["tipo"] , lista_auxiliar))
         if len(result) == 0:
-            print(item)
-            print("hay que borrar")
+            print("lo borro")
+            payload = json.dumps({'id': item["id"]})
+            dynamodb.delete_item(TableName='licitaciones', Key={"id":item["id"]})
+            requests.post("http://127.0.0.1:8000/remove_licitacion", data=payload)
 
     return
 

@@ -20,6 +20,7 @@ from .utils import compare_user
 from django.http import JsonResponse
 from django.views.decorators.cache import never_cache
 import stripe
+from django.views.generic import TemplateView
 
 
 
@@ -170,6 +171,8 @@ def register(request):
                         }
                     }
                     ret = myapi.post("v1/billing/subscriptions", data)
+                    print("viendo status")
+                    print(ret)
                     if ret['status'] == 'APPROVAL_PENDING':
                         # Create inactive user and profile
 
@@ -231,6 +234,9 @@ def contact(request):
 
     form = ContactForm()
     return render(request, "account/contact.html", {'form': form})
+
+class RegisterDonePageView(TemplateView):
+    template_name = 'account/register_done.html'
 
 
 def RegisterDone(request):

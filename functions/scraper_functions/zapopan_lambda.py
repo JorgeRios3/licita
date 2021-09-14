@@ -23,12 +23,12 @@ except Exception as e:
 
 dynamodb = boto3.client('dynamodb', region_name='us-west-2')
 
-def process_table(table):
-    rows = table.find_elements_by_class_name("rich-table-firstrow")
-    licitaciones_actuales = dynamodb.scan(TableName='licitaciones', ProjectionExpression="licitacion, tipo, id", FilterExpression='entidad= :entidad', ExpressionAttributeValues= {":entidad":{"S":"Zapopan"} })
-    lista_auxiliar = []
-    #este for es para agregar nuevas licitaciones a dynamodb validando contra los actuales en dynamodb
+def process_table():
     rows = table.find_elements_by_id("tabla1")
+    rows = table.find_elements_by_tag_name("tr")
+    licitaciones_actuales = dynamodb.scan(TableName='licitaciones', ProjectionExpression="licitacion, id", FilterExpression='entidad= :entidad', ExpressionAttributeValues= {":entidad":{"S":"Zapopan"} })
+    lista_auxiliar = []
+    rows = rows[1:]
     for i,row in enumerate(rows):
         text = row.text
         if 'Fecha Cierre' in text:
@@ -71,11 +71,10 @@ def process_table(table):
             'cierre': fecha_cierre,
             'urls': urls
         }
-        lista_auxiliar.append(item)
-        print("viendo item")
-        print(item)
-        
-        result = list(filter(lambda x: x["licitacion"]["S"]==item["licitacion"] and x["tipo"]["S"]==item["tipo"], licitaciones_actuales["Items"]))
+        durls = {}
+        for key in urls.keys():
+            durls[f"{key}"] = {"S": urls[f"{key}"]}    
+        result = list(filter(lambda x: x["licitacion"]["S"]==item["licitacion"], licitaciones_actuales["Items"]))
         if len(result) == 0:
             d_val = {
                 "id": {"S": item["id"]},
@@ -84,7 +83,7 @@ def process_table(table):
                 "invitacion": {"S": item["invitacion"]},
                 "publicacion": {"S": item["publicacion"]},
                 "cierre": {"S": item["cierre"]},
-                "urls": {"M": {f"{texto}": {"S": url}} },
+                "urls": {"M": durls },
                 "descripcion": {"S": item["descripcion"]}
             }
             print("agregando")
@@ -157,5 +156,5 @@ def lambda_handler(event, context):
     table = driver.find_element_by_class_name("rich-table")
     hash_value = hashlib.sha224(table.text.encode()).hexdigest()
     if check_changes(hash_value):
-        process_table(table)
+        process_table()
     return True

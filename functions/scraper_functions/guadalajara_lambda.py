@@ -28,7 +28,6 @@ def process_table():
     licitaciones_actuales = dynamodb.scan(TableName='licitaciones', ProjectionExpression="licitacion, tipo, id", FilterExpression='entidad= :entidad', ExpressionAttributeValues= {":entidad":{"S":"Guadalajara"} })
     lista_auxiliar = []
     for i,row in enumerate(rows):
-        print("intentando")
         line = row.text
         text = line.split(' ')
         if 'LPL' in text:

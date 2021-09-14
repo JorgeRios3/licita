@@ -132,7 +132,7 @@ table = driver.find_element_by_id("DataList1")
 hash_value = hashlib.sha224(table.text.encode()).hexdigest()
 
 
-#if check_changes(hash_value):
+if check_changes(hash_value):
 process_table()
 
 

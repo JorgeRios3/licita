@@ -97,7 +97,7 @@ def process_table(table):
                 "dependencia": {"S": item["dependencia"]},
                 "publicacion": {"S": item["publicacion"]},
                 "limite": {"S": item["limite"]},
-                "urls": {"M": {f"{texto}": {"S": url}} },
+                "urls": {"M": {f"{texto}": {"S": urls}} },
                 "descripcion": {"S": item["descripcion"]}
             }
             print("agregando")

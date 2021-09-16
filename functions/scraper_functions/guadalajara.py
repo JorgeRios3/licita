@@ -1,5 +1,3 @@
-#from selenium import webdriver
-#from selenium.webdriver.chrome.options import Options
 import hashlib
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
@@ -8,18 +6,21 @@ from botocore.exceptions import ClientError
 from bs4 import BeautifulSoup
 import requests
 import datetime
+import json
 
 url = 'https://transparencia.guadalajara.gob.mx/licitaciones2021'
 page = requests.get(url)
-soup = BeautifulSoup(page.content, features="lxml")
-dynamo = boto3.resource('dynamodb', region_name='us-west-2')
+soup = BeautifulSoup(page.content, features="html.parser")
+dynamodb = boto3.client('dynamodb', region_name='us-west-2')
+
 
 
 def process_table():
     rows = soup.find_all('tr', class_='odd')
-    v_table = dynamo.Table('licitaciones')
-
-    for row in rows:
+    licitaciones_actuales = dynamodb.scan(TableName='licitaciones', ProjectionExpression="licitacion, tipo, id", FilterExpression='entidad= :entidad', ExpressionAttributeValues= {":entidad":{"S":"Guadalajara"} })
+    lista_auxiliar = []
+    for i,row in enumerate(rows):
+        print("intentando")
         line = row.text
         text = line.split(' ')
         if 'LPL' in text:
@@ -57,41 +58,69 @@ def process_table():
                 'descripcion': descripcion.replace('“', "").replace('"',"").replace("\n", ""),
                 'urls': {"base": base, "convocatoria": convocatoria, "fallo": fallo}
             }
-            v_table.put_item(Item=item)
-            print(item)
-            print('Registrando ' + licitacion)
+            lista_auxiliar.append(item)
+        
+            result = list(filter(lambda x: x["licitacion"]["S"]==item["licitacion"], licitaciones_actuales["Items"]))
+            if len(result) == 0:
+                print("agregando ")
+                d_val = {
+                    "id": {"S": item["id"]},
+                    "licitacion": {"S": item["licitacion"]},
+                    "entidad": {"S": item["entidad"]},
+                    "urls": {"M": {"base": {"S": item["urls"]["base"]}, "convocatoria":{"S":item["urls"]["convocatoria"]}} },
+                    "descripcion": {"S": item["descripcion"]}
+                }
+                print("agregando")
+                dynamodb.put_item(TableName='licitaciones', Item=d_val)
+                payload = json.dumps({'id': item["id"]})
+                requests.post("http://127.0.0.1:8000/add_licitacion", data=payload)
+                #llamada al server para avisar que hay una nueva licitacion
 
+    #este for nos va a ayudar a que si en la pagina del gobierno borraron una licitacion nosotros la borremos de dynamo
+    for item in licitaciones_actuales["Items"]:
+        result = list(filter(lambda x: x["licitacion"] ==item["licitacion"]["S"], lista_auxiliar))
+        if len(result) == 0:
+            print("lo borro")
+            payload = json.dumps({'id': item["id"]})
+            dynamodb.delete_item(TableName='licitaciones', Key={"id":item["id"]})
+            requests.post("http://127.0.0.1:8000/remove_licitacion", data=payload)
     return
 
 
 def check_changes(hash_value):
-    s_table = dynamo.Table('states')
-    response = s_table.query(
-        KeyConditionExpression=Key('name').eq('guadalajara'))
-
+    response = dynamodb.query(TableName='states', Select='ALL_ATTRIBUTES', KeyConditionExpression='entidad = :nombre', ExpressionAttributeValues= { ":nombre":{"S":"Guadalajara"}})
+    print("viendo states reponse")
+    print(response)
+    fecha = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if len(response['Items']) == 0:
-        s_table.put_item(Item={'name': 'guadalajara', 'current': hash_value})
+        dynamodb.put_item(TableName='states',Item={'entidad': {"S": 'Guadalajara'}, 'actual': {"S":hash_value}, "fecha": {"S": fecha} })
         return True
     else:
-        response = s_table.get_item(Key={'name': 'guadalajara'})
-        print(response)
+        response = dynamodb.get_item(TableName='states', Key={'entidad': {"S":'Guadalajara'}})
         current = response['Item']
-        if current['current'] != hash_value:
-            s_table.update_item(
-                Key={'name': 'guadalajara'},
-                UpdateExpression='SET #new_current = :val',
-                ExpressionAttributeValues={':val': hash_value},
-                ExpressionAttributeNames={'#new_current': 'current'}
-
+        print("viendo si encontro uno")
+        print(current)
+        print(hash_value)
+        if current['actual']["S"] != hash_value:
+            dynamodb.update_item(TableName='states',
+                Key={'entidad': {"S": 'Guadalajara'}},
+                UpdateExpression="set actual=:r, fecha=:f",
+                ExpressionAttributeValues={':r': {"S": hash_value}, ":f":{"S": fecha}}
             )
             return True
 
     return False
 
 
-#hash_value = hashlib.sha224(soup).hexdigest()
-#if check_changes(hash_value):
-#    process_table()
+def execute_process():
+    url = 'https://transparencia.guadalajara.gob.mx/licitaciones2021'
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content, features="html.parser")
+    rows = soup.find_all('tr', class_='odd')
+    rows = str(rows)
+    hash_value = hashlib.sha224(rows.encode()).hexdigest()
+    if check_changes(hash_value):
+        process_table()
 
 if __name__ == "__main__":
-    process_table()
+    execute_process()

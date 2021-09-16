@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
@@ -9,19 +8,19 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.core.mail import send_mail, BadHeaderError
 from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm, ContactForm
-from .models import Profile, UsuarioLicitaciones
+from .models import UsuarioLicitaciones, Group
 from django.contrib.auth.models import User
 import paypalrestsdk
 import json
 from paypalrestsdk.notifications import WebhookEvent
-from django.views.generic import TemplateView
 from .dynamo_functions import fetch_items_table
 from .licitaciones import get_user_licitaciones
 from .filtros import get_user_filtros
 from .utils import compare_user
-from .models import CatalogoFiltros, UsuarioFiltros
 from django.http import JsonResponse
 from django.views.decorators.cache import never_cache
+import stripe
+from django.views.generic import TemplateView
 
 
 
@@ -55,6 +54,7 @@ def my_login(request):
     print(user)
     if user is not None:
         login(request, user)
+        licitaciones = UsuarioLicitaciones.objects.filter(user=request.user.id)
         return render(request, 'account/dashboard.html',
                   {'section': 'dashboard', "licitaciones":licitaciones})
     else:
@@ -126,45 +126,67 @@ def register(request):
         user_form = UserRegistrationForm(request.POST)
         if user_form.is_valid():
             request.session['subscription_plan'] = request.POST.get('plans')
-
-            if request.session.get('subscription_plan') == 'Basica':
-                plan_id = settings.PAYPAL_PLAN_MONTHLY_ID
-                data = {
-                    'plan_id': plan_id,
-                    "subscriber": {
-                        "name": {
-                          "given_name": user_form.data['first_name'],
-                          "surname": user_form.data['last_name']
+            if request.POST.get('tipo') == "stripe":
+                user = User.objects.create_user(username=user_form.data['username'], first_name=user_form.data['first_name'], last_name=user_form.data['last_name'], email=user_form.data['email'], password=user_form.data['password'])
+                user.save()
+                stripe.api_key = settings.STRIPE_SECRET
+                session = stripe.checkout.Session.create(
+                client_reference_id=request.user.id if request.user.is_authenticated else None,
+                success_url=f"{settings.DOMAIN_URL}" + 'account/register-done/?session_id={CHECKOUT_SESSION_ID}&user_id='+f"{user.id}",
+                cancel_url=f"{settings.DOMAIN_URL}" + 'cancel/',
+                payment_method_types=['card'],
+                mode='subscription',
+                line_items=[
+                        {
+                            'price': settings.STRIPE_BASIC,
+                            'quantity': 1,
+                        }
+                    ]
+                )
+                return render(request, 'account/stripe-checkout.html', {"checkout":session["id"], "public_key": settings.STRIPE_KEY})
+            else:
+                if request.session.get('subscription_plan') == 'Basica':
+                    plan_id = settings.PAYPAL_PLAN_MONTHLY_ID
+                    data = {
+                        'plan_id': plan_id,
+                        "subscriber": {
+                            "name": {
+                            "given_name": user_form.data['first_name'],
+                            "surname": user_form.data['last_name']
+                            },
+                            "email_address": user_form.data['email']
                         },
-                        "email_address": user_form.data['email']
-                    },
-                    "custom_id": user_form.data['username'],
-                    "application_context": {
-                        "brand_name": "Licitamex",
-                        "locale": "en-MX",
-                        "shipping_preference": "NO_SHIPPING",
-                        "user_action": "SUBSCRIBE_NOW",
-                        "payment_method": {
-                            "payer_selected": "PAYPAL",
-                            "payee_preferred": "IMMEDIATE_PAYMENT_REQUIRED"
-                        },
-                        "return_url": "https://www.consultalicitamex.com/account/register-done/",
-                        "cancel_url": "https://www.consultalicitamex.com/account/register-done/"
+                        "custom_id": user_form.data['username'],
+                        "application_context": {
+                            "brand_name": "Licitamex",
+                            "locale": "en-MX",
+                            "shipping_preference": "NO_SHIPPING",
+                            "user_action": "SUBSCRIBE_NOW",
+                            "payment_method": {
+                                "payer_selected": "PAYPAL",
+                                "payee_preferred": "IMMEDIATE_PAYMENT_REQUIRED"
+                            },
+                            "return_url": "https://consultalicitamex.com/account/register-done/",
+                            "cancel_url": "https://consultalicitamex.com/cancel/"
+                        }
                     }
-                }
-                ret = myapi.post("v1/billing/subscriptions", data)
-                if ret['status'] == 'APPROVAL_PENDING':
-                    # Create inactive user and profile
+                    ret = myapi.post("v1/billing/subscriptions", data)
+                    print("viendo status")
+                    print(ret)
+                    if ret['status'] == 'APPROVAL_PENDING':
+                        # Create inactive user and profile
 
-                    for link in ret['links']:
-                        if link['rel'] == 'approve':
-                            redirect_url = link['href']
-                            user = User.objects.create_user(username=user_form.data['username'], first_name=user_form.data['first_name'], last_name=user_form.data['last_name'], email=user_form.data['email'], password=user_form.data['password'])
-                            user.save()
-                
-                    #return HttpResponseRedirect(redirect_url)
+                        for link in ret['links']:
+                            if link['rel'] == 'approve':
+                                redirect_url = link['href']
+                                user = User.objects.create_user(username=user_form.data['username'], first_name=user_form.data['first_name'], last_name=user_form.data['last_name'], email=user_form.data['email'], password=user_form.data['password'])
+                                user.save()
+                                group = Group(admin_user=user, plan_active=True)
+                                group.save()
+                    
+                        return HttpResponseRedirect(redirect_url)
                     #return HttpResponseRedirect("http://127.0.0.1:8000/")
-                    return render(request, 'account/dashboard.html',{})
+                    #return render(request, 'account/dashboard.html',{})
 
     else:
         user_form = UserRegistrationForm()
@@ -213,6 +235,24 @@ def contact(request):
     form = ContactForm()
     return render(request, "account/contact.html", {'form': form})
 
-
 class RegisterDonePageView(TemplateView):
     template_name = 'account/register_done.html'
+
+
+def RegisterDone(request):
+    user_id = request.GET.get('user_id')
+    session_id = request.GET.get('session_id')
+    print("viendo el  id", user_id)
+    print("viendo el  session_id", session_id)
+    stripe.api_key = settings.STRIPE_SECRET
+    session = stripe.checkout.Session.retrieve(session_id)
+    print(session)
+    if session["payment_status"] in ["paid", "unpaid"]:
+        print("si callo")
+        user = User.objects.get(pk=user_id)
+        group = Group(admin_user=user, plan_active=True)
+        group.save()
+    return render(request, "account/register_done.html")
+
+def cancel(request):
+    return render(request, "account/cancel.html")

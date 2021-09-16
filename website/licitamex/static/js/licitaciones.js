@@ -47,7 +47,7 @@ function activar_licitacion(id, description, entidad){
     let cookie = getCookie('csrftoken');
     $("#activar_licitacionr"+id.toString().split(".")[0]).addClass("hide-element");
     $("#loaderr"+id.toString().split(".")[0]).removeClass("hide-element");
-    fetch('http://127.0.0.1:8000/account/activate_licitacion',{ method: 'POST',
+    fetch('http://localhost:8000/account/activate_licitacion',{ method: 'POST',
         headers: {'X-CSRFToken': cookie},
         mode: 'same-origin',
         cache: 'default',

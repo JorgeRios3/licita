@@ -5,18 +5,20 @@ import hashlib
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
 import datetime
-
+import requests
+import json
 
 
 url = 'https://encompras.jalisco.gob.mx/SJ3Kweb/secure/'
-dynamo = boto3.resource('dynamodb', region_name='us-west-2')
 
+dynamodb = boto3.client('dynamodb', region_name='us-west-2')
 
-def process_table():
+def process_table(table):
     rows = table.find_elements_by_class_name("rich-table-firstrow")
-    v_table = dynamo.Table('licitaciones')
-
-    for row in rows:
+    licitaciones_actuales = dynamodb.scan(TableName='licitaciones', ProjectionExpression="licitacion, tipo, id", FilterExpression='entidad= :entidad', ExpressionAttributeValues= {":entidad":{"S":"Jalisco"} })
+    lista_auxiliar = []
+    #este for es para agregar nuevas licitaciones a dynamodb validando contra los actuales en dynamodb
+    for i,row in enumerate(rows):
         elements = row.find_elements_by_class_name("rich-table-cell")
         try:
             tipo = elements[1].text
@@ -39,7 +41,7 @@ def process_table():
         try:
             dependencia = elements[4].text
         except:
-            depencencia = ""
+            dependencia = ""
         try:
             publicacion = elements[5].text
         except:
@@ -69,30 +71,60 @@ def process_table():
             'urls':urls,
             "descripcion": f"{tipo} {familia}"
         }
+        lista_auxiliar.append(item)
+        
+        result = list(filter(lambda x: x["licitacion"]["S"]==item["licitacion"] and x["tipo"]["S"]==item["tipo"], licitaciones_actuales["Items"]))
+        if len(result) == 0:
+            d_val = {
+                "id": {"S": item["id"]},
+                "licitacion": {"S": item["licitacion"]},
+                "entidad": {"S": item["entidad"]},
+                "tipo": {"S": item["tipo"]},
+                "solicitud": {"S": item["solicitud"]},
+                "grupo": {"S": item["grupo"]},
+                "familia": {"S": item["familia"]},
+                "dependencia": {"S": item["dependencia"]},
+                "publicacion": {"S": item["publicacion"]},
+                "limite": {"S": item["limite"]},
+                "urls": {"M": {f"{texto}": {"S": url}} },
+                "descripcion": {"S": item["descripcion"]}
+            }
+            print("agregando")
+            dynamodb.put_item(TableName='licitaciones', Item=d_val)
+            payload = json.dumps({'id': item["id"]})
+            requests.post("http://127.0.0.1:8000/add_licitacion", data=payload)
+            #llamada al server para avisar que hay una nueva licitacion
 
-        v_table.put_item(Item=item)
-        print('Registrando ' + licitacion)
+    #este for nos va a ayudar a que si en la pagina del gobierno borraron una licitacion nosotros la borremos de dynamo
+    for item in licitaciones_actuales["Items"]:
+        result = list(filter(lambda x: x["licitacion"] ==item["licitacion"]["S"] and item["tipo"]["S"]==x["tipo"] , lista_auxiliar))
+        if len(result) == 0:
+            print("lo borro")
+            payload = json.dumps({'id': item["id"]})
+            dynamodb.delete_item(TableName='licitaciones', Key={"id":item["id"]})
+            requests.post("http://127.0.0.1:8000/remove_licitacion", data=payload)
 
     return
 
 
 def check_changes(hash_value):
-    s_table = dynamo.Table('states')
-    response = s_table.query(KeyConditionExpression=Key('name').eq('jalisco'))
-
+    response = dynamodb.query(TableName='states', Select='ALL_ATTRIBUTES', KeyConditionExpression='entidad = :nombre', ExpressionAttributeValues= { ":nombre":{"S":"Jalisco"}})
+    print("viendo states reponse")
+    print(response)
+    fecha = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if len(response['Items']) == 0:
-        s_table.put_item(Item={'name': 'jalisco', 'current': hash_value})
+        dynamodb.put_item(TableName='states',Item={'entidad': {"S": 'Jalisco'}, 'actual': {"S":hash_value}, "fecha": {"S": fecha} })
         return True
     else:
-        response = s_table.get_item(Key={'name': 'jalisco'})
+        response = dynamodb.get_item(TableName='states', Key={'entidad': {"S":'Jalisco'}})
         current = response['Item']
-        if current['current'] != hash_value:
-            s_table.update_item(
-                Key={'name': 'jalisco'},
-                UpdateExpression='SET #new_current = :val',
-                ExpressionAttributeValues={':val': hash_value},
-                ExpressionAttributeNames={'#new_current': 'current'}
-
+        print("viendo si encontro uno")
+        print(current)
+        if current['actual']["S"] != hash_value:
+            dynamodb.update_item(TableName='states',
+                Key={'entidad': {"S": 'Jalisco'}},
+                UpdateExpression="set actual=:r, fecha=:f",
+                ExpressionAttributeValues={':r': {"S": hash_value}, ":f":{"S": fecha}}
             )
             return True
 
@@ -116,7 +148,7 @@ table = driver.find_element_by_class_name("rich-table")
 hash_value = hashlib.sha224(table.text.encode()).hexdigest()
 
 #if check_changes(hash_value):
-process_table()
+process_table(table)
 
 driver.close()
 driver.quit()

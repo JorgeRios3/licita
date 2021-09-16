@@ -50,8 +50,6 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
         <!-- Text Logo - Use this if you don't have a graphic logo -->
-        <a class="navbar-brand logo-text page-scroll" href="/">Licitamex</a>
-
         <!-- Image Logo -->
         <!-- <a class="navbar-brand logo-image" href="/"><img src="{% static 'images/logo.svg' %}" alt="alternative"></a> -->
         
@@ -63,7 +61,7 @@
         <!-- end of mobile menu toggle button -->
 
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-            <ul class="navbar-nav ml-auto">
+            <ul class="navbar-nav mx-auto">
                 {% block navbarfront %}
                 {% endblock %}
                 {% block navbarback %}
@@ -175,6 +173,7 @@
     <script src="{% static 'js/licitaciones.js' %}"></script>
     <script src="{% static 'js/mis_licitaciones.js' %}"></script>
     <script src="{% static 'js/configuracion.js' %}"></script>
+    <script src="https://js.stripe.com/v3/"></script>
     <script src="https://cdn.jsdelivr.net/gh/xcash/bootstrap-autocomplete@v2.3.7/dist/latest/bootstrap-autocomplete.min.js"></script>
 
 

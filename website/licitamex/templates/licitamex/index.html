@@ -9,12 +9,15 @@
         <div class="header-content">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-6">
-                        <div class="text-container">
-                            <h1>Licitamex</h1>
-                            <p class="p-large">Frase super motivadora de como ser el chido y ganar todas las licitaciones</p>
-                            <a class="btn-solid-lg page-scroll" href="#services">Conocenos</a>
-                        </div> <!-- end of text-container -->
+                    <div class="col-lg-6 align-self-center">
+                        <div class="row">
+                            <div class="col">
+                                <button type="button" class="btn btn-dark orange-button"><a style="text-decoration: none; color:white"href="/account/register/">Registrate</a></button>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="btn btn-light button-border-orange"><a style="text-decoration: none; color:rgb(241,90,36)"href="/account/login/">Inicia Sesión</a></button>
+                            </div>
+                        </div>
                     </div> <!-- end of col -->
                     <div class="col-lg-6">
                         <div class="image-container">
@@ -35,111 +38,62 @@
     </li>
 {% endif %}
 <!-- Dropdown Menu -->          
-<li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle page-scroll" href="#services" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">Conocenos</a>
+<li class="nav-item dropdown padding-nav-items">
+    <a class="nav-link dropdown-toggle page-scroll helvetica-font" href="#services" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">Conocenos</a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="https://www.nilaconsulting.com.mx/"><span class="item-text">Nila Consulting</span></a>
+        <a class="dropdown-item helvetica-font" href="https://www.nilaconsulting.com.mx/"><span class="item-text">Nila Consulting</span></a>
         <div class="dropdown-items-divide-hr"></div>
-        <a class="dropdown-item" href="{% url 'terms-conditions' %}"><span class="item-text">Terminos y condiciones</span></a>
+        <a class="dropdown-item helvetica-font" href="{% url 'terms-conditions' %}"><span class="item-text">Terminos y condiciones</span></a>
         <div class="dropdown-items-divide-hr"></div>
-        <a class="dropdown-item" href="{% url 'privacy-policy' %}"><span class="item-text">Politica de privacidad</span></a>
+        <a class="dropdown-item helvetica-font" href="{% url 'privacy-policy' %}"><span class="item-text">Politica de privacidad</span></a>
     </div>
 </li>
 <!-- end of dropdown menu -->
-<li class="nav-item">
-    <a class="nav-link page-scroll" href="#pricing">Membresias</a>
+<li class="nav-item padding-nav-items">
+    <a class="nav-link page-scroll helvetica-font" href="#pricing">Membresias</a>
 </li>
-<li class="nav-item">
-    <a class="nav-link page-scroll" href="#about">Nosotros</a>
+<li class="nav-item padding-nav-items">
+    <a class="nav-link page-scroll helvetica-font" href="#about">Nosotros</a>
+</li>
+<li class="nav-item padding-nav-items">
+    <a class="nav-link page-scroll baloo-font" href="/" style="font-size: 2em;">Licitamex</a>
 </li>
 {% if request.user.is_authenticated %}
-        <li class="nav-item">
-            <a class="nav-link page-scroll" href="{% url 'dashboard' %}">Ayuda</a>
+        <li class="nav-item padding-nav-items">
+            <a class="nav-link page-scroll helvetica-font" href="{% url 'dashboard' %}">Ayuda</a>
         </li>
     {% else %}
-        <li class="nav-item">
-            <a class="nav-link page-scroll" href="{% url 'contact' %}">Contacto</a>
+        <li class="nav-item padding-nav-items">
+            <a class="nav-link page-scroll helvetica-font" href="{% url 'contact' %}">Contacto</a>
         </li>
     {% endif %}
 {% endblock %}
 
 {% block navbarback %}
     {% if request.user.is_authenticated %}
-        <li class="nav-item">
-            <a class="nav-link page-scroll" href="{% url 'logout' %}">Salir</a>
+        <li class="nav-item padding-nav-items">
+            <a class="nav-link page-scroll helvetica-font" href="{% url 'logout' %}">Salir</a>
         </li>
     {% else %}
-        <li class="nav-item">
-            <a class="nav-link page-scroll" href="{% url 'register' %}">Registrate</a>
+        <li class="nav-item padding-nav-items">
+            <a class="nav-link page-scroll helvetica-font" href="{% url 'register' %}">Registrate</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link page-scroll" href="{% url 'login' %}">Iniciar sesión</a>
+        <li class="nav-item padding-nav-items">
+            <a class="nav-link page-scroll helvetica-font" href="{% url 'login' %}">Iniciar sesión</a>
         </li>
     {% endif %}
 {% endblock %}
 
 
 {% block content %}
-    <!-- Customers -->
-    <div class="slider-1">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h5>Competencias</h5>
-                    
-                    <!-- Image Slider -->
-                    <div class="slider-container">
-                        <div class="swiper-container image-slider">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <div class="image-container">
-                                        <img class="img-responsive" src="{% static 'images/customer-logo-1.png' %}" alt="alternative">
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="image-container">
-                                        <img class="img-responsive" src="{% static 'images/customer-logo-2.png' %}" alt="alternative">
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="image-container">
-                                        <img class="img-responsive" src="{% static 'images/customer-logo-3.png' %}" alt="alternative">
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="image-container">
-                                        <img class="img-responsive" src="{% static 'images/customer-logo-4.png' %}" alt="alternative">
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="image-container">
-                                        <img class="img-responsive" src="{% static 'images/customer-logo-5.png' %}" alt="alternative">
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="image-container">
-                                        <img class="img-responsive" src="{% static 'images/customer-logo-6.png' %}" alt="alternative">
-                                    </div>
-                                </div>
-                            </div> <!-- end of swiper-wrapper -->
-                        </div> <!-- end of swiper container -->
-                    </div> <!-- end of slider-container -->
-                    <!-- end of image slider -->
-
-                </div> <!-- end of col -->
-            </div> <!-- end of row -->
-        </div> <!-- end of container -->
-    </div> <!-- end of slider-1 -->
-    <!-- end of customers -->
-
 
     <!-- Services -->
     <div id="services" class="cards-1">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <h2>Conocenos</h2>
-                    <p class="p-heading p-large">Aprovecha las oportunidades antes que nadie utilizando nuestro sistema de notificaciones</p>
+                    <h2 class="baloo-font" style="font-weight: 900; font-size: 2.5em;">Conocenos</h2>
+                    <p class="p-heading p-large" style="font-family: avenir;">Aprovecha las oportunidades antes que nadie utilizando nuestro sistema de notificaciones</p>
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
             <div class="row">
@@ -147,30 +101,36 @@
 
                     <!-- Card -->
                     <div class="card">
-                        <img class="card-image" src="{% static 'images/services-icon-1.svg' %}" alt="alternative">
+                        <img class="card-image" src="{% static 'images/IMG_ltmx1.png' %}" alt="alternative">
                         <div class="card-body">
-                            <h4 class="card-title">Enfocate en tu negocio</h4>
-                            <p>Deja que nuestra plataforma se ocupe del monitoreo de convocatorias para que tu puedas dedicarte a lo importante</p>
+                            <h4 class="card-title baloo-font" style="font-weight: 900 !important;font-size: 1.9em;">
+                                Enfocate en tu negocio
+                            </h4>
+                            <p style="font-family: avenir">Deja que nuestra plataforma se ocupe del monitoreo de convocatorias para que tu puedas dedicarte a lo importante</p>
                         </div>
                     </div>
                     <!-- end of card -->
 
                     <!-- Card -->
                     <div class="card">
-                        <img class="card-image" src="{% static 'images/services-icon-2.svg' %}" alt="alternative">
+                        <img class="card-image" src="{% static 'images/IMG-ltmx-02.png' %}" alt="alternative">
                         <div class="card-body">
-                            <h4 class="card-title">No pierdas tiempo</h4>
-                            <p>Enterate de las convocatorias tan pronto como son anunciadas</p>
+                            <h4 class="card-title baloo-font" style="
+                            font-weight: 900 !important;
+                            font-size: 1.9em;">No pierdas tiempo</h4>
+                            <p style="font-family: avenir">Enterate de las convocatorias tan pronto como son anunciadas</p>
                         </div>
                     </div>
                     <!-- end of card -->
 
                     <!-- Card -->
                     <div class="card">
-                        <img class="card-image" src="{% static 'images/services-icon-3.svg' %}" alt="alternative">
+                        <img class="card-image" src="{% static 'images/IMG-ltmx-03-1.png' %}" alt="alternative">
                         <div class="card-body">
-                            <h4 class="card-title">Personalizacion</h4>
-                            <p>Crea notificaciones personalizadas justo a la medida de tu negocio</p>
+                            <h4 class="card-title baloo-font" style="
+                            font-weight: 900 !important;
+                            font-size: 1.9em;">Personalizacion</h4>
+                            <p style="font-family: avenir">Crea notificaciones personalizadas justo a la medida de tu negocio</p>
                         </div>
                     </div>
                     <!-- end of card -->
@@ -188,9 +148,9 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="text-container">
-                        <h2>Recibe notificaciones directamente a tu correo o celular</h2>
-                        <p>Tu decides que notificaciones deseas recibir y a donde mas te sea conveniente, a tu correo, Whatssapp o Telegram </p>
-                        <a class="btn-solid-reg popup-with-move-anim" href="#details-lightbox-1">Ejemplo?</a>
+                        <h2 class="baloo-font">Recibe notificaciones directamente a tu correo o celular</h2>
+                        <p class="avenir-font">Tu decides que notificaciones deseas recibir y a donde mas te sea conveniente, a tu correo, Whatssapp o Telegram </p>
+                        <!--<a class="btn-solid-reg popup-with-move-anim" href="#details-lightbox-1">Ejemplo?</a>-->
                     </div> <!-- end of text-container -->
                 </div> <!-- end of col -->
                 <div class="col-lg-6">
@@ -215,22 +175,18 @@
                 </div> <!-- end of col -->
                 <div class="col-lg-6">
                     <div class="text-container">
-                        <h2>Conoce mejor tu negocio</h2>
+                        <h2 class="baloo-font">Conoce mejor tu negocio</h2>
                         <ul class="list-unstyled li-space-lg">
                             <li class="media">
                                 <i class="fas fa-check"></i>
-                                <div class="media-body">Analisa el registro historico de tus distintas alertas</div>
+                                <div class="media-body avenir-font">Analisa el registro historico de tus distintas alertas</div>
                             </li>
                             <li class="media">
                                 <i class="fas fa-check"></i>
-                                <div class="media-body">Conoce cuantas notificaciones haz recibdo</div>
-                            </li>
-                            <li class="media">
-                                <i class="fas fa-check"></i>
-                                <div class="media-body">Otro ejemplo mamalon de alguna otra cosa</div>
+                                <div class="media-body avenir-font">Conoce cuantas notificaciones haz recibdo</div>
                             </li>
                         </ul>
-                        <a class="btn-solid-reg popup-with-move-anim" href="#details-lightbox-2">Ejemplo de reporte?</a>
+                        <!--<a class="btn-solid-reg popup-with-move-anim" href="#details-lightbox-2">Ejemplo de reporte?</a>-->
                     </div> <!-- end of text-container -->
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
@@ -331,8 +287,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <h2>Nuestras membresias</h2>
-                    <p class="p-heading p-large">Conoce nuestras distintos tipos de membresia, y subcribete al que mas le acomode a tu negocio</p>
+                    <h2 class="baloo-font" style="font-weight: 900; font-size: 2.5em;">Nuestras membresias</h2>
+                    <p class="p-heading p-large avenir-font">Conoce nuestras distintos tipos de membresia, y subcribete al que mas le acomode a tu negocio</p>
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
             <div class="row">
@@ -340,12 +296,14 @@
 
                     <!-- Card-->
                     <div class="card">
-                        <div class="card-body">
-                            <div class="card-title">Pequeñines</div>
-                            <div class="card-subtitle">Es provete no artete</div>
+                        <div class="card-title baloo-font card-titles-basic" style="font-weight: 900; font-size: 2.8em;">
+                            <div>Básico</div>
+                        </div>
+
+                        <div class="card-body black-background-color body-cards">
                             <hr class="cell-divide-hr">
-                            <div class="price">
-                                <span class="currency">$</span><span class="value">199</span>
+                            <div class="price baloo-font" style="color:white">
+                                <span class="currency" style="color:white">$</span><span class="value" style="color:white">199</span>
                                 <div class="frequency">mensual</div>
                             </div>
                             <hr class="cell-divide-hr">
@@ -373,32 +331,35 @@
                     </div> <!-- end of card -->
                     <!-- end of card -->
 
-                    <!-- Card-->
                     <div class="card">
-                        <div class="card-body">
-                            <div class="card-title">Normalon</div>
-                            <div class="card-subtitle">Mediocre  :c</div>
+                        <div class="card-title baloo-font card-titles-plus" style="font-weight: 900; font-size: 2.8em;">
+                            <div>Plus</div>
+                        </div>
+
+                        <div class="card-body black-background-color body-cards">
                             <hr class="cell-divide-hr">
-                            <div class="price">
-                                <span class="currency">$</span><span class="value">299</span>
+                            <div class="price baloo-font" style="color:white">
+                                <p class="baloo-font" style="color:red">Proximamente</p>
+                                <br>
+                                <span class="currency" style="color:white">$</span><span class="value" style="color:white">299</span>
                                 <div class="frequency">mensual</div>
                             </div>
                             <hr class="cell-divide-hr">
                             <ul class="list-unstyled li-space-lg">
                                 <li class="media">
-                                    <i class="fas fa-check"></i><div class="media-body">Tiliche 1</div>
+                                    <i class="fas fa-check"></i><div class="media-body">Cosa 1</div>
                                 </li>
                                 <li class="media">
-                                    <i class="fas fa-check"></i><div class="media-body">Tiliche 2</div>
+                                    <i class="fas fa-check"></i><div class="media-body">Cosa 2</div>
                                 </li>
                                 <li class="media">
-                                    <i class="fas fa-check"></i><div class="media-body">Tiliche 3</div>
+                                    <i class="fas fa-times"></i><div class="media-body">Cosa 3</div>
                                 </li>
                                 <li class="media">
-                                    <i class="fas fa-check"></i><div class="media-body">Tiliche 4</div>
+                                    <i class="fas fa-times"></i><div class="media-body">Cosa 4</div>
                                 </li>
                                 <li class="media">
-                                    <i class="fas fa-times"></i><div class="media-body">Tiliche 5</div>
+                                    <i class="fas fa-times"></i><div class="media-body">Cosa 5</div>
                                 </li>
                             </ul>
                             <div class="button-wrapper">
@@ -408,43 +369,6 @@
                     </div> <!-- end of card -->
                     <!-- end of card -->
 
-                    <!-- Card-->
-                    <div class="card">
-                        <div class="label">
-                            <p class="best-value">Best Value</p>
-                        </div>
-                        <div class="card-body">
-                            <div class="card-title">Mamalon</div>
-                            <div class="card-subtitle">Pinsho presumido</div>
-                            <hr class="cell-divide-hr">
-                            <div class="price">
-                                <span class="currency">$</span><span class="value">399</span>
-                                <div class="frequency">mensual</div>
-                            </div>
-                            <hr class="cell-divide-hr">
-                            <ul class="list-unstyled li-space-lg">
-                                <li class="media">
-                                    <i class="fas fa-check"></i><div class="media-body">Caviar</div>
-                                </li>
-                                <li class="media">
-                                    <i class="fas fa-check"></i><div class="media-body">Aguacate</div>
-                                </li>
-                                <li class="media">
-                                    <i class="fas fa-check"></i><div class="media-body">Premium de a 91 octanos</div>
-                                </li>
-                                <li class="media">
-                                    <i class="fas fa-check"></i><div class="media-body">Un iphone</div>
-                                </li>
-                                <li class="media">
-                                    <i class="fas fa-check"></i><div class="media-body">Unos taquitos de lengua</div>
-                                </li>
-                            </ul>
-                            <div class="button-wrapper">
-                                <a class="btn-solid-reg page-scroll" href="#request">Registrate</a>
-                            </div>
-                        </div>
-                    </div> <!-- end of card -->
-                    <!-- end of card -->
 
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
@@ -452,36 +376,6 @@
     </div> <!-- end of cards-2 -->
     <!-- end of pricing -->
 
-    <!-- Video -->
-    <div class="basic-3">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h2>Mira nuestro video</h2>
-                </div> <!-- end of col -->
-            </div> <!-- end of row -->
-            <div class="row">
-                <div class="col-lg-12">
-                    
-                    <!-- Video Preview -->
-                    <div class="image-container">
-                        <div class="video-wrapper">
-                            <a class="popup-youtube" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" data-effect="fadeIn">
-                                <img class="img-fluid" src="{% static 'images/video-frame.svg' %}" alt="alternative">
-                                <span class="video-play-button">
-                                    <span></span>
-                                </span>
-                            </a>
-                        </div> <!-- end of video-wrapper -->
-                    </div> <!-- end of image-container -->
-                    <!-- end of video preview -->
-
-                    <p>Conoce nuestro nuestro <strong>profsionalismo y compromiso</strong> hacia con nuestros clientes.</p>
-                </div> <!-- end of col -->
-            </div> <!-- end of row -->
-        </div> <!-- end of container -->
-    </div> <!-- end of basic-3 -->
-    <!-- end of video -->
 
 
     <!-- Testimonials -->

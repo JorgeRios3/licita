@@ -6,3 +6,5 @@ mercadopago
 click
 paypalrestsdk
 fuzzywuzzy
+stripe==2.60.*
+mailjet-rest==1.3.*

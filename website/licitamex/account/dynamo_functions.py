@@ -19,5 +19,18 @@ def fetch_items_table(table=None, attr=None):
     else:
         return []
 
+def fetch_item(table=None, attr=None):
+    if table != None:
+        if attr != None:
+            print("si entro aca")
+            table = dynamodb.Table(table)
+            item = table.get_item(Key={'id': attr})
+            return item["Item"]
+        else:
+            return None
+    return None
+
+
+
 
 

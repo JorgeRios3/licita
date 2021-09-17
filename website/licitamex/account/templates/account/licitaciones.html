@@ -5,13 +5,13 @@
 {% endblock %}
 
 {% block account_content %}
-<div id="main_container">
+<div id="main_container" style="padding-top: 100px;">
     <div class="row">
         <div class="col-4">
             <form>
                 <div class="form-group">
                 <label for="exampleInputEmail1">Buscar Licitacion</label>
-                <input id="search_licitacion" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nombre Licitacion" onkeyup="keyupFunction()">
+                <input id="search_licitacion" type="email" class="form-control basic-input" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nombre Licitacion" onkeyup="keyupFunction()">
                 </div>
             </form>
         </div>
@@ -32,31 +32,31 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th scope="col">Licitacion</th>
-                        <th scope="col">Entidad</th>
-                        <th scope="col">Descripcion</th>
-                        <th scope="col">Detalles</th>
-                        <th scope="col">Seleccion</th>
+                        <th scope="col" class="table-titles">Licitacion</th>
+                        <th scope="col" class="table-titles">Entidad</th>
+                        <th scope="col" class="table-titles">Descripcion</th>
+                        <th scope="col" class="table-titles">Detalles</th>
+                        <th scope="col" class="table-titles">Seleccion</th>
                     </tr>
                     </thead>
                     <tbody>
                         {% for x in licitaciones %}
                         <tr id="{{x.id|format_id_rows}}">
-                            <td>
+                            <td class="avenir-font">
                             {% if x.licitacion %}
                             {{x.licitacion}}
                             {% else %}
                             {% endif %}
                             </td>
                 
-                            <td>
+                            <td class="avenir-font">
                             {% if x.entidad %}
                             {{x.entidad}}
                             {% else %}
                             {% endif %}
                             </td>
                             
-                            <td>
+                            <td class="avenir-font">
                             {% if x.entidad == "Jalisco" %}
                                 {{x.tipo}} {{x.familia}}
                             {% else %}
@@ -66,12 +66,12 @@
                                 {% endif %}
                             {% endif %}
                             </td>
-                            <td>
+                            <td class="avenir-font">
                                 {% if x.urls %}
                                 {{ x.urls|format_urls|safe }}
                                 {% endif %}
                             </td>
-                            <td>
+                            <td class="baloo-font">
                                 {% if x.selected %}
                                 <div id="desactivar_licitacion{{x.id|format_id_rows}}" class="btn btn-danger" onClick="desactivar_licitacion({{x.id}})">Desactivar</div>
                                 <div id="loader{{x.id|format_id_rows}}" class="loader hide-element"></div>

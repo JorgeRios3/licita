@@ -6,7 +6,7 @@ FILTRO_ID=null;
 
 function remove_filtro(id){
     let cookie = getCookie('csrftoken');
-    fetch('http://127.0.0.1:8000/account/remove_filtro',{ method: 'POST',
+    fetch('http://localhost:8000/account/remove_filtro',{ method: 'POST',
         headers: {'X-CSRFToken': cookie},
         mode: 'same-origin',
         cache: 'default',
@@ -122,7 +122,7 @@ function change_status_filtro(id, status){
 
 function call_change_status_filtro(licitacion_id, status){
     let cookie = getCookie('csrftoken');
-    fetch('http://127.0.0.1:8000/account/change_status_filtro',{ method: 'POST',
+    fetch('http://localhost:8000/account/change_status_filtro',{ method: 'POST',
         headers: {'X-CSRFToken': cookie},
         mode: 'same-origin',
         cache: 'default',

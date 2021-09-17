@@ -3,9 +3,10 @@ familia=null;
 articulo=null;
 FILTRO_ID=null;
 
+
 function remove_filtro(id){
     let cookie = getCookie('csrftoken');
-    fetch('https://consultalicitamex.com/account/remove_filtro',{ method: 'POST',
+    fetch('http://localhost:8000/account/remove_filtro',{ method: 'POST',
         headers: {'X-CSRFToken': cookie},
         mode: 'same-origin',
         cache: 'default',
@@ -27,7 +28,7 @@ function add_filtro(){
     console.log("llego al boton");
     console.log(grupo, familia, articulo)
     let cookie = getCookie('csrftoken');
-    fetch('https://consultalicitamex.com/account/add_filtro',{ method: 'POST',
+    fetch('http://localhost:8000/account/add_filtro',{ method: 'POST',
     headers: {'X-CSRFToken': cookie},
         mode: 'same-origin',
         cache: 'default',
@@ -60,7 +61,7 @@ $( document ).ready(function() {
         queryKey:'grupo',
         resolverSettings: {
             queryKey:'grupo',
-            url: 'https://consultalicitamex.com/account/filter'
+            url: 'http://localhost:8000/account/filter'
         }
     });
     $(".grupoAutoComplete").on("autocomplete.select", function(evt, item){
@@ -75,7 +76,7 @@ $( document ).ready(function() {
         events: {
             search: function (qry, callback){
                 $.ajax(
-                'https://consultalicitamex.com/account/filter?familia='+qry+"&grupo="+grupo,
+                'http://localhost:8000/account/filter?familia='+qry+"&grupo="+grupo,
                 ).done(function (res) {
                 callback(res)
                 });
@@ -93,7 +94,7 @@ $( document ).ready(function() {
         events: {
             search: function (qry, callback){
                 $.ajax(
-                'https://consultalicitamex.com/account/filter?articulo='+qry+"&grupo="+grupo+"&familia="+familia,
+                'http://localhost:8000/account/filter?articulo='+qry+"&grupo="+grupo+"&familia="+familia,
                 ).done(function (res) {
                 callback(res)
                 });
@@ -121,7 +122,7 @@ function change_status_filtro(id, status){
 
 function call_change_status_filtro(licitacion_id, status){
     let cookie = getCookie('csrftoken');
-    fetch('https://consultalicitamex.com/account/change_status_filtro',{ method: 'POST',
+    fetch('http://localhost:8000/account/change_status_filtro',{ method: 'POST',
         headers: {'X-CSRFToken': cookie},
         mode: 'same-origin',
         cache: 'default',
@@ -136,4 +137,4 @@ function call_change_status_filtro(licitacion_id, status){
         var docArticle = doc.querySelector('#tabla_filtros');
         $( "#tabla_filtros" ).replaceWith( docArticle );
     });
-} 
+}

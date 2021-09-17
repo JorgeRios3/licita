@@ -44,6 +44,18 @@ Colors:
 /******************************/
 /*     01. General Styles     */
 /******************************/
+@font-face {
+	font-family: 'baloo';
+	src: local('Abc'),
+		 url('../webfonts/Baloo2-Regular.ttf') format("truetype");
+}
+
+@font-face {
+	font-family: 'helvetica';
+	src: local('Abc'),
+		 url('../webfonts/Helvetica.ttf') format("truetype");
+}
+
 body,
 html {
     width: 100%;
@@ -53,6 +65,75 @@ html {
 body, p {
 	color: #626262; 
 	font: 400 0.875rem/1.375rem "Raleway", sans-serif;
+}
+
+.baloo-font {
+	font-family: "baloo" !important;
+}
+
+.helvetica-font {
+	font-family: "helvetica" !important;
+}
+.avenir-font{
+	font-family: "avenir" !important;
+}
+.padding-nav-items{
+	padding-right: 4em;
+}
+
+.orange-button{
+	border-radius: 25px;
+    background-color: rgb(241,90,36);
+    border-color: rgb(241,90,36);
+	height: 35px;
+	width: 155px;
+	font-family: 'baloo';
+	font-weight:bold;
+	font-size: 1.3em;
+}
+
+.black-background-color{
+	background-color:rgb(56,56,56);
+}
+
+.button-border-orange{
+	border-radius: 25px;
+    background-color:white;
+    border-color: rgb(241,90,36);
+	height: 35px;
+	width: 155px;
+	color:rgb(241,90,36);
+	font-family: 'baloo';
+	font-weight: bold;
+	font-size: 1.3em;
+}
+
+.card-titles-basic{
+	
+		font-weight: 900;
+		font-size: 2.8em;
+		background: linear-gradient(to right, black, orange);
+		height: 100px;
+		text-align: center;
+		padding-top: 50px;
+		color:white !important;
+		margin-bottom: 0px !important;
+}
+
+.card-titles-plus{
+	
+	font-weight: 900;
+	font-size: 2.8em;
+	background: linear-gradient(to right, blue, white);
+	height: 100px;
+	text-align: center;
+	padding-top: 50px;
+	color:white !important;
+	margin-bottom: 0px !important;
+}
+
+.body-cards{
+	color:white;
 }
 
 .p-large {
@@ -633,7 +714,7 @@ input[type='checkbox'] {
 /*     03. Navigation     */
 /**************************/
 .navbar-custom {
-	background-color: #fff;
+	background-color: rgb(47,97,182) !important;
 	box-shadow: 0 0.0625rem 0.375rem 0 rgba(0, 0, 0, 0.1);
 	font: 600 0.875rem/0.875rem "Raleway", sans-serif;
 	transition: all 0.2s;
@@ -657,7 +738,7 @@ input[type='checkbox'] {
 
 .navbar-custom .nav-item .nav-link {
 	padding: 0.625rem 0.75rem 0.625rem 0.75rem;
-	color: #393939;
+	color:white;
 	text-decoration: none;
 	transition: all 0.2s ease;
 }
@@ -1770,7 +1851,7 @@ a:hover.back-to-top {
 	}
 
 	.navbar-custom.top-nav-collapse .nav-item .nav-link {
-		color: #393939;
+		color: white;
 		opacity: 1;
 	}
 	
@@ -1856,8 +1937,8 @@ a:hover.back-to-top {
 
 	/* Header */
 	.header {
-		background: url('../images/header-background.jpg') center center no-repeat;
-		background-size: cover; 
+		/*background: url('../images/header-background.jpg') center center no-repeat;
+		background-size: cover;*/
 	}
 
 	.header .header-content {
@@ -1988,8 +2069,8 @@ a:hover.back-to-top {
 
 	/* Extra Pages */
 	.ex-header {
-		background: url('../images/ex-header-background.jpg') center center no-repeat;
-		background-size: cover;
+		/*background: url('../images/ex-header-background.jpg') center center no-repeat;
+		background-size: cover;*/
 	}
 
 	.ex-header h1 {
@@ -2182,3 +2263,31 @@ a:hover.back-to-top {
 	/* end of extra pages */
 }
 /* end of min-width width 1200px */
+
+
+
+/* new styles */
+
+.stick-bottom{
+	position: absolute;
+    bottom: 0px;
+}
+
+.hide-element{
+	display:none
+}
+
+
+.loader {
+	border: 16px solid #f3f3f3; /* Light grey */
+	border-top: 16px solid #3498db; /* Blue */
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+	animation: spin 2s linear infinite;
+  }
+  
+  @keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+  }

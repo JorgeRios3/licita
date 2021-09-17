@@ -9,7 +9,9 @@
 
 {% block account_content %}
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-6" style="padding-top: 150px;">
+            <p class="p-large baloo-font titles-register-account blue-color">Inicio de</p>
+            <p class="p-large baloo-font titles-register-account" style="font-size: 4em!important;">Sesión</p>
             {% if form.errors %}
                 <p class="p-large">
                     Usuario o contraseña incorrectos.
@@ -21,7 +23,7 @@
                     {% for field in form.visible_fields %}
                         <div class="form-group">
                             <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                            {{ field|add_class:'form-control' }}
+                            {{ field|add_class:'form-control basic-input' }}
                             <div class="help-block with-errors"></div>
                             {% for error in field.errors %}
                                 <span class="help-block">{{ error }}</span>
@@ -30,10 +32,13 @@
                     {% endfor %}
                     {% csrf_token %}
                     <input type="hidden" name="next" value="{{ next }}" />
-                    <button class="btn-solid-reg" href="{% url 'my_login' %}">Entrar</button>
+                    <button class="btn btn-dark orange-button" href="{% url 'my_login' %}">Entrar</button>
                 </form>
-                <p><a href="{% url 'password_reset' %}">¿Olvidaste tu contraseña?</a></p> 
+                <p><a class="avenir-font" href="{% url 'password_reset' %}">¿Olvidaste tu contraseña?</a></p> 
             </div>
         </div> <!-- end of col -->
+        <div class="col-lg-6">
+            <img class="img-fluid" src="../../../static/images/IMG-ltmx-04.png" alt="alternative">
+        </div>
     </div> <!-- end of row -->
 {% endblock %}

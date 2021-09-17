@@ -14,7 +14,7 @@ function change_status(licitacion_id, status){
 
 function call_change_status_licitacion(licitacion_id, status){
     let cookie = getCookie('csrftoken');
-    fetch('http://127.0.0.1:8000/account/change_status_licitacion',{ method: 'POST',
+    fetch('http://localhost:8000/account/change_status_licitacion',{ method: 'POST',
         headers: {'X-CSRFToken': cookie},
         mode: 'same-origin',
         cache: 'default',
@@ -35,7 +35,7 @@ function call_change_status_licitacion(licitacion_id, status){
 function aceptar_borrar(){
     console.log("falta chamba aqui", LICITACION_ID);
     let cookie = getCookie('csrftoken');
-    fetch('http://127.0.0.1:8000/account/delete_licitacion',{ method: 'POST',
+    fetch('http://localhost:8000/account/delete_licitacion',{ method: 'POST',
         headers: {'X-CSRFToken': cookie},
         mode: 'same-origin',
         cache: 'default',

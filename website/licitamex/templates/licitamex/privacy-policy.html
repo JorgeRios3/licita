@@ -18,15 +18,13 @@
 {% endblock %}
 
 {% block navbarfront %}
-<li class="nav-item">
-    <a class="nav-link page-scroll" href="{% url 'index' %}">Home</a>
-</li>
+
 {% endblock %}
 
 {% block navbarback %}
     {% if request.user.is_authenticated %}
         <li class="nav-item">
-            <a class="nav-link page-scroll" href="{% url 'dashboard' %}">Mi portal</a>
+            <a class="nav-link page-scroll orange-color" href="{% url 'dashboard' %}">Mi portal</a>
         </li>
         <li class="nav-item">
             <a class="nav-link page-scroll" href="{% url 'logout' %}">Salir</a>

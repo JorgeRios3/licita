@@ -5,18 +5,18 @@
 {% endblock %}
 
 {% block account_content %}
-<div id="licitacion_container">
+<div id="licitacion_container" style="padding-top: 100px;">
     <div class="row">
         <div class="col">
-        <h2>Licitacion  {{id}}</h2>
+        <h2 class="baloo-font">Licitacion  {{id}}</h2>
         </div>
         <div class="col">
-            <h2>Estatus: {{licitacion.status}}</h2>
+            <h2 class="baloo-font">Estatus: {{licitacion.status}}</h2>
         </div>
     </div>
     <div class="row">
             <div class="col">
-                <b>{{licitacion.description}}</b>
+                <b class="baloo-font">{{licitacion.description}}</b>
         </div>
     </div>
     <div class="row">
@@ -25,8 +25,8 @@
             </textarea>
             <div class="row">
                 <div class="col">
-                    <div class="btn btn-info" onClick="agregar_comentario({{id}})">Agregar Comentario</div>&nbsp;
-                    <div class="btn btn-secondary">Agregar Cotizacion</div>
+                    <div style="width: 196px;" class="btn btn-info blue-button" onClick="agregar_comentario({{id}})">Agregar Comentario</div>&nbsp;
+                    <div style="width: 196px;" class="btn btn-secondary orange-button">Agregar Cotizacion</div>
                 </div>
         </div>
         <br>
@@ -35,7 +35,7 @@
             {% for x in licitacion.comments.comments %}
             <div class="row">
                 <div class="col">
-                    <b>{{x.date}}</b> {{x.comment}}
+                    <b class="avenir-font">{{x.date}}</b> {{x.comment}}
                 </div>
             </div>
             {% endfor %}
@@ -43,50 +43,50 @@
         </div>
         <div class="col" id="comprador_container">
             <div class="row">
-                <div class="col text-center"><b>Datos de Comprador</b></div>
+                <div class="col text-center"><b class="avenir-font">Datos de Comprador</b></div>
             </div>
             <div class="col">
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Nombre</label>
+                    <label for="exampleInputEmail1" class="avenir-font">Nombre</label>
                     {% if licitacion.datos_comprador.nombre %}
-                    <input type="email" class="form-control" id="comprador_nombre" aria-describedby="emailHelp" placeholder="Nombre" value="{{licitacion.datos_comprador.nombre}}">
+                    <input type="email" class="form-control basic-input" id="comprador_nombre" aria-describedby="emailHelp" placeholder="Nombre" value="{{licitacion.datos_comprador.nombre}}">
                     {% else %}
-                    <input type="email" class="form-control" id="comprador_nombre" aria-describedby="emailHelp" placeholder="Nombre">
+                    <input type="email" class="form-control basic-input" id="comprador_nombre" aria-describedby="emailHelp" placeholder="Nombre">
                     {% endif %}
                 </div>
             </div>
             <div class="col">
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Telefono</label>
+                    <label for="exampleInputEmail1" class="avenir-font">Telefono</label>
                     {% if licitacion.datos_comprador.telefono %}
-                    <input type="email" class="form-control" id="comprador_telefono" aria-describedby="emailHelp" placeholder="Telefono" value="{{licitacion.datos_comprador.telefono}}">
+                    <input type="email" class="form-control basic-input" id="comprador_telefono" aria-describedby="emailHelp" placeholder="Telefono" value="{{licitacion.datos_comprador.telefono}}">
                     {% else %}
-                    <input type="email" class="form-control" id="comprador_telefono" aria-describedby="emailHelp" placeholder="Telefono">
+                    <input type="email" class="form-control basic-input" id="comprador_telefono" aria-describedby="emailHelp" placeholder="Telefono">
                     {% endif %}
                 </div>
             </div>
             <div class="col">
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Email</label>
+                    <label for="exampleInputEmail1" class="avenir-font">Email</label>
                     {% if licitacion.datos_comprador.email %}
-                    <input type="email" class="form-control" id="comprador_email" aria-describedby="emailHelp" placeholder="Email" value="{{licitacion.datos_comprador.email}}">
+                    <input type="email" class="form-control basic-input" id="comprador_email" aria-describedby="emailHelp" placeholder="Email" value="{{licitacion.datos_comprador.email}}">
                     {% else %}
-                    <input type="email" class="form-control" id="comprador_email" aria-describedby="emailHelp" placeholder="Email">
+                    <input type="email" class="form-control basic-input" id="comprador_email" aria-describedby="emailHelp" placeholder="Email">
                     {% endif %}
                 </div>
             </div>
             <div class="col">
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Direccion</label>
+                    <label for="exampleInputEmail1" class="avenir-font">Direccion</label>
                     {% if licitacion.datos_comprador.direccion %}
-                    <input type="email" class="form-control" id="comprador_direccion" aria-describedby="emailHelp" placeholder="Direccion" value="{{licitacion.datos_comprador.direccion}}">
+                    <input type="email" class="form-control basic-input" id="comprador_direccion" aria-describedby="emailHelp" placeholder="Direccion" value="{{licitacion.datos_comprador.direccion}}">
                     {% else %}
-                    <input type="email" class="form-control" id="comprador_direccion" aria-describedby="emailHelp" placeholder="Direccion">
+                    <input type="email" class="form-control basic-input" id="comprador_direccion" aria-describedby="emailHelp" placeholder="Direccion">
                     {% endif %}
                 </div>
             </div>
             <div class="col">
-                <div class="btn btn-info" id="guardar_datos_comprador" onClick="guardar_datos_comprador({{id}})">Guardar</div>
+                <div class="btn btn-info orange-button" id="guardar_datos_comprador" onClick="guardar_datos_comprador({{id}})">Guardar</div>
             </div>
         </div>
     </div>

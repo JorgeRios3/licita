@@ -4,7 +4,7 @@
 {% block account_title %}Mi portal{% endblock %}
 
 {% block account_header %}
-<h1>Configuracion</h1>
+<h2 style="padding-top: 150px;" class="baloo-font">Configuracion</h2>
 {% endblock %}
 
 {% block account_content %}
@@ -17,17 +17,17 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Borrar Filtro</h5>
+        <h5 class="modal-title baloo-font" id="exampleModalLabel">Borrar Filtro</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        Seguro que quiere borrar el filtro
+      <div class="modal-body avenir-font">
+        Seguro que quieres borrar el filtro
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-        <button type="button" class="btn btn-danger" onClick="aceptar_borrar_filtro()">Eliminar</button>
+        <button type="button" class="btn btn-secondary gray-button" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-danger orange-light-button" onClick="aceptar_borrar_filtro()">Eliminar</button>
       </div>
     </div>
   </div>
@@ -36,16 +36,16 @@
 
 <div class="row">
     <div class="col-5">
-    <label><b>Grupo</b></label>
-    <input class="form-control grupoAutoComplete" type="text" autocomplete="off" placeholder="Ingresa el grupo">
+    <label><b class="baloo-font">Grupo</b></label>
+    <input class="form-control grupoAutoComplete basic-input" type="text" autocomplete="off" placeholder="Ingresa el grupo">
     </div>
     <div class="col">
-        <label><b>Familia</b></label>
-        <input class="form-control familiaAutoComplete" type="text" autocomplete="off" placeholder="Ingresa el familia">
+        <label><b class="baloo-font">Familia</b></label>
+        <input class="form-control familiaAutoComplete basic-input" type="text" autocomplete="off" placeholder="Ingresa el familia">
     </div>
     <div class="col">
-        <label><b>Articulo</b></label>
-        <input class="form-control articuloAutoComplete" type="text" autocomplete="off" placeholder="Ingresa el artiulo">
+        <label><b class="baloo-font">Articulo</b></label>
+        <input class="form-control articuloAutoComplete basic-input" type="text" autocomplete="off" placeholder="Ingresa el artiulo">
     </div>
     <div class="col">
       <button class="btn btn-info stick-bottom hide-element" id="add_filtro_btn" onClick="add_filtro()">Agregar Filtro</button>
@@ -54,39 +54,39 @@
 <br><br>
 <div class="row">
     <div class="col">
-        <p><b>Filtros seleccionados:</b></p>
+        <p><b class="baloo-font">Filtros seleccionados:</b></p>
         <div id="tabla_filtros">
         <table class="table">
             <thead>
               <tr>
-                <th scope="col">Grupo</th>
-                <th scope="col">Familia</th>
-                <th scope="col">Articulo</th>
-                <th scope="col">Estatus</th>
+                <th scope="col" class="table-titles">Grupo</th>
+                <th scope="col" class="table-titles">Familia</th>
+                <th scope="col" class="table-titles">Articulo</th>
+                <th scope="col" class="table-titles">Estatus</th>
               </tr>
             </thead>
             <tbody>
               {% for x in filtros %}
               <tr>
-                <th scope="row">{{x.grupo|empty_val}}</th>
-                <td>{{x.familia|empty_val}}</td>
-                <td>{{x.articulo|empty_val}}</td>
+                <th scope="row" class="baloo-font">{{x.grupo|empty_val}}</th>
+                <td class="baloo-font">{{x.familia|empty_val}}</td>
+                <td class="baloo-font">{{x.articulo|empty_val}}</td>
                 <td><div class="dropdown">
                   {% if x.activado %}
-                  <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button class="btn btn-info dropdown-toggle baloo-font" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Activo
                   </button>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" onClick="change_status_filtro({{x.id}}, 'Desactivar')" >Desactivar</a>
-                    <a class="dropdown-item" onClick="change_status_filtro({{x.id}}, 'Eliminar')">Eliminar</a>
+                    <a class="dropdown-item baloo-font" onClick="change_status_filtro({{x.id}}, 'Desactivar')" >Desactivar</a>
+                    <a class="dropdown-item baloo-font" onClick="change_status_filtro({{x.id}}, 'Eliminar')">Eliminar</a>
                   </div>
                   {% else %}
-                  <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button class="btn btn-danger dropdown-toggle baloo-font" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Inactivo
                   </button>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" onClick="change_status_filtro({{x.id}}, 'Activar')">Activar</a>
-                    <a class="dropdown-item" onClick="change_status_filtro({{x.id}}, 'Eliminar')">Eliminar</a>
+                    <a class="dropdown-item baloo-font" onClick="change_status_filtro({{x.id}}, 'Activar')">Activar</a>
+                    <a class="dropdown-item baloo-font" onClick="change_status_filtro({{x.id}}, 'Eliminar')">Eliminar</a>
                   </div>
                   {% endif %}
                 </div></td>

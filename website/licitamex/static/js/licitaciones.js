@@ -27,7 +27,7 @@ function keyupFunction(){
 function make_search_query(){
     let cookie = getCookie('csrftoken');
     var nombre = document.getElementById("search_licitacion").value;
-    fetch('http://127.0.0.1:8000/account/search_licitacion_by_name?nombre='+nombre, { method: 'GET',
+    fetch('http://localhost:8000/account/search_licitacion_by_name?nombre='+nombre, { method: 'GET',
         headers: {'X-CSRFToken': cookie},
         mode: 'same-origin',
         cache: 'default',
@@ -67,7 +67,7 @@ function desactivar_licitacion(id){
     let cookie = getCookie('csrftoken');
     $("#desactivar_licitacionr"+id.toString().split(".")[0]).addClass("hide-element");
     $("#loaderr"+id.toString().split(".")[0]).removeClass("hide-element");
-    fetch('http://127.0.0.1:8000/account/inactive_licitacion',{ method: 'POST',
+    fetch('http://localhost:8000/account/inactive_licitacion',{ method: 'POST',
         headers: {'X-CSRFToken': cookie},
         mode: 'same-origin',
         cache: 'default',

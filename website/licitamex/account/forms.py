@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.forms import widgets
 from .models import Group
 
 subscription_options = [
@@ -18,21 +19,21 @@ class ContactForm(forms.Form):
     
 
 class UserRegistrationForm(forms.ModelForm):
-    #password = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
-    #password2 = forms.CharField(label='Confirmar contraseña', widget=forms.PasswordInput)
     plans = forms.ChoiceField(choices=subscription_options)
+    plans.widget.attrs.update({'class' : 'basic-input'})
     tipo = forms.ChoiceField(choices=payment_types)
+    tipo.widget.attrs.update({'class' : 'basic-input'})
 
 
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email','password')
-        labels = {
-            'username': 'Usuario',
-            'first_name': 'Nombre(s)',
-            'last_name': 'Apellidos',
-            'email': 'Correo electronico',
-            'password': 'Contraseña',
+        widgets = {
+           "username": forms.TextInput(attrs={'class': 'basic-input', "placeholder":"Usuario", 'required': 'true' }),
+           "first_name": forms.TextInput(attrs={'class': 'basic-input', "placeholder":"Nombres", 'required': 'true' }),
+           "last_name": forms.TextInput(attrs={'class': 'basic-input', "placeholder":"Apellidos", 'required': 'true' }),
+           "email": forms.TextInput(attrs={'class': 'basic-input', "placeholder":"Email", 'required': 'true' }),
+           "password": forms.TextInput(attrs={'class': 'basic-input', "placeholder":"Contraseña", 'required': 'true' }),
         }
         
 

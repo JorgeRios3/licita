@@ -16,71 +16,70 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Borrar licitacion</h5>
+        <h5 class="modal-title baloo-font" id="exampleModalLabel">Borrar licitacion</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body avenir-font">
         Seguro que quiere borrar la licitacion de sus licitaciones activas
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-        <button type="button" class="btn btn-danger" onClick="aceptar_borrar()">Eliminar</button>
+        <button type="button" class="btn btn-secondary gray-button" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-danger orange-light-button" onClick="aceptar_borrar()">Eliminar</button>
       </div>
     </div>
   </div>
 </div>
 
-<div class="row">
+<div class="row" style="padding-top: 100px;">
     <div class="col-lg-6">
         <!--<p class="p-large">Informacion de la cuenta de {{request.user.first_name}}</p><br/>-->
-        Mis licitaciones
         <div id="mis_licitaciones">
             <table class="table">
                 <thead>
                   <tr>
-                    <th>Id</th>
-                    <th scope="col">licitacion</th>
-                    <th scope="col">description</th>
-                    <th scope="col">Entidad</th>
-                    <th scope="col">Estatus</th>
+                    <th class="table-titles">Id</th>
+                    <th scope="col" class="table-titles">licitacion</th>
+                    <th scope="col" class="table-titles">description</th>
+                    <th scope="col" class="table-titles">Entidad</th>
+                    <th scope="col" class="table-titles">Estatus</th>
                   </tr>
                 </thead>
                 <tbody>
                     {% for x in licitaciones %}
                     <tr>
-                      <td><a href="/account/licitacion/{{ x.id }}">{{x.id}}</a></td>
-                        <td>{{x.licitacion}}</td>
-                        <td>{{x.description}}</td>
-                        <td>{{x.entidad}}</td>
+                      <td class="avenir-font"><a href="/account/licitacion/{{ x.id }}">{{x.id}}</a></td>
+                        <td class="avenir-font">{{x.licitacion}}</td>
+                        <td class="avenir-font">{{x.description}}</td>
+                        <td class="avenir-font">{{x.entidad}}</td>
                         <td><div class="dropdown">
                           {% if x.status == "Abierta" %}
-                          <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <button class="btn btn-info dropdown-toggle baloo-font" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {{x.status}}
                           </button>
                           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" onClick="change_status({{x.id}}, 'Pendiente')">Pendiente</a>
-                            <a class="dropdown-item" onClick="change_status({{x.id}}, 'Cerrada')" >Cerrada</a>
-                            <a class="dropdown-item" onClick="change_status({{x.id}}, 'Eliminar')">Eliminar</a>
+                            <a class="dropdown-item baloo-font" onClick="change_status({{x.id}}, 'Pendiente')">Pendiente</a>
+                            <a class="dropdown-item baloo-font" onClick="change_status({{x.id}}, 'Cerrada')" >Cerrada</a>
+                            <a class="dropdown-item baloo-font" onClick="change_status({{x.id}}, 'Eliminar')">Eliminar</a>
                           </div>
                           {% elif x.status == "Pendiente" %}
-                          <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <button class="btn btn-warning dropdown-toggle baloo-font" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {{x.status}}
                           </button>
                           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" onClick="change_status({{x.id}}, 'Abierta')">Abierta</a>
-                            <a class="dropdown-item" onClick="change_status({{x.id}}, 'Cerrada')" >Cerrada</a>
-                            <a class="dropdown-item" onClick="change_status({{x.id}}, 'Eliminar')">Eliminar</a>
+                            <a class="dropdown-item baloo-font" onClick="change_status({{x.id}}, 'Abierta')">Abierta</a>
+                            <a class="dropdown-item baloo-font" onClick="change_status({{x.id}}, 'Cerrada')" >Cerrada</a>
+                            <a class="dropdown-item baloo-font" onClick="change_status({{x.id}}, 'Eliminar')">Eliminar</a>
                           </div>
                           {% else %}
-                          <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <button class="btn btn-primary dropdown-toggle baloo-font" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {{x.status}}
                           </button>
                           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" onClick="change_status({{x.id}}, 'Abierta')">Abierta</a>
-                            <a class="dropdown-item" onClick="change_status({{x.id}}, 'Pendiente')" >Pendiente</a>
-                            <a class="dropdown-item" onClick="change_status({{x.id}}, 'Eliminar')">Eliminar</a>
+                            <a class="dropdown-item baloo-font" onClick="change_status({{x.id}}, 'Abierta')">Abierta</a>
+                            <a class="dropdown-item baloo-font" onClick="change_status({{x.id}}, 'Pendiente')" >Pendiente</a>
+                            <a class="dropdown-item baloo-font" onClick="change_status({{x.id}}, 'Eliminar')">Eliminar</a>
                           </div>
                           {% endif %}
                         </div></td>

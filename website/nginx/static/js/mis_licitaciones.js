@@ -14,7 +14,7 @@ function change_status(licitacion_id, status){
 
 function call_change_status_licitacion(licitacion_id, status){
     let cookie = getCookie('csrftoken');
-    fetch('http://localhost:8000/account/change_status_licitacion',{ method: 'POST',
+    fetch('https://consultalicitamex.com/account/change_status_licitacion',{ method: 'POST',
         headers: {'X-CSRFToken': cookie},
         mode: 'same-origin',
         cache: 'default',
@@ -60,7 +60,7 @@ function agregar_comentario(id){
     if (val === ""){
         return;
     }
-    fetch('http://localhost:8000/account/licitacion/'+id,{ method: 'POST',
+    fetch('https://consultalicitamex.com/account/licitacion/'+id,{ method: 'POST',
         headers: {'X-CSRFToken': cookie},
         mode: 'same-origin',
         cache: 'default',
@@ -83,7 +83,7 @@ function guardar_datos_comprador(id){
     comprador_telefono = $("#comprador_telefono").val();
     comprador_email = $("#comprador_email").val();
     comprador_direccion = $("#comprador_direccion").val();
-    fetch('http://localhost:8000/account/licitacion/'+id,{ method: 'POST',
+    fetch('https://consultalicitamex.com/account/licitacion/'+id,{ method: 'POST',
         headers: {'X-CSRFToken': cookie},
         mode: 'same-origin',
         cache: 'default',

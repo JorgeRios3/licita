@@ -8,7 +8,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .dynamo_functions import fetch_items_table
 from django.template.response import TemplateResponse
 from django.http import JsonResponse
-from .dynamo_functions import fetch_items_table
 from .utils import compare_user
 from django.core import serializers
 from .mis_licitaciones import get_user_licitaciones
@@ -42,7 +41,7 @@ def activate_licitacion(request):
     licitacion.expired = False
     licitacion.expired_date = datetime.datetime.now().strftime("%Y-%m-%d")
     licitacion.status = "Abierta"
-    licitacion.quotation = "aqui va el documento de la cotizacion del usuario"
+    licitacion.quotation = ""
     licitacion.comments = {"comments":[]}
     licitacion.description = post_data.get("description", "")
     licitacion.entidad = post_data.get("entidad", "")

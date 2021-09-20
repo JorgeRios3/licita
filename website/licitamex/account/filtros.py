@@ -5,10 +5,8 @@ import datetime
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse, HttpResponseRedirect
-from .dynamo_functions import fetch_items_table
 from django.template.response import TemplateResponse
 from django.http import JsonResponse
-from .dynamo_functions import fetch_items_table
 from .utils import compare_user
 from .models import UsuarioFiltros, CatalogoFiltros
 from django.core import serializers

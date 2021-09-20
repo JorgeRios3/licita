@@ -157,6 +157,8 @@ PAYPAL_RECEIVER_EMAIL = 'sb-kundi2221798@business.example.com'
 PAYPAL_TEST = True
 
 DOMAIN_URL = "https://consultalicitamex.com/"
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
 
 if DEBUG:
     PAYPAL_CLIENT_ID = 'AbWxlPNfqE90HcRy8UXNwkg1llRdhtPS6d7k6X7vZ3iUaW4OIHsq6Neq1U1fh28bBJGEY6VRv4bYPaKo'

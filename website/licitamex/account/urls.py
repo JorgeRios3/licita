@@ -29,6 +29,7 @@ urlpatterns = [
     path('licitacion/<id>', mis_licitaciones.licitacion, name='licitacion'),
     path('delete_licitacion', mis_licitaciones.delete_licitacion, name='delete_licitacion'),
     path('change_status_licitacion', mis_licitaciones.change_status, name="change_status"),
+    path('add_cotizacion/<id>', mis_licitaciones.add_cotizacion, name='add_cotizacion')
 
     
     #path('process_subscription/', views.process_subscription, name='process_subscription'),

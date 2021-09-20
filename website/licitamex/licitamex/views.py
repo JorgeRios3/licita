@@ -62,7 +62,7 @@ def add_licitacion_usuario(usuario, licitacion):
 	new_val.expired = False
 	new_val.expired_date = datetime.datetime.now().strftime("%Y-%m-%d")
 	new_val.status = "Abierta"
-	new_val.quotation = "aqui va el documento de la cotizacion del usuario"
+	new_val.quotation = ""
 	new_val.comments = {"comments":[]}
 	new_val.description = licitacion["descripcion"]
 	new_val.entidad = licitacion["entidad"]

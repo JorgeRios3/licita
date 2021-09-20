@@ -26,9 +26,22 @@
             <div class="row">
                 <div class="col">
                     <div style="width: 196px;" class="btn btn-info blue-button" onClick="agregar_comentario({{id}})">Agregar Comentario</div>&nbsp;
-                    <div style="width: 196px;" class="btn btn-secondary orange-button">Agregar Cotizacion</div>
+                    <br>
+                    <form method="POST" enctype="multipart/form-data" action="{% url 'add_cotizacion' id=id %}">
+                        {% csrf_token %}
+                        <input type="file" name="document">
+                        <!--<div style="width: 196px;" class="btn btn-secondary orange-button">Agregar Cotizacion</div>-->
+                        <input style="width: 196px;" class="btn btn-secondary orange-button" type="submit" value="Agregar Cotizacion">
+                    </form>
                 </div>
-        </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    {% if licitacion.quotation != "" %}
+                    <a href="{{licitacion.quotation}}">ver cotizacion</a>
+                    {% endif %}
+                </div>
+            </div>
         <br>
         <div class="row"><div class="col"><b>Comentarios</b></div></div>
         <div id="comentarios_licitacion">

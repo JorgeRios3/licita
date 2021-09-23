@@ -9,13 +9,16 @@
         <div class="header-content">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-6 align-self-center" style="margin-bottom: 50px;">
+                    <div class="col-lg-6" style="margin-bottom: 50px; padding-top:50px">
+                        <div class="col text-left" style="margin-bottom: 20px;">
+                            <span class="baloo-font" style="font-size:3em; font-weight: 900; color:black">¿Te gustaría un socio <br><br> que te notifique de <br><br> nuevas convocatorias?</span>
+                        </div>
                         <div class="row">
                             <div class="col">
-                                <button type="button" class="btn btn-dark orange-button"><a style="text-decoration: none; color:white"href="/account/register/">Registrate</a></button>
+                                <button type="button" class="btn btn-dark big-orange-button" style="margin-bottom: 10px"><a style="text-decoration: none; color:white;"href="/account/register/">Regístrate</a></button>
                             </div>
                             <div class="col">
-                                <button type="button" class="btn btn-light button-border-orange"><a style="text-decoration: none; color:rgb(241,90,36)"href="/account/login/">Inicia Sesión</a></button>
+                                <button type="button" class="btn btn-light big-button-border-orange"><a style="text-decoration: none; color:rgb(241,90,36)"href="/account/login/">Inicia Sesión</a></button>
                             </div>
                         </div>
                     </div> <!-- end of col -->
@@ -34,7 +37,7 @@
 {% block navbarfront %}
 <!-- Dropdown Menu -->          
 <li class="nav-item dropdown padding-nav-items">
-    <a class="nav-link dropdown-toggle page-scroll helvetica-font" href="#services" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">Conocenos</a>
+    <a style="font-size:1.3em" class="nav-link dropdown-toggle page-scroll helvetica-font" href="#services" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">Conócenos</a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         <a class="dropdown-item helvetica-font" href="https://www.nilaconsulting.com.mx/"><span class="item-text">Nila Consulting</span></a>
         <div class="dropdown-items-divide-hr"></div>
@@ -45,24 +48,25 @@
 </li>
 <!-- end of dropdown menu -->
 <li class="nav-item padding-nav-items">
-    <a class="nav-link page-scroll helvetica-font" href="#pricing">Membresias</a>
+    <a style="font-size:1.3em" class="nav-link page-scroll helvetica-font " href="#pricing">Membresías</a>
 </li>
 <li class="nav-item padding-nav-items">
-    <a class="nav-link page-scroll helvetica-font" href="#about">Nosotros</a>
+    <a style="font-size:1.3em" class="nav-link page-scroll helvetica-font " href="https://www.nilaconsulting.com.mx/">Nosotros</a>
 </li>
 <li class="nav-item padding-nav-items">
-    <a class="nav-link page-scroll baloo-font" href="/" style="font-size: 2em;">Licitamex</a>
+    <a class="nav-link page-scroll baloo-font" href="/" style="font-size: 3.8em;">Lic<span style="color:rgb(241,90,36)!important">i</span>tamex</a>
+
 </li>
 {% if request.user.is_authenticated %}
         <li class="nav-item">
-            <a class="nav-link page-scroll orange-color" href="{% url 'dashboard' %}">Mi portal</a>
+            <a class="nav-link page-scroll orange-color" style="font-size:1.3em" href="{% url 'dashboard' %}">Mi portal</a>
         </li>
         <li class="nav-item padding-nav-items">
-            <a class="nav-link page-scroll helvetica-font" href="{% url 'dashboard' %}">Ayuda</a>
+            <a class="nav-link page-scroll helvetica-font" style="font-size:1.3em" href="{% url 'contact' %}">Ayuda</a>
         </li>
     {% else %}
         <li class="nav-item padding-nav-items">
-            <a class="nav-link page-scroll helvetica-font" href="{% url 'contact' %}">Contacto</a>
+            <a style="font-size:1.3em" class="nav-link page-scroll helvetica-font titles-font-size" href="{% url 'contact' %}">Contacto</a>
         </li>
     {% endif %}
 {% endblock %}
@@ -70,14 +74,14 @@
 {% block navbarback %}
     {% if request.user.is_authenticated %}
         <li class="nav-item padding-nav-items">
-            <a class="nav-link page-scroll helvetica-font" href="{% url 'logout' %}">Salir</a>
+            <a class="nav-link page-scroll helvetica-font" style="font-size:1.3em" href="{% url 'logout' %}">Salir</a>
         </li>
     {% else %}
         <li class="nav-item padding-nav-items">
-            <a class="nav-link page-scroll helvetica-font" href="{% url 'register' %}">Registrate</a>
+            <a style="font-size:1.3em" class="nav-link page-scroll helvetica-font" href="{% url 'register' %}">Regístrate</a>
         </li>
-        <li class="nav-item padding-nav-items">
-            <a class="nav-link page-scroll helvetica-font" href="{% url 'login' %}">Iniciar sesión</a>
+        <li style="padding-right: 0px;" class="nav-item padding-nav-items">
+            <a style="font-size:1.3em" class="nav-link page-scroll helvetica-font" href="{% url 'login' %}">Iniciar sesión</a>
         </li>
     {% endif %}
 {% endblock %}
@@ -90,8 +94,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <h2 class="baloo-font" style="font-weight: 900; font-size: 2.5em;">Conocenos</h2>
-                    <p class="p-heading p-large" style="font-family: avenir;">Aprovecha las oportunidades antes que nadie utilizando nuestro sistema de notificaciones</p>
+                    <h2 class="baloo-font" style="font-weight: 900; font-size: 3.5em;">Conócenos</h2>
+                    <p class="p-heading p-large" style="font-family: avenir; font-size: 1.4em;">Aprovecha las oportunidades antes que nadie utilizando nuestro sistema de notificaciones</p>
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
             <div class="row">
@@ -99,10 +103,10 @@
 
                     <!-- Card -->
                     <div class="card">
-                        <img class="card-image" src="{% static 'images/IMG_ltmx1.png' %}" alt="alternative">
+                        <img class="card-image imagenes-principales" src="{% static 'images/IMG-ltmx-01.png' %}" alt="alternative">
                         <div class="card-body">
                             <h4 class="card-title baloo-font" style="font-weight: 900 !important;font-size: 1.9em;">
-                                Enfocate en tu negocio
+                                Enfócate en tu negocio
                             </h4>
                             <p style="font-family: avenir">Deja que nuestra plataforma se ocupe del monitoreo de convocatorias para que tu puedas dedicarte a lo importante</p>
                         </div>
@@ -111,24 +115,24 @@
 
                     <!-- Card -->
                     <div class="card">
-                        <img class="card-image" src="{% static 'images/IMG-ltmx-02.png' %}" alt="alternative">
+                        <img class="card-image imagenes-principales" src="{% static 'images/IMG-Ltmx-02-1.png' %}" alt="alternative">
                         <div class="card-body">
                             <h4 class="card-title baloo-font" style="
                             font-weight: 900 !important;
                             font-size: 1.9em;">No pierdas tiempo</h4>
-                            <p style="font-family: avenir">Enterate de las convocatorias tan pronto como son anunciadas</p>
+                            <p style="font-family: avenir">Enterate de las convocatorias tan pronto como son anunciadas<br><spa>&nbsp;</spa></p>
                         </div>
                     </div>
                     <!-- end of card -->
 
                     <!-- Card -->
                     <div class="card">
-                        <img class="card-image" src="{% static 'images/IMG-ltmx-03-1.png' %}" alt="alternative">
+                        <img class="card-image imagenes-principales" src="{% static 'images/IMG-ltmx-03.png' %}" alt="alternative">
                         <div class="card-body">
                             <h4 class="card-title baloo-font" style="
                             font-weight: 900 !important;
-                            font-size: 1.9em;">Personalizacion</h4>
-                            <p style="font-family: avenir">Crea notificaciones personalizadas justo a la medida de tu negocio</p>
+                            font-size: 1.9em;">Personalización</h4>
+                            <p style="font-family: avenir">Crea notificaciones personalizadas justo a la medida de tu negocio<br><spa>&nbsp;</spa></p>
                         </div>
                     </div>
                     <!-- end of card -->
@@ -146,8 +150,8 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="text-container">
-                        <h2 class="baloo-font">Recibe notificaciones directamente a tu correo o celular</h2>
-                        <p class="avenir-font">Tu decides que notificaciones deseas recibir y a donde mas te sea conveniente, a tu correo, Whatssapp o Telegram </p>
+                        <h2 class="baloo-font" style="font-size: 2.8em!important;">Tú decides que notificaciones deseas recibir</h2>
+                        <p class="avenir-font" style="font-size: 1.4em!important;">- Recibe notificaciones directamente en tu correo <span>&nbsp;&nbsp;</span>electrónico. <br>- Próximamente en tu celular</p>
                         <!--<a class="btn-solid-reg popup-with-move-anim" href="#details-lightbox-1">Ejemplo?</a>-->
                     </div> <!-- end of text-container -->
                 </div> <!-- end of col -->
@@ -173,15 +177,19 @@
                 </div> <!-- end of col -->
                 <div class="col-lg-6">
                     <div class="text-container">
-                        <h2 class="baloo-font">Conoce mejor tu negocio</h2>
+                        <h2 class="baloo-font" style="font-size: 3.5em!important;">Conoce mejor tu negocio</h2>
                         <ul class="list-unstyled li-space-lg">
                             <li class="media">
                                 <i class="fas fa-check"></i>
-                                <div class="media-body avenir-font">Analisa el registro historico de tus distintas alertas</div>
+                                <div style="font-size:1.4em!important" class="media-body avenir-font">Analisa el registro historico de tus distintas alertas</div>
                             </li>
                             <li class="media">
                                 <i class="fas fa-check"></i>
-                                <div class="media-body avenir-font">Conoce cuantas notificaciones haz recibdo</div>
+                                <div style="font-size:1.4em!important" class="media-body avenir-font">Conoce cuantas notificaciones haz recibdo</div>
+                            </li>
+                            <li class="media">
+                                <i class="fas fa-asterisk"></i>
+                                <div style="font-size:1.4em!important" class="media-body avenir-font">Próximamente administra con tu equipo tus licitaciones</div>
                             </li>
                         </ul>
                         <!--<a class="btn-solid-reg popup-with-move-anim" href="#details-lightbox-2">Ejemplo de reporte?</a>-->
@@ -228,7 +236,7 @@
                             <i class="fas fa-check"></i><div class="media-body">ola ke ace</div>
                         </li>
                     </ul>
-                    <a class="btn-solid-reg mfp-close page-scroll" href="#request">Registrate</a> <a class="btn-outline-reg mfp-close as-button" href="#screenshots">Atras</a>
+                    <a class="btn-solid-reg mfp-close page-scroll" style="font-size: 1.4em;" href="#request">Regístrate</a> <a class="btn-outline-reg mfp-close as-button" href="#screenshots">Atras</a>
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
         </div> <!-- end of container -->
@@ -271,7 +279,7 @@
                             <i class="fas fa-check"></i><div class="media-body">super licitacion 6</div>
                         </li>
                     </ul>
-                    <a class="btn-solid-reg mfp-close page-scroll" href="#request">Registrate</a> <a class="btn-outline-reg mfp-close as-button" href="#screenshots">Atras</a>
+                    <a class="btn-solid-reg mfp-close page-scroll" href="#request">Regístrate</a> <a class="btn-outline-reg mfp-close as-button" href="#screenshots">Atras</a>
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
         </div> <!-- end of container -->
@@ -285,8 +293,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <h2 class="baloo-font" style="font-weight: 900; font-size: 2.5em;">Nuestras membresias</h2>
-                    <p class="p-heading p-large avenir-font">Conoce nuestras distintos tipos de membresia, y subcribete al que mas le acomode a tu negocio</p>
+                    <h2 class="baloo-font" style="font-weight: 900; font-size: 3.5em;">Nuestras membresías</h2>
+                    <p class="p-heading p-large avenir-font" style="font-size: 1.4em!important;">Conoce nuestras distintos tipos de membresia, y subcribete al que mas le acomode a tu negocio</p>
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
             <div class="row">
@@ -294,78 +302,108 @@
 
                     <!-- Card-->
                     <div class="card">
-                        <div class="card-title baloo-font card-titles-basic" style="font-weight: 900; font-size: 2.8em;">
+                        <div class="baloo-font card-titles-basic" style="font-weight: 900; font-size: 3.8em;">
                             <div>Básico</div>
                         </div>
 
                         <div class="card-body black-background-color body-cards">
                             <hr class="cell-divide-hr">
                             <div class="price baloo-font" style="color:white">
-                                <span class="currency" style="color:white">$</span><span class="value" style="color:white">199</span>
+                                <br>
+                                <span class="currency" style="color:white">$</span><span class="value" style="color:white">249</span>
                                 <div class="frequency">mensual</div>
                             </div>
                             <hr class="cell-divide-hr">
                             <ul class="list-unstyled li-space-lg">
                                 <li class="media">
-                                    <i class="fas fa-check"></i><div class="media-body">Cosa 1</div>
+                                    <i class="fas fa-check"></i><div class="media-body texto-normal">1 Usuario</div>
                                 </li>
                                 <li class="media">
-                                    <i class="fas fa-check"></i><div class="media-body">Cosa 2</div>
+                                    <i class="fas fa-check"></i><div class="media-body texto-normal">Administración de licitaciones</div>
                                 </li>
                                 <li class="media">
-                                    <i class="fas fa-times"></i><div class="media-body">Cosa 3</div>
+                                    <i class="fas fa-check"></i><div class="media-body texto-normal">1GB de Almacenamiento</div>
                                 </li>
                                 <li class="media">
-                                    <i class="fas fa-times"></i><div class="media-body">Cosa 4</div>
-                                </li>
-                                <li class="media">
-                                    <i class="fas fa-times"></i><div class="media-body">Cosa 5</div>
+                                    <i class="fas fa-check"></i><div class="media-body texto-normal">15 filtros Personalizados</div>
                                 </li>
                             </ul>
                             <div class="button-wrapper">
-                                <a class="btn-solid-reg page-scroll" href="#request">Registrate</a>
+                                <a class="btn-solid-reg page-scroll" style="font-size:1.4em" href="/account/register/">Regístrate</a>
                             </div>
                         </div>
                     </div> <!-- end of card -->
                     <!-- end of card -->
-
                     <div class="card">
-                        <div class="card-title baloo-font card-titles-plus" style="font-weight: 900; font-size: 2.8em;">
-                            <div>Plus</div>
+                        <div class="baloo-font card-titles-premium" style="font-weight: 900; font-size: 3.8em;">
+                            <div>Premium</div>
                         </div>
 
-                        <div class="card-body black-background-color body-cards">
+                        <div class="card-body body-cards">
                             <hr class="cell-divide-hr">
                             <div class="price baloo-font" style="color:white">
-                                <p class="baloo-font" style="color:red">Proximamente</p>
-                                <br>
-                                <span class="currency" style="color:white">$</span><span class="value" style="color:white">299</span>
-                                <div class="frequency">mensual</div>
+                                <p class="baloo-font" style="color:red; margin:0px">Proximamente</p>
+                                
+                                <span class="currency black-color">$</span><span class="value black-color">549</span>
+                                <div class="frequency black-color">mensual</div>
                             </div>
                             <hr class="cell-divide-hr">
                             <ul class="list-unstyled li-space-lg">
                                 <li class="media">
-                                    <i class="fas fa-check"></i><div class="media-body">Cosa 1</div>
+                                    <i class="fas fa-check"></i><div class="media-body black-color texto-normal">20 Usuarios</div>
                                 </li>
                                 <li class="media">
-                                    <i class="fas fa-check"></i><div class="media-body">Cosa 2</div>
+                                    <i class="fas fa-check"></i><div class="media-body black-color texto-normal">Administración de licitaciones</div>
                                 </li>
                                 <li class="media">
-                                    <i class="fas fa-times"></i><div class="media-body">Cosa 3</div>
+                                    <i class="fas fa-check"></i><div class="media-body black-color texto-normal">5GB de almacenamiento</div>
                                 </li>
                                 <li class="media">
-                                    <i class="fas fa-times"></i><div class="media-body">Cosa 4</div>
-                                </li>
-                                <li class="media">
-                                    <i class="fas fa-times"></i><div class="media-body">Cosa 5</div>
+                                    <i class="fas fa-check"></i><div class="media-body black-color texto-normal">99 Filtros Personalizados</div>
                                 </li>
                             </ul>
                             <div class="button-wrapper">
-                                <a class="btn-solid-reg page-scroll" href="#request">Registrate</a>
+                                <!--<a class="btn-solid-reg page-scroll" style="font-size:1.4em" href="/account/register/">Registrate</a>-->
                             </div>
                         </div>
-                    </div> <!-- end of card -->
+                    </div>
+                    
+
+                    <div class="card">
+                        <div class="baloo-font card-titles-basic" style="font-weight: 900; font-size: 3.8em;">
+                            <div>Plus</div>
+                        </div>
+    
+                            <div class="card-body black-background-color body-cards">
+                                <hr class="cell-divide-hr">
+                                <div class="price baloo-font" style="color:white">
+                                    <p class="baloo-font" style="color:red; margin:0px">Proximamente</p>
+
+                                    <span class="currency" style="color:white">$</span><span class="value" style="color:white">399</span>
+                                    <div class="frequency">mensual</div>
+                                </div>
+                                <hr class="cell-divide-hr">
+                                <ul class="list-unstyled li-space-lg">
+                                    <li class="media">
+                                        <i class="fas fa-check"></i><div class="media-body texto-normal">5 Usuarios</div>
+                                    </li>
+                                    <li class="media">
+                                        <i class="fas fa-check"></i><div class="media-body texto-normal">Administración de licitaciones</div>
+                                    </li>
+                                    <li class="media">
+                                        <i class="fas fa-check"></i><div class="media-body texto-normal">2GB de almacenamiento</div>
+                                    </li>
+                                    <li class="media">
+                                        <i class="fas fa-check"></i><div class="media-body texto-normal">35 filtros Personalizados</div>
+                                    </li>
+                                </ul>
+                                <div class="button-wrapper">
+                                    <!--<a class="btn-solid-reg page-scroll" style="font-size:1.4em" href="/account/register/">Registrate</a>-->
+                                </div>
+                            </div>
+                        </div> <!-- end of card -->
                     <!-- end of card -->
+                
 
 
                 </div> <!-- end of col -->
@@ -377,23 +415,23 @@
 
 
     <!-- Testimonials -->
-    <div class="slider-2">
+    <!--<div class="slider-2">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
                     <div class="image-container">
                         <img class="img-fluid" src="{% static 'images/testimonials-2-men-talking.svg' %}" alt="alternative">
-                    </div> <!-- end of image-container -->
-                </div> <!-- end of col -->
+                    </div> 
+                </div> 
                 <div class="col-lg-6">
                     <h2>Testimonios</h2>
 
-                    <!-- Card Slider -->
+                    
                     <div class="slider-container">
                         <div class="swiper-container card-slider">
                             <div class="swiper-wrapper">
                                 
-                                <!-- Slide -->
+                               
                                 <div class="swiper-slide">
                                     <div class="card">
                                         <img class="card-image" src="{% static 'images/testimonial-1.svg' %}" alt="alternative">
@@ -402,10 +440,9 @@
                                             <p class="testimonial-author">Juan Vendedetergentes - Empresario</p>
                                         </div>
                                     </div>
-                                </div> <!-- end of swiper-slide -->
-                                <!-- end of slide -->
+                                </div> 
         
-                                <!-- Slide -->
+                              
                                 <div class="swiper-slide">
                                     <div class="card">
                                         <img class="card-image" src="{% static 'images/testimonial-2.svg' %}" alt="alternative">
@@ -414,10 +451,7 @@
                                             <p class="testimonial-author">Ciudadano cualquiera - Godin</p>
                                         </div>
                                     </div>        
-                                </div> <!-- end of swiper-slide -->
-                                <!-- end of slide -->
-        
-                                <!-- Slide -->
+                                </div> 
                                 <div class="swiper-slide">
                                     <div class="card">
                                         <img class="card-image" src="{% static 'images/testimonial-3.svg' %}" alt="alternative">
@@ -426,139 +460,22 @@
                                             <p class="testimonial-author">Barack Obama - Nigga de barrio</p>
                                         </div>
                                     </div>        
-                                </div> <!-- end of swiper-slide -->
-                                <!-- end of slide -->
+                                </div> 
                                
-                            </div> <!-- end of swiper-wrapper -->
-        
-                            <!-- Add Arrows -->
+                            </div> 
                             <div class="swiper-button-next"></div>
                             <div class="swiper-button-prev"></div>
-                            <!-- end of add arrows -->
-        
-                        </div> <!-- end of swiper-container -->
-                    </div> <!-- end of slider-container -->
-                    <!-- end of card slider -->
-
-                </div> <!-- end of col -->
-            </div> <!-- end of row -->
-        </div> <!-- end of container -->
-    </div> <!-- end of slider-2 -->
-    <!-- end of testimonials -->
-
-
-    <!-- About -->
-    <div id="about" class="basic-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h2>Nuestro equipo</h2>
-                    <p class="p-heading p-large">Conoce a nuestro equipo de especialistas expertos en el area que trabajaran para asegurar el exito de tu empresa.</p>
-                </div> <!-- end of col -->
-            </div> <!-- end of row -->
-            <div class="row">
-                <div class="col-lg-12">
+                            
+                        </div> 
+                    </div> 
                     
-                    <!-- Team Member -->
-                    <div class="team-member">
-                        <div class="image-wrapper">
-                            <img class="img-fluid" src="{% static 'images/team-member-1.jpeg' %}" alt="alternative">
-                        </div> <!-- end of image-wrapper -->
-                        <p class="p-large"><strong>Mari Mar... aaauu!!</strong></p>
-                        <p class="job-title">CEO</p>
-                        <span class="social-icons">
-                            <span class="fa-stack">
-                                <a href="#your-link">
-                                    <i class="fas fa-circle fa-stack-2x facebook"></i>
-                                    <i class="fab fa-facebook-f fa-stack-1x"></i>
-                                </a>
-                            </span>
-                            <span class="fa-stack">
-                                <a href="#your-link">
-                                    <i class="fas fa-circle fa-stack-2x twitter"></i>
-                                    <i class="fab fa-twitter fa-stack-1x"></i>
-                                </a>
-                            </span>
-                        </span> <!-- end of social-icons -->
-                    </div> <!-- end of team-member -->
-                    <!-- end of team member -->
 
-                    <!-- Team Member -->
-                    <div class="team-member">
-                        <div class="image-wrapper">
-                            <img class="img-fluid" src="{% static 'images/team-member-2.jpeg' %}" alt="alternative">
-                        </div> <!-- end of image wrapper -->
-                        <p class="p-large"><strong>Changoleon</strong></p>
-                        <p class="job-title">Marketing</p>
-                        <span class="social-icons">
-                            <span class="fa-stack">
-                                <a href="#your-link">
-                                    <i class="fas fa-circle fa-stack-2x facebook"></i>
-                                    <i class="fab fa-facebook-f fa-stack-1x"></i>
-                                </a>
-                            </span>
-                            <span class="fa-stack">
-                                <a href="#your-link">
-                                    <i class="fas fa-circle fa-stack-2x twitter"></i>
-                                    <i class="fab fa-twitter fa-stack-1x"></i>
-                                </a>
-                            </span>
-                        </span> <!-- end of social-icons -->
-                    </div> <!-- end of team-member -->
-                    <!-- end of team member -->
+                </div> 
+            </div> 
+        </div> 
+    </div> 
+     -->
 
-                    <!-- Team Member -->
-                    <div class="team-member">
-                        <div class="image-wrapper">
-                            <img class="img-fluid" src="{% static 'images/team-member-3.jpeg' %}" alt="alternative">
-                        </div> <!-- end of image wrapper -->
-                        <p class="p-large"><strong>Angela Merkel</strong></p>
-                        <p class="job-title">Canciller de Alemania</p>
-                        <span class="social-icons">
-                            <span class="fa-stack">
-                                <a href="#your-link">
-                                    <i class="fas fa-circle fa-stack-2x facebook"></i>
-                                    <i class="fab fa-facebook-f fa-stack-1x"></i>
-                                </a>
-                            </span>
-                            <span class="fa-stack">
-                                <a href="#your-link">
-                                    <i class="fas fa-circle fa-stack-2x twitter"></i>
-                                    <i class="fab fa-twitter fa-stack-1x"></i>
-                                </a>
-                            </span>
-                        </span> <!-- end of social-icons -->
-                    </div> <!-- end of team-member -->
-                    <!-- end of team member -->
 
-                    <!-- Team Member -->
-                    <div class="team-member">
-                        <div class="image-wrapper">
-                            <img class="img-fluid" src="{% static 'images/team-member-4.jpeg' %}" alt="alternative">
-                        </div> <!-- end of image wrapper -->
-                        <p class="p-large"><strong>Batman</strong></p>
-                        <p class="job-title">Limpia baños</p>
-                        <span class="social-icons">
-                            <span class="fa-stack">
-                                <a href="#your-link">
-                                    <i class="fas fa-circle fa-stack-2x facebook"></i>
-                                    <i class="fab fa-facebook-f fa-stack-1x"></i>
-                                </a>
-                            </span>
-                            <span class="fa-stack">
-                                <a href="#your-link">
-                                    <i class="fas fa-circle fa-stack-2x twitter"></i>
-                                    <i class="fab fa-twitter fa-stack-1x"></i>
-                                </a>
-                            </span>
-                        </span> <!-- end of social-icons -->
-                    </div> <!-- end of team-member -->
-                    <!-- end of team member -->
-
-                </div> <!-- end of col -->
-            </div> <!-- end of row -->
-        </div> <!-- end of container -->
-    </div> <!-- end of basic-4 -->
-    <!-- end of about -->
-
+    
 {% endblock %}

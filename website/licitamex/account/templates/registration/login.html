@@ -10,8 +10,8 @@
 {% block account_content %}
     <div class="row">
         <div class="col-lg-6" style="padding-top: 150px;">
-            <p class="p-large baloo-font titles-register-account blue-color">Inicio de</p>
-            <p class="p-large baloo-font titles-register-account" style="font-size: 4em!important;">Sesión</p>
+            <p class="p-large baloo-font titles-register-account blue-color" style="font-size: 3.5em!important;">Inicio de</p>
+            <p class="p-large baloo-font titles-register-account" style="font-size: 4.5em!important;">Sesión</p>
             {% if form.errors %}
                 <p class="p-large">
                     Usuario o contraseña incorrectos.
@@ -22,7 +22,11 @@
                 <form action="{% url 'my_login' %}" method="post">
                     {% for field in form.visible_fields %}
                         <div class="form-group">
-                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {% if field.label == "Username" %}
+                            <label for="{{ field.id_for_label }}">Usuario</label>
+                            {% else %}
+                            <label for="{{ field.id_for_label }}">Contraseña</label>
+                            {% endif %}
                             {{ field|add_class:'form-control basic-input' }}
                             <div class="help-block with-errors"></div>
                             {% for error in field.errors %}
@@ -32,13 +36,14 @@
                     {% endfor %}
                     {% csrf_token %}
                     <input type="hidden" name="next" value="{{ next }}" />
-                    <button class="btn btn-dark orange-button" href="{% url 'my_login' %}">Entrar</button>
+                    <button class="btn btn-dark orange-button" style="height:50px!important; width:190px!important; font-size:1.7em !important" href="{% url 'my_login' %}">Iniciar</button>
                 </form>
                 <p><a class="avenir-font" href="{% url 'password_reset' %}">¿Olvidaste tu contraseña?</a></p> 
             </div>
         </div> <!-- end of col -->
-        <div class="col-lg-6">
+        <div class="col-lg-6 text-center">
             <img class="img-fluid" src="../../../static/images/IMG-ltmx-04.png" alt="alternative">
+            <p style="font-size: 1.4em; font-weight: 900;" class="baloo-font">Has lo que mas te gusta mientras nuestro sistema te notifica <br>en tiempo real las nuevas convocatorías</p>
         </div>
     </div> <!-- end of row -->
 {% endblock %}

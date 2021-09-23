@@ -225,8 +225,8 @@ def contact(request):
             message = "\n".join(body.values())
 
             try:
-                send_mail(subject, message, 'admin@example.com',
-                          ['admin@example.com'])
+                send_mail(subject, message, 'ruvalcaba91@hotmail.com',
+                          ['ruvalcaba91@hotmail.com'])
             except BadHeaderError:
                 return HttpResponse('Invalid header found.')
             # return redirect ('../../account/contact_message_done.html')

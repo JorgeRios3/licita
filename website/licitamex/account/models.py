@@ -18,7 +18,7 @@ class UsuarioLicitaciones(models.Model):
     expired = models.BooleanField()
     expired_date = models.DateField()
     status = models.CharField(max_length=100)
-    quotation = models.CharField(max_length=300)
+    quotation = models.TextField()
     comments = models.JSONField(default='{}')
     description = models.CharField(max_length=500)
     entidad = models.CharField(max_length=100)

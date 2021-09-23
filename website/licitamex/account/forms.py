@@ -4,7 +4,7 @@ from django.forms import widgets
 from .models import Group
 
 subscription_options = [
-        ('Basica', 'Membresia basica ($10 MX/Mes)'),
+        ('Basica', 'Membresía basica ($249.00 MX/Mes)'),
     ]
 
 payment_types = [
@@ -33,7 +33,7 @@ class UserRegistrationForm(forms.ModelForm):
            "first_name": forms.TextInput(attrs={'class': 'basic-input', "placeholder":"Nombres", 'required': 'true' }),
            "last_name": forms.TextInput(attrs={'class': 'basic-input', "placeholder":"Apellidos", 'required': 'true' }),
            "email": forms.TextInput(attrs={'class': 'basic-input', "placeholder":"Email", 'required': 'true' }),
-           "password": forms.TextInput(attrs={'class': 'basic-input', "placeholder":"Contraseña", 'required': 'true' }),
+           "password": forms.PasswordInput(attrs={'class': 'basic-input', "placeholder":"Contraseña", 'required': 'true' }),
         }
         
 

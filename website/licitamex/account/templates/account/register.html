@@ -6,10 +6,10 @@
 {% endblock %}
 
 {% block account_content %}
-<div class="row">
+<div class="row" style="padding-top: 103px;">
     <div class="col-lg-6" style="padding-top: 70px;">
-        <p class="p-large baloo-font titles-register-account blue-color">Crear tu</p>
-        <p class="p-large baloo-font titles-register-account">Cuenta</p>
+        <p class="p-large baloo-font titles-register-account blue-color" style="font-size:3.5em!important">Crear tu</p>
+        <p class="p-large baloo-font titles-register-account" style="font-size:4.5em!important">Cuenta</p>
         <div class="login-form">
             <form method="post">
                 <div class="form-group">
@@ -80,12 +80,13 @@
 
                 {% csrf_token %}
                 <input type="hidden" name="next" value="{{ next }}" />
-                <button type="submit" class="btn-solid-reg">Crear cuenta</button>
+                <button type="submit" class="btn btn-dark orange-button" style="height:50px!important; width:190px!important; font-size:1.7em !important">Crear cuenta</button>
             </form>
         </div>
     </div> <!-- end of col -->
-    <div class="col-lg-6">
+    <div class="col-lg-6 text-center">
         <img class="img-fluid" src="../../../static/images/IMG-ltmx-05.png" alt="alternative">
+        <p class="baloo-font" style="font-size: 1.3em; font-weight: 900;">Bien podrías ir en un vuelo a Paris mientras buscamos <br>la convocatoría que configuraste en las notificaciones</p>
     </div>
 </div> <!-- end of row -->
 {% endblock %}

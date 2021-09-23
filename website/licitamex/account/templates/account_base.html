@@ -31,19 +31,25 @@
 {% block navbarback %}
     {% if request.user.is_authenticated %}
         <li class="nav-item">
-            <a class="nav-link page-scroll baloo-font" href="/" style="font-size: 2em;">Licitamex</a>
+            <a class="nav-link page-scroll baloo-font" href="/" style="font-size: 3.8em;">Lic<span style="color:rgb(241,90,36)!important">i</span>tamex</a>
+
         </li>
         <li class="nav-item">
-            <a class="nav-link page-scroll" href="{% url 'licitaciones' %}">Licitaciones</a>
+            <a class="nav-link page-scroll" style="font-size:1.3em" href="{% url 'licitaciones' %}">Licitaciones</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link page-scroll" href="{% url 'dashboard' %}">Mis Licitaciones</a>
+            <a class="nav-link page-scroll" style="font-size:1.3em" href="{% url 'dashboard' %}">Mi Portal</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link page-scroll" href="{% url 'configuracion' %}">Configuracion</a>
+            <a class="nav-link page-scroll" style="font-size:1.3em" href="{% url 'configuracion' %}">Configuración</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link page-scroll" href="{% url 'logout' %}">Salir</a>
+            <a class="nav-link page-scroll" style="font-size:1.3em" href="{% url 'logout' %}">Salir</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+            <a class="nav-link page-scroll baloo-font" href="/" style="font-size: 3.8em;">Lic<span style="color:rgb(241,90,36)!important">i</span>tamex</a>
+
         </li>
     {% endif %}
 {% endblock %}

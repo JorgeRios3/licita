@@ -33,13 +33,36 @@
 </div>
 
 <div class="row" style="padding-top: 100px;">
-    <div class="col-lg-6">
+  <div class="col text-center baloo-font" style="font-size: 5.5em; font-weight: 900; margin-bottom: 50px;"><span style="color:rgb(241,90,36)">Mi</span> <span style="color:black">Portal</span></div>
+</div>
+<div class="row">
+  <div class="col-4">
+      <form>
+          <div class="form-group">
+          <label for="exampleInputEmail1" style="font-size:1.3em !important;" class="avenir-font">Buscar Licitacion</label>
+          <input id="search_mi_portal_lcitacion" type="email" class="form-control basic-input" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nombre Licitacion" onkeyup="keyupFunction_mi_portal()">
+          </div>
+      </form>
+  </div>
+  {% if items_qty %}
+  <div class="col-3">
+      <br><br>
+      <form>
+          <div class="form-group">
+              <span style="font-weight: bold;">Licitaciones Encontradas {{items_qty}}</span>
+          </div>
+      </form>
+  </div>
+  {% endif %}
+</div>
+<div class="row">
+    <div class="col">
         <!--<p class="p-large">Informacion de la cuenta de {{request.user.first_name}}</p><br/>-->
         <div id="mis_licitaciones">
             <table class="table">
                 <thead>
                   <tr>
-                    <th class="table-titles">Id</th>
+                    <th class="table-titles">Detalle</th>
                     <th scope="col" class="table-titles">licitación</th>
                     <th scope="col" class="table-titles">descripción</th>
                     <th scope="col" class="table-titles">Entidad</th>
@@ -49,10 +72,10 @@
                 <tbody>
                     {% for x in licitaciones %}
                     <tr>
-                      <td class="avenir-font"><a href="/account/licitacion/{{ x.id }}">{{x.id}}</a></td>
+                      <td class="avenir-font"><a href="/account/licitacion/{{ x.id }}">Ver</a></td>
                         <td class="avenir-font">{{x.licitacion}}</td>
-                        <td class="avenir-font">{{x.description}}</td>
-                        <td class="avenir-font">{{x.entidad}}</td>
+                        <td class="avenir-font" style="font-size:1.1em">{{x.description}}</td>
+                        <td class="avenir-font" style="font-size:1.1em">{{x.entidad}}</td>
                         <td><div class="dropdown">
                           {% if x.status == "Abierta" %}
                           <button class="btn btn-info dropdown-toggle baloo-font" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

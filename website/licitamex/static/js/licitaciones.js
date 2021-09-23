@@ -23,6 +23,57 @@ function keyupFunction(){
     clearTimeout(typingTimer);
     typingTimer = setTimeout(function(){make_search_query()}, 2000);
 }
+function keyupFunction_mi_portal(){
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(function(){search_mi_portal_licitaciones()}, 2000);
+}
+function keyupFunction_buscar_filtro(){
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(function(){search_filtro_configuracion()}, 2000);
+
+}
+
+function search_filtro_configuracion(){
+    let cookie = getCookie('csrftoken');
+    var nombre = document.getElementById("search_filtro_valor").value;
+    fetch('http://localhost:8000/account/search_filtro_by_name?nombre='+nombre, { method: 'GET',
+        headers: {'X-CSRFToken': cookie},
+        mode: 'same-origin',
+        cache: 'default',
+    }).then(res => {
+        return res.text();
+    })
+    .then(data => {
+        var parser = new DOMParser();
+        // Parse the text
+        var doc = parser.parseFromString(data, "text/html"); 
+        var docArticle = doc.querySelector('#filtros_container');
+        $( "#filtros_container" ).replaceWith( docArticle );
+    });
+
+}
+
+
+
+function search_mi_portal_licitaciones(){
+    let cookie = getCookie('csrftoken');
+    var nombre = document.getElementById("search_mi_portal_lcitacion").value;
+    fetch('http://localhost:8000/account/search_mi_portallicitacion_by_name?nombre='+nombre, { method: 'GET',
+        headers: {'X-CSRFToken': cookie},
+        mode: 'same-origin',
+        cache: 'default',
+    }).then(res => {
+        return res.text();
+    })
+    .then(data => {
+        var parser = new DOMParser();
+        // Parse the text
+        var doc = parser.parseFromString(data, "text/html"); 
+        var docArticle = doc.querySelector('#mis_licitaciones');
+        $( "#mis_licitaciones" ).replaceWith( docArticle );
+    });
+
+}
 
 function make_search_query(){
     let cookie = getCookie('csrftoken');
@@ -38,8 +89,8 @@ function make_search_query(){
         var parser = new DOMParser();
         // Parse the text
         var doc = parser.parseFromString(data, "text/html"); 
-        var docArticle = doc.querySelector('#main_container');
-        $( "#main_container" ).replaceWith( docArticle );
+        var docArticle = doc.querySelector('#tabla_licitaciones');
+        $( "#tabla_licitaciones").replaceWith( docArticle );
     });
 }
 

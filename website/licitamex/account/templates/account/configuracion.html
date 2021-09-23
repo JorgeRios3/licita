@@ -4,7 +4,6 @@
 {% block account_title %}Mi portal{% endblock %}
 
 {% block account_header %}
-<h2 style="padding-top: 150px;" class="baloo-font">Configuracion</h2>
 {% endblock %}
 
 {% block account_content %}
@@ -34,30 +33,56 @@
 </div>
 
 
-<div class="container">
+<div class="container" style="margin-top:180px">
+  <div class="row" style="margin-bottom: 50px;">
+    <div class="col text-center baloo-font" style="font-size: 4.5em; font-weight: 900;">
+    Configurac<span style="color:rgb(241,90,36)">i</span>ón
+    </div>
+  </div>
 <div class="row">
-    <div class="col-sm-12 col-md-4">
-    <label><b class="baloo-font">Grupo</b></label>
+    <div class="col-sm-12 col-md-4" style="margin-bottom: 10px;">
+    <label><b class="baloo-font" style="font-size:1.4em; padding-left: 10px;">Grupo</b></label>
       <input class="form-control grupoAutoComplete basic-input" type="text" autocomplete="off" placeholder="Ingresa el grupo">
     </div>
-    <div class="col-sm-12 col-md-3">
-        <label><b class="baloo-font">Familia</b></label>
+    <div class="col-sm-12 col-md-3" style="margin-bottom: 10px;">
+        <label><b class="baloo-font" style="font-size:1.4em; padding-left: 10px;">Familia</b></label>
         <input class="form-control familiaAutoComplete basic-input" type="text" autocomplete="off" placeholder="Ingresa el familia">
     </div>
-    <div class="col-sm-12 col-md-3">
-        <label><b class="baloo-font">Articulo</b></label>
+    <div class="col-sm-12 col-md-3" style="margin-bottom: 10px;">
+        <label><b class="baloo-font" style="font-size:1.4em; padding-left: 10px;">Articulo</b></label>
         <input class="form-control articuloAutoComplete basic-input" type="text" autocomplete="off" placeholder="Ingresa el artiulo">
     </div>
     <div class="col-sm-4 col-md-2" style="padding-top: 30px;">
       <button class="btn btn-info orange-button hide-element" id="add_filtro_btn" onClick="add_filtro()">Agregar Filtro</button>
     </div>
 </div>
+<div class="row">
+  <div class="col-4">
+      <form>
+          <div class="form-group">
+          <label for="exampleInputEmail1" style="font-size:1.3em !important; padding-left: 10px;" class="avenir-font">Buscar Filtro</label>
+          <input id="search_filtro_valor" type="email" class="form-control basic-input" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nombre Licitacion" onkeyup="keyupFunction_buscar_filtro()">
+          </div>
+      </form>
+  </div>
+  {% if items_qty %}
+  <div class="col-3">
+      <br><br>
+      <form>
+          <div class="form-group">
+              <span style="font-weight: bold;">Licitaciones Encontradas {{items_qty}}</span>
+          </div>
+      </form>
+  </div>
+  {% endif %}
+</div>
 <!-- end of row -->
 </div>
+
 <br><br>
-<div class="row">
+<div class="row" id="filtros_container">
     <div class="col">
-        <p><b class="baloo-font">Filtros seleccionados:</b></p>
+        <p><b class="baloo-font" style="font-size:1.6em">Filtros seleccionados:</b></p>
         <div id="tabla_filtros">
         <table class="table">
             <thead>
@@ -71,9 +96,9 @@
             <tbody>
               {% for x in filtros %}
               <tr>
-                <th scope="row" class="baloo-font">{{x.grupo|empty_val}}</th>
-                <td class="baloo-font">{{x.familia|empty_val}}</td>
-                <td class="baloo-font">{{x.articulo|empty_val}}</td>
+                <th scope="row" class="baloo-font" style="font-size:1.1em">{{x.grupo|empty_val}}</th>
+                <td class="baloo-font" style="font-size:1.1em">{{x.familia|empty_val}}</td>
+                <td class="baloo-font" style="font-size:1.1em">{{x.articulo|empty_val}}</td>
                 <td><div class="dropdown">
                   {% if x.activado %}
                   <button class="btn btn-info dropdown-toggle baloo-font" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -24,7 +24,13 @@ def change_status(request):
     return render(request, 'account/dashboard.html', {"licitaciones":get_user_licitaciones(request.user.id)})
 
 def add_cotizacion(request, id):
-    file = request.FILES['document']
+    try:
+        file = request.FILES['document']
+    except:
+        licitacion = UsuarioLicitaciones.objects.filter(pk=id)
+        serialized_obj = serializers.serialize('json', licitacion)
+        ob_json = json.loads(serialized_obj)
+        return render(request, 'account/licitacion.html', {"id":id, "licitacion":ob_json[0]["fields"]})
     print(file.name)
     print(file.size)
     file_directory_within_bucket = 'user_upload_files/{username}/cotizacion/{id}'.format(username=request.user.id, id=id)

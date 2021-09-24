@@ -96,5 +96,7 @@ function guardar_datos_comprador(id){
         var doc = parser.parseFromString(data, "text/html"); 
         var docArticle = doc.querySelector('#comprador_container');
         $( "#comprador_container" ).replaceWith( docArticle );
+        $("#modal_datos_comprador").click();
+        //listo
     });
 }

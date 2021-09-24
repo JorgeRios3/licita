@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.core.mail import send_mail, BadHeaderError
 from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm, ContactForm
-from .models import UsuarioLicitaciones, Group
+from .models import UsuarioLicitaciones, UserPlan
 from django.contrib.auth.models import User
 import paypalrestsdk
 import json
@@ -46,12 +46,15 @@ def licitaciones(request):
     return render(request, 'account/licitaciones.html', {"licitaciones":validated_items})
 
 
+
 def my_login(request):
     print(request.POST.get("username"))
     print(request.POST.get("password"))
     print("si entro")
     user = authenticate(username=request.POST.get("username"), password=request.POST.get("password"))
-    print(user)
+    up = UserPlan.objects.filter(owner_user=user.id)
+    if up[0].plan_active == False:
+        return render(request, 'account/suspended_account.html',{})
     if user is not None:
         login(request, user)
         licitaciones = UsuarioLicitaciones.objects.filter(user=request.user.id)
@@ -132,7 +135,7 @@ def register(request):
                 stripe.api_key = settings.STRIPE_SECRET
                 session = stripe.checkout.Session.create(
                 client_reference_id=request.user.id if request.user.is_authenticated else None,
-                success_url=f"{settings.DOMAIN_URL}" + 'account/register-done/?session_id={CHECKOUT_SESSION_ID}&user_id='+f"{user.id}",
+                success_url=f"{settings.DOMAIN_URL}" + 'account/register-done/?session_id={CHECKOUT_SESSION_ID}&user_id='+f"{user.id}&plan_type=Basica",
                 cancel_url=f"{settings.DOMAIN_URL}" + 'cancel/',
                 payment_method_types=['card'],
                 mode='subscription',
@@ -181,8 +184,12 @@ def register(request):
                                 redirect_url = link['href']
                                 user = User.objects.create_user(username=user_form.data['username'], first_name=user_form.data['first_name'], last_name=user_form.data['last_name'], email=user_form.data['email'], password=user_form.data['password'])
                                 user.save()
-                                group = Group(admin_user=user, plan_active=True)
-                                group.save()
+                                up = UserPlan()
+                                up.owner_user = user
+                                up.type = request.session.get('subscription_plan')
+                                up.status = "active"
+                                up.plan_active = True
+                                up.save()
                     
                         return HttpResponseRedirect(redirect_url)
                     #return HttpResponseRedirect("http://127.0.0.1:8000/")
@@ -242,6 +249,7 @@ class RegisterDonePageView(TemplateView):
 def RegisterDone(request):
     user_id = request.GET.get('user_id')
     session_id = request.GET.get('session_id')
+    plan_type = request.GET.get('plan_type')
     print("viendo el  id", user_id)
     print("viendo el  session_id", session_id)
     stripe.api_key = settings.STRIPE_SECRET
@@ -250,8 +258,12 @@ def RegisterDone(request):
     if session["payment_status"] in ["paid", "unpaid"]:
         print("si callo")
         user = User.objects.get(pk=user_id)
-        group = Group(admin_user=user, plan_active=True)
-        group.save()
+        up = UserPlan()
+        up.owner_user = user
+        up.type = plan_type
+        up.status = "active"
+        up.plan_active = True
+        up.save()
     return render(request, "account/register_done.html")
 
 def cancel(request):

@@ -10,6 +10,13 @@ class Group(models.Model):
     plan_active = models.BooleanField(default=False)
 
 
+class UserPlan(models.Model):
+    owner_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    type = models.CharField(max_length=50, blank=True, null=True)
+    plan_active = models.BooleanField(default=False)
+    status = models.CharField(max_length=50, blank=True, null=True)
+    users = models.JSONField(default='{}')
+
 
 class UsuarioLicitaciones(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

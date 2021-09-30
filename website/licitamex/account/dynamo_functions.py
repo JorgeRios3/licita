@@ -19,6 +19,11 @@ def fetch_items_table(table=None, attr=None):
     else:
         return []
 
+def fetch_dependencias():
+    table = dynamodb.Table("states")
+    return table.scan(Select='SPECIFIC_ATTRIBUTES', AttributesToGet=['entidad'])
+
+
 def fetch_item(table=None, attr=None):
     if table != None:
         if attr != None:

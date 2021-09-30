@@ -20,6 +20,22 @@
                 </div>
             </form>
         </div>
+        <div class="col-4" style="padding-top: 13px;">
+            <div class="form-group">
+                <p></p>
+            <div class="dropdown">
+                <button id="dependencia-seleccionada-licitaciones" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Dependencias
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    {% for x in dependencias %}
+                        <a class="dropdown-item" onClick="seleccionar_dependencia('{{x.entidad}}')">{{x.entidad}}</a>
+                  {% endfor %}
+                  <a class="dropdown-item" onClick="seleccionar_dependencia('todas')">Todas</a>
+                </div>
+              </div>
+            </div>
+        </div>
         {% if items_qty %}
         <div class="col-3">
             <br><br>

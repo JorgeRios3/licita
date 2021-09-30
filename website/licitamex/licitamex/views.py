@@ -33,6 +33,15 @@ def remove_licitacion(request):
 	UsuarioLicitaciones.objects.filter(licitacion_id=licitacion_id).delete()
 	return HttpResponse('deleted')
 
+
+def validate_filtro(descripcion, filtro_val, filtro_precision ):
+	if fuzz.partial_ratio(descripcion, filtro_val) > filtro_precision:
+		if filtro_val in descripcion:
+			return True
+		else:
+			return False
+	return False
+	
 @csrf_exempt
 def add_licitacion(request):
 	post_data = json.loads(request.body.decode("utf-8"))    
@@ -40,9 +49,9 @@ def add_licitacion(request):
 	licitacion = fetch_item("licitaciones", licitacion_id)
 	filtros = UsuarioFiltros.objects.all()
 	lista = []
-	lista += list(filter(lambda x:fuzz.partial_ratio(licitacion["descripcion"].lower(), x.grupo.lower()) > 70, filtros))
-	lista += list(filter(lambda x:fuzz.partial_ratio(licitacion["descripcion"].lower(), x.familia.lower()) > 50, filtros))
-	lista += list(filter(lambda x:fuzz.partial_ratio(licitacion["descripcion"].lower(), x.articulo.lower()) > 50, filtros))
+	lista += list(filter(lambda x:validate_filtro(licitacion["descripcion"].lower(), x.grupo.lower(), 50), filtros))
+	lista += list(filter(lambda x:validate_filtro(licitacion["descripcion"].lower(), x.familia.lower(), 50), filtros))
+	lista += list(filter(lambda x:validate_filtro(licitacion["descripcion"].lower(), x.articulo.lower(), 50), filtros))
 	filtrado = set(lista)
 	print("viendo filtrado")
 	print(filtrado)

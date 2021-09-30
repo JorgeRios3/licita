@@ -19,10 +19,12 @@ from fuzzywuzzy import fuzz
 
 def search_licitacion_by_name(request):
     nombre = request.GET.get('nombre')
-    print("viendo nombre ", nombre)
+    dependencia = request.GET.get('dependencia')
     items = fetch_items_table("licitaciones", nombre)["Items"]
     user_licitaciones = get_user_licitaciones(request.user.id)
     validated_items = list(map(lambda x: compare_user(x, user_licitaciones), items))
+    if dependencia:
+        validated_items = list(filter(lambda x: x["entidad"] == dependencia, validated_items))
     return render(request, 'account/licitaciones.html', {"licitaciones":validated_items, "items_qty":len(validated_items)})
 
 def search_filtro_by_name(request):

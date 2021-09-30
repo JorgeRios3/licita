@@ -13,7 +13,7 @@ from django.contrib.auth.models import User
 import paypalrestsdk
 import json
 from paypalrestsdk.notifications import WebhookEvent
-from .dynamo_functions import fetch_items_table
+from .dynamo_functions import fetch_items_table, fetch_dependencias
 from .licitaciones import get_user_licitaciones
 from .filtros import get_user_filtros
 from .utils import compare_user
@@ -41,9 +41,12 @@ def configuracion(request):
 @never_cache
 def licitaciones(request):
     items = fetch_items_table("licitaciones")["Items"]
+    dependencias = fetch_dependencias()["Items"]
+    print("dependencias")
+    print(dependencias)
     user_licitaciones = get_user_licitaciones(request.user.id)
     validated_items = list(map(lambda x: compare_user(x, user_licitaciones), items))
-    return render(request, 'account/licitaciones.html', {"licitaciones":validated_items})
+    return render(request, 'account/licitaciones.html', {"licitaciones":validated_items, "dependencias":dependencias})
 
 
 

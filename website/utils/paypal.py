@@ -11,9 +11,9 @@ PRODUCT = "product"
 logger = logging.getLogger(__name__)
 
 myapi = paypalrestsdk.Api({
-	"mode": settings.PAYPAL_MODE,
-	"client_id": settings.PAYPAL_CLIENT_ID,
-	"client_secret": settings.PAYPAL_CLIENT_SECRET,
+	"mode": "live",
+	"client_id": "ATI4azSRPWJP1KB0EacJVFtrhTQfb4hXutSb7RdIL-ePGOvw0B82qFotONe_OqLqwhpk3tFECEQ3AYFE",
+	"client_secret": "EI9l519ifczqQw9WsdvRBlx1MYnYBYvGf24DjKRba-JgNSQHO7udEsgWaCgn3B6JKnfTvi6pi0URCD2D"
 	})
 
 BASE_DIR = os.path.join("..", "..", "..", os.path.dirname(__file__))

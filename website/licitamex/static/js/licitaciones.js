@@ -1,5 +1,7 @@
 //const { SSL_OP_EPHEMERAL_RSA } = require("constants");
 
+let dependencia = 'todas';
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -55,6 +57,7 @@ function search_filtro_configuracion(){
 
 
 
+
 function search_mi_portal_licitaciones(){
     let cookie = getCookie('csrftoken');
     var nombre = document.getElementById("search_mi_portal_lcitacion").value;
@@ -75,10 +78,22 @@ function search_mi_portal_licitaciones(){
 
 }
 
+
+function seleccionar_dependencia(dependencia_valor){
+    console.log("aqui");
+    dependencia = dependencia_valor
+    $("#dependencia-seleccionada-licitaciones").text(dependencia)
+    make_search_query()
+}
+
 function make_search_query(){
     let cookie = getCookie('csrftoken');
     var nombre = document.getElementById("search_licitacion").value;
-    fetch('http://localhost:8000/account/search_licitacion_by_name?nombre='+nombre, { method: 'GET',
+    let url = 'http://localhost:8000/account/search_licitacion_by_name?nombre='+nombre
+    if(dependencia !== 'todas'){
+        url = url+"&dependencia="+dependencia
+    }
+    fetch(url, { method: 'GET',
         headers: {'X-CSRFToken': cookie},
         mode: 'same-origin',
         cache: 'default',
@@ -93,6 +108,10 @@ function make_search_query(){
         $( "#tabla_licitaciones").replaceWith( docArticle );
     });
 }
+
+
+
+
 
 function activar_licitacion(id, description, entidad){
     let cookie = getCookie('csrftoken');

@@ -1,19 +1,30 @@
 ---
-product_id: PROD-5G385625SW6727522
-name: Plan mensual
-description: Plan mensual
+product_id: PROD-53N47504GP109435V
+name: Licitamex Plan Baisco
+description: Baisco mensual
 status: ACTIVE
 billing_cycles:
 - frequency:
     interval_unit: MONTH
     interval_count: 1
-  tenure_type: REGULAR
+  tenure_type: TRIAL
   sequence: 1
+  total_cycles: 1
+  pricing_scheme:
+    fixed_price:
+      value: '0'
+      currency_code: MXN
+- frequency:
+    interval_unit: MONTH
+    interval_count: 1
+  tenure_type: REGULAR
+  sequence: 2
   total_cycles: 0
   pricing_scheme:
     fixed_price:
-      value: '10'
+      value: '249'
       currency_code: MXN
+
 payment_preferences:
   auto_bill_outstanding: true
   setup_fee:
@@ -21,3 +32,6 @@ payment_preferences:
     currency_code: MXN
   setup_fee_failure_action: CONTINUE
   payment_failure_threshold: 3
+
+
+# id': 'P-1J916372VV921974TMFK7XSI', 'product_id': 'PROD-53N47504GP109435V', 'name': 'Licitamex Plan Baisco'

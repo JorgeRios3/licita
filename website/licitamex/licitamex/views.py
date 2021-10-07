@@ -8,7 +8,7 @@ import os
 from account.dynamo_functions import fetch_item
 import json
 from django.contrib.auth.models import User
-from account.models import UsuarioFiltros, UsuarioLicitaciones
+from account.models import UsuarioFiltros, UsuarioLicitaciones, CustomUser
 from fuzzywuzzy import fuzz
 import datetime
 
@@ -56,7 +56,7 @@ def add_licitacion(request):
 	print("viendo filtrado")
 	print(filtrado)
 	for x in filtrado:
-		u = User.objects.filter(username= x.user)
+		u = CustomUser.objects.filter(username= x.user)
 		print("viendo esto")
 		print(licitacion)
 		nueva = add_licitacion_usuario(u[0], licitacion)
@@ -80,6 +80,26 @@ def add_licitacion_usuario(usuario, licitacion):
 
 
 
+def registro_exitoso_email(email, licitacion):
+	mailjet = Client(auth=(settings.MJ_APIKEY_PUBLIC, settings.MJ_APIKEY_PRIVATE), version='v3.1')
+	data = {
+		'Messages': [{
+			"From": {
+				"Email": "norma.contreras@nilaconsulting.com.mx",
+				"Name": "Licitamex"
+			},
+			"To": [{
+				"Email": email,
+				"Name": "You"
+			}],
+			"Subject": "Registro Exitoso",
+			"HTMLPart": f"""<h3>Gracias por registrarte en LICITAMEX.</h3>
+			<br/>Empieza a usar tu cuenta aqui.<br/>
+			<a href=\"https://consultalicitamex.com/\">consultalicitamex</a>"""
+		}]
+	}
+	mailjet.send.create(data=data)
+
 
 def nueva_licitacion_email(email, licitacion):
 	mailjet = Client(auth=(settings.MJ_APIKEY_PUBLIC, settings.MJ_APIKEY_PRIVATE), version='v3.1')
@@ -87,7 +107,7 @@ def nueva_licitacion_email(email, licitacion):
 		'Messages': [{
 			"From": {
 				"Email": "norma.contreras@nilaconsulting.com.mx",
-				"Name": "Me"
+				"Name": "Licitamex"
 			},
 			"To": [{
 				"Email": email,

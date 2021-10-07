@@ -77,6 +77,18 @@
                         <span class="help-block">{{ error }}</span>
                     {% endfor %}
                 </div>
+                <div class="form-group">
+                    <div class="row">
+                    <span>
+                    {{ user_form.visible_fields.7|add_class:'padding-top-10' }}
+                    </span>
+                    <div class="help-block with-errors"></div>
+                    {% for error in user_form.visible_fields.7.errors %}
+                        <span class="help-block">{{ error }}</span>
+                    {% endfor %}
+                    <span><a href="/terms-conditions" target="_blank">Aceptar terminos y condiciones.</a> <a href="/privacy-policy" target="_blank">Aviso de privacidad.</a></span>
+                    </div>
+                </div>
 
                 {% csrf_token %}
                 <input type="hidden" name="next" value="{{ next }}" />

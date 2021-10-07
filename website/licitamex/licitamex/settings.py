@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+AUTH_USER_MODEL = 'account.CustomUser'
+
+
 MIDDLEWARE = [
     'licitamex.middleware.HealthCheckMiddleware',
     'licitamex.middleware.DisableBrowserCacheMiddleware',
@@ -156,7 +159,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 PAYPAL_RECEIVER_EMAIL = 'sb-kundi2221798@business.example.com'
 PAYPAL_TEST = True
 
-DOMAIN_URL = "https://consultalicitamex.com/"
+DOMAIN_URL = "http://localhost:8000/"
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 
@@ -176,7 +179,7 @@ if DEBUG:
 
     STRIPE_KEY= "pk_live_51JTBKjLE0Lev1MBURN83QxHSKAhryDTBXLAus1q1dMSYt89SVlM3eo5va8doPiobqWxDel3Rbp3AonV2YWafGUQP00TAcYCPQi"
     STRIPE_SECRET= "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"
-    STRIPE_BASIC = "price_1JbvFDLE0Lev1MBUkO6UYo4k"
+    STRIPE_BASIC = "price_1JhOyHLE0Lev1MBUHci0ALEG"
 
 
     #develop

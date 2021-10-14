@@ -2,7 +2,6 @@ from django.http import HttpResponse
 from .models import UsuarioLicitaciones
 import json
 import datetime
-from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
@@ -10,10 +9,11 @@ from django.http import JsonResponse
 from .utils import compare_user
 from .models import UsuarioFiltros, CatalogoFiltros
 from django.core import serializers
+from .models import CustomUser
 
 
 def get_user_filtros(user_id):
-    user = User.objects.get(pk=user_id)
+    user = CustomUser.objects.get(pk=user_id)
     filtros = UsuarioFiltros.objects.filter(user=user)
     return filtros
 
@@ -27,7 +27,7 @@ def add_filtro(request):
     grupo = post_data.get("grupo", '')
     familia = post_data.get("familia", '')
     articulo = post_data.get("articulo", '')
-    user = User.objects.get(pk=request.user.id)
+    user = CustomUser.objects.get(pk=request.user.id)
     catalogo_filtro = find_catalogo_filtro(grupo, familia, articulo)
     print("este es")
     print(catalogo_filtro)

@@ -1,5 +1,4 @@
 from .models import UsuarioLicitaciones
-from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, reverse
 import json
 from django.core import serializers
@@ -7,13 +6,14 @@ from datetime import datetime
 from storages.backends.s3boto3 import S3Boto3Storage
 import os
 from django.http import JsonResponse
+from .models import CustomUser
 
 
 class MediaStorage(S3Boto3Storage):
     bucket_name = 'cotizacioneslicitamex'
 
 def get_user_licitaciones(user_id):
-    user = User.objects.get(pk=user_id)
+    user = CustomUser.objects.get(pk=user_id)
     licitaciones = UsuarioLicitaciones.objects.filter(user=user)
     print(licitaciones)
     return licitaciones
@@ -79,7 +79,7 @@ def licitacion(request, id):
         comentario = post_data.get("text", "")
         if comentario.strip() != "":
             fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            user = User.objects.get(pk=request.user.id)
+            user = CustomUser.objects.get(pk=request.user.id)
             if licitacion.comments.get("comments", "") == "":
                 licitacion.comments = {"comments":[{"date":fecha, "comment":comentario, "user":user.id}]}
             else:

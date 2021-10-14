@@ -43,7 +43,9 @@ def password_reset(request):
         date =datetime.now() + timedelta(days=1)
         date=date.utcnow().timestamp(),
         user = CustomUser.objects.filter(email=email)
-        hash = f"{user[0].username[0]}{user[0].password[2]}{user[0].last_name[0:2]}{date}"
+        hash = f"{date}"
+        hash = hash.replace("(", "").replace(")", "").replace(",", "")
+        user = user[0]
         user.reset_passowrd_hash = hash
         user.save()
         reset_password_email(email, hash)
@@ -96,8 +98,7 @@ def set_new_password(request):
         user = CustomUser.objects.filter(email=email)
         date =datetime.now()
         date = date.utcnow().timestamp()
-        time = hash[4:]
-        if float(time[4:]) < date and user[0].reset_passowrd_hash == hash:
+        if float(hash) < date and user[0].reset_passowrd_hash == hash:
             form = ChangePasswordForm()
             return render(request, 'account/password/new_password_form.html', {'form': form, "hash":hash})
         else:

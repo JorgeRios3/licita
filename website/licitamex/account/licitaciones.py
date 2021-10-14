@@ -12,6 +12,7 @@ from .utils import compare_user
 from django.core import serializers
 from .mis_licitaciones import get_user_licitaciones, licitacion
 from .filtros import get_user_filtros
+from .models import CustomUser
 
 from fuzzywuzzy import fuzz
 
@@ -41,7 +42,7 @@ def search_filtro_by_name(request):
 
 def search_mi_portallicitacion_by_name(request):
     nombre = request.GET.get('nombre')
-    user = User.objects.get(pk=request.user.id)
+    user = CustomUser.objects.get(pk=request.user.id)
     licitaciones = UsuarioLicitaciones.objects.filter(user=user)
     if nombre.strip():
         searched_items = list(filter(lambda x:fuzz.partial_ratio(nombre.lower(), x.description.lower()) > 70, licitaciones))
@@ -64,7 +65,7 @@ def compare_user(licitacion, user_licitaciones):
     
 def activate_licitacion(request):
     post_data = json.loads(request.body.decode("utf-8"))
-    user = User.objects.get(pk=request.user.id)
+    user = CustomUser.objects.get(pk=request.user.id)
     licitacion = UsuarioLicitaciones()
     licitacion.user = user
     licitacion.licitacion_id = post_data.get("valor", 0)

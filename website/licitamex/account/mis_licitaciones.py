@@ -27,6 +27,7 @@ def add_cotizacion(request, id):
     try:
         file = request.FILES['document']
     except:
+        print("se fue por el execept")
         licitacion = UsuarioLicitaciones.objects.filter(pk=id)
         serialized_obj = serializers.serialize('json', licitacion)
         ob_json = json.loads(serialized_obj)
@@ -56,13 +57,7 @@ def add_cotizacion(request, id):
         ob_json = json.loads(serialized_obj)
         return render(request, 'account/licitacion.html', {"id":id, "licitacion":ob_json[0]["fields"]})
     else:
-        return JsonResponse({
-            'message': 'Error: file {filename} already exists at {file_directory} in bucket {bucket_name}'.format(
-                filename=file_obj.name,
-                file_directory=file_directory_within_bucket,
-                bucket_name=media_storage.bucket_name
-            ),
-        }, status=400)
+        return render(request, 'account/licitacion.html', {"id":id, "licitacion":ob_json[0]["fields"], "archivo_existe":True})
 
 
 def licitacion(request, id):

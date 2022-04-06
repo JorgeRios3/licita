@@ -1,0 +1,34 @@
+{% extends "account_base.html" %}
+
+{% block account_title %}Mi portal{% endblock %}
+
+{% block account_header %}
+<h1>Mi portal</h1>
+{% endblock %}
+
+{% block account_content %}
+<button id="modal_boton" style="display:none" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Launch demo modal
+</button>
+
+
+<div class="row" style="padding-top: 100px;">
+  <div class="col text-center baloo-font" style="font-size: 5.5em; font-weight: 900; margin-bottom: 50px;"><span style="color:rgb(241,90,36)">Cancelar</span> <span style="color:black">Cuenta</span></div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <!--<p class="p-large">Informacion de la cuenta de {{request.user.first_name}}</p><br/>-->
+        <div id="mis_licitaciones">
+            Esta seguro que desea cancelar su cuenta una vez confirmada aceptada de confirmado la informacion sera borrada de nuestro servidor
+            <br/><br/><br/><br/>
+
+            <div>
+                <p><input type="checkbox" name="terms" id="cancel_terms">Aceptar borrar cuenta</u></p>
+                <p><button onClick="checkForm(this)">Cancelar</button></p>
+            </div>
+
+        </div>
+    </div> <!-- end of col -->
+</div> <!-- end of row -->
+{% endblock %}

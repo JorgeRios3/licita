@@ -1,5 +1,28 @@
 LICITACION_ID=null;
 
+
+function checkForm(form){
+    val = document.getElementById("cancel_terms");
+    if(!val.checked) {
+      alert("Selecciona la casilla para poder cancelar");
+    }else{
+        console.log("bien")
+        let cookie = getCookie('csrftoken');
+        fetch('http://localhost:8000/account/borrar_cuenta',{ method: 'POST',
+        headers: {'X-CSRFToken': cookie},
+        mode: 'same-origin',
+        cache: 'default',
+        body: JSON.stringify({"delete":true})
+        }).then(res => {
+            if(res.status == 200){
+                console.log("termino");
+                window.location.replace("http://localhost:8000/");
+            }
+        })
+    }
+  }
+
+
 function change_status(licitacion_id, status){
     console.log("entro aqui ", status);
     if (status=="Eliminar"){

@@ -1,20 +1,19 @@
 from django.http import HttpResponse
-from .models import UsuarioLicitaciones
+from .models import Group, UsuarioLicitaciones
 import json
 import datetime
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.http import JsonResponse
-from .utils import compare_user
-from .models import UsuarioFiltros, CatalogoFiltros
+from .models import CatalogoFiltros, GrupoFiltros
 from django.core import serializers
 from .models import CustomUser
 
 
 def get_user_filtros(user_id):
     user = CustomUser.objects.get(pk=user_id)
-    filtros = UsuarioFiltros.objects.filter(user=user)
+    filtros = GrupoFiltros.objects.filter(group=user.group.id)
     return filtros
 
 
@@ -31,6 +30,7 @@ def add_filtro(request):
     catalogo_filtro = find_catalogo_filtro(grupo, familia, articulo)
     print("este es")
     print(catalogo_filtro)
+    print(user.group)
     if not catalogo_filtro:
         catalogo_filtro = CatalogoFiltros()
         catalogo_filtro.grupo = grupo
@@ -39,20 +39,30 @@ def add_filtro(request):
         catalogo_filtro.save()
     else:
         catalogo_filtro=catalogo_filtro[0]
-    usuario_filtro = UsuarioFiltros()
-    usuario_filtro.user = user
-    usuario_filtro.filtro_id = catalogo_filtro.pk
-    usuario_filtro.grupo = catalogo_filtro.grupo 
-    usuario_filtro.familia = catalogo_filtro.familia or ""
-    usuario_filtro.articulo = catalogo_filtro.articulo or ""
-    usuario_filtro.activado = True
-    usuario_filtro.save()
+    grupo_filtro = GrupoFiltros()
+    grupo_filtro.group = user.group
+    grupo_filtro.filtro_id = catalogo_filtro.pk
+    grupo_filtro.grupo = catalogo_filtro.grupo
+    grupo_filtro.familia = catalogo_filtro.familia or ""
+    grupo_filtro.articulo = catalogo_filtro.articulo or ""
+    grupo_filtro.activado = True
+    grupo_filtro.save()
     usuario_filtros = get_user_filtros(request.user.id)
+
     return render(request, 'account/configuracion.html', {"filtros":usuario_filtros})
+
+
+def delete_group_user(request):
+    post_data = json.loads(request.body.decode("utf-8"))
+    cu = CustomUser.objects.filter(pk=post_data.get("id", 0))
+    group = cu[0].group
+    cu.delete()
+    return render(request, 'account/configuracion.html', {})
+
 
 def change_status_filtro(request):
     post_data = json.loads(request.body.decode("utf-8"))
-    UsuarioFiltros.objects.filter(pk=post_data.get("id", 0)).update(activado= True if post_data.get("status", '') != "Desactivar" else False)
+    GrupoFiltros.objects.filter(pk=post_data.get("id", 0)).update(activado= True if post_data.get("status", '') != "Desactivar" else False)
     usuario_filtros = get_user_filtros(request.user.id)
     return render(request, 'account/configuracion.html', {"filtros":usuario_filtros})
 

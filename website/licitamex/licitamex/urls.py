@@ -21,6 +21,7 @@ from . import views
 
 urlpatterns = [
     path('account/', include('account.urls')),
+    path('group/', include('account.group_urls')),
     path('admin/', admin.site.urls),
     path('', views.HomePageView.as_view(), name='index'),
     path('terms-conditions/', views.TermsConditionsPageView.as_view(), name='terms-conditions'),

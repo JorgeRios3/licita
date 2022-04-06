@@ -9,7 +9,8 @@ subscription_options = [
     ]
 
 payment_types = [
-        ('paypal', 'Paypal')
+        ('paypal', 'Paypal'),
+        ('stripe', 'Stripe')
     ]
 
 class ChangePasswordForm(forms.Form):
@@ -56,8 +57,31 @@ class UserRegistrationForm(forms.ModelForm):
            "last_name": forms.TextInput(attrs={'class': 'basic-input', "placeholder":"Apellidos", 'required': 'true' }),
            "email": forms.TextInput(attrs={'class': 'basic-input', "placeholder":"Email", 'required': 'true' }),
            "password": forms.PasswordInput(attrs={'class': 'basic-input', "placeholder":"Contraseña", 'required': 'true' }),
+           #"": forms.TextInput(attrs={'class': 'basic-input', "placeholder":"Apellidos", 'required': 'true' }),
+
         }
-        
+
+
+
+class NewUserForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'first_name', 'last_name', 'email')
+        widgets = {
+           "username": forms.TextInput(attrs={'class': 'basic-input', "placeholder":"Usuario", 'required': 'true' }),
+           "first_name": forms.TextInput(attrs={'class': 'basic-input', "placeholder":"Nombres", 'required': 'true' }),
+           "last_name": forms.TextInput(attrs={'class': 'basic-input', "placeholder":"Apellidos", 'required': 'true' }),
+           "email": forms.TextInput(attrs={'class': 'basic-input', "placeholder":"Email", 'required': 'true'}),
+        }
+
+        def clean(self):
+            cleaned_data = super(NewUserForm, self).clean()
+            email = cleaned_data.get("email")
+            if len(email)<2:
+                self.add_error('email', "Las contraseñas no coinciden")
+
+            return cleaned_data
+
 
 class UserEditForm(forms.ModelForm):
     class Meta:

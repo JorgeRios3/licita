@@ -4,6 +4,13 @@ articulo=null;
 FILTRO_ID=null;
 
 
+
+function mostrar_forma_crear_usuario(){
+    
+}
+
+
+
 function remove_filtro(id){
     let cookie = getCookie('csrftoken');
     fetch('http://localhost:8000/account/remove_filtro',{ method: 'POST',
@@ -118,6 +125,25 @@ function change_status_filtro(id, status){
         call_change_status_filtro(id, status);
     }
 
+}
+
+function deleteGroupUser(id){
+    let cookie = getCookie('csrftoken');
+    fetch('http://localhost:8000/account/delete_group_user',{ method: 'POST',
+        headers: {'X-CSRFToken': cookie},
+        mode: 'same-origin',
+        cache: 'default',
+        body: JSON.stringify({"id": id})
+    }).then(res => {
+        return res.text();
+    })
+    .then(data => {
+        var parser = new DOMParser();
+        // Parse the text
+        //var doc = parser.parseFromString(data, "text/html"); 
+        //var docArticle = doc.querySelector('#tabla_filtros');
+        //$( "#tabla_filtros" ).replaceWith( docArticle );
+    });
 }
 
 function call_change_status_filtro(licitacion_id, status){

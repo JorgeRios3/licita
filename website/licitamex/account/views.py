@@ -1,3 +1,4 @@
+import grp
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -7,8 +8,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.core.mail import send_mail, BadHeaderError
-from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm, ContactForm, ChangePasswordForm
-from .models import UsuarioLicitaciones, UserPlan, CustomUser
+from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm, ContactForm, ChangePasswordForm, NewUserForm
+from .models import UsuarioLicitaciones, CustomUser, Group
 from django.contrib.auth.models import User
 import paypalrestsdk
 import json
@@ -16,15 +17,21 @@ from paypalrestsdk.notifications import WebhookEvent
 from .dynamo_functions import fetch_items_table, fetch_dependencias
 from .licitaciones import get_user_licitaciones
 from .filtros import get_user_filtros
-from .utils import compare_user
-from django.http import JsonResponse
+from .utils import compare_user, group_users
+#from django.http import JsonResponse
 from django.views.decorators.cache import never_cache
 import stripe
 from django.views.generic import TemplateView
-from mailjet_rest import Client
 from datetime import datetime
 from datetime import timedelta
-from django.urls import reverse
+#from django.urls import reverse
+from .mails import reset_password_email, registro_exitoso_email
+from django.contrib.auth import logout
+import requests
+from requests.auth import HTTPBasicAuth
+from .utils import account_is_active
+
+
 
 
 
@@ -52,27 +59,6 @@ def password_reset(request):
         return render(request, 'account/password/password_reset_done.html', {}) 
     else:
         return render(request, 'account/password/password_reset_form.html', {})
-
-
-def reset_password_email(email, hash):
-	mailjet = Client(auth=(settings.MJ_APIKEY_PUBLIC, settings.MJ_APIKEY_PRIVATE), version='v3.1')
-	data = {
-		'Messages': [{
-			"From": {
-				"Email": "norma.contreras@nilaconsulting.com.mx",
-				"Name": "Licitamex"
-			},
-			"To": [{
-				"Email": email,
-				"Name": "You"
-			}],
-			"Subject": "Restablecer contraseña",
-			"HTMLPart": f"""<h3>usted a solicitado cambiar contraseña.</h3>
-			<br/>por favor da click en el link para cambiar tu contraseña<br/>
-			<a href=\"https://consultalicitamex.com/account/set-new-password/?email={email}&hash={hash}\">consultalicitamex</a>"""
-		}]
-	}
-	mailjet.send.create(data=data)
 
 
 def reset_new_password(request, hash):
@@ -104,15 +90,51 @@ def set_new_password(request):
         else:
             return render(request, 'account/password/password_expired.html', {})
 
+@login_required
+def borrar_cuenta(request):
+    user = CustomUser.objects.filter(pk=request.user.id)
+    group = Group.objects.filter(pk=user[0].group.id)
+    group = group[0]
+    if int(group.admin_user) != int(request.user.id):
+        return HttpResponse("necesitas derecho de administrador para poder borrar")
+    if request.method == "POST":
+        print("borrando la cuenta")
+        logout(request)
+        stripe.api_key = settings.STRIPE_SECRET
+        if group.payment_vendor == "Stripe":
+            val = stripe.Subscription.delete(group.subscription_id)
+            group.plan_is_active = False
+            group.save()
+            print(val)
+            return HttpResponse(status=200)
+        else:
+            ret = myapi.post("v1/billing/subscriptions/{}/cancel".format(group.subscription_id))
+            print("viendo cancelacion  ", ret)
+            group.plan_is_active = False
+            group.save()
+            return HttpResponse(status=200)
+
+    else:
+        return render(request, 'account/borrar_cuenta.html', {})
 
 @login_required
+@account_is_active
 def configuracion(request):
+    is_admin=False
     usuario_filtros = get_user_filtros(request.user.id)
-    return render(request, 'account/configuracion.html', {"filtros":usuario_filtros})
+    form = NewUserForm()
+    usuarios = group_users(request.user.id)
+    user = CustomUser.objects.filter(pk=request.user.id)
+    group = Group.objects.filter(pk=user[0].group.id)
+    if int(group[0].admin_user) == int(request.user.id):
+        is_admin=True
+    print("viendo group ", group[0].admin_user)
+    return render(request, 'account/configuracion.html', {"filtros":usuario_filtros, "form":form, "usuarios":usuarios, "group":group[0], "is_admin":is_admin})
 
 
 @login_required
 @never_cache
+@account_is_active
 def licitaciones(request):
     items = fetch_items_table("licitaciones")["Items"]
     dependencias = fetch_dependencias()["Items"]
@@ -128,8 +150,8 @@ def my_login(request):
     user = authenticate(username=request.POST.get("username"), password=request.POST.get("password"))
     if user is None:
         return render(request, 'account/login.html',{"errror":"error"})
-    up = UserPlan.objects.filter(owner_user=user.id)
-    if up[0].plan_active == False:
+    group = Group.objects.filter(owner_user=user.group)
+    if group[0].plan_is_active == False:
         return render(request, 'account/suspended_account.html',{})
     if user is not None:
         login(request, user)
@@ -138,6 +160,7 @@ def my_login(request):
                   {'section': 'dashboard', "licitaciones":licitaciones})
 
 @login_required
+@account_is_active
 def dashboard(request):
     licitaciones = UsuarioLicitaciones.objects.filter(user=request.user.id)
     return render(request,
@@ -200,31 +223,49 @@ def paypal_webhooks(request):
 
 def register(request):
     if request.method == 'POST':
+        print("si entrooo")
         user_form = UserRegistrationForm(request.POST)
+        users = CustomUser.objects.filter(email = user_form.data['email'])
+        print("esto ", len(users))
+        if len(users) >0:
+            return render(request, 'account/user_exists.html', {})
         if user_form.is_valid():
             request.session['subscription_plan'] = request.POST.get('plans')
+            print("aqui")
             if request.POST.get('tipo') == "stripe":
-                user = CustomUser.objects.create_user(username=user_form.data['username'], first_name=user_form.data['first_name'], last_name=user_form.data['last_name'], email=user_form.data['email'], password=user_form.data['password'])
-                user.save()
-                trial_date_end =datetime.now() + timedelta(days=30)
-                stripe.api_key = settings.STRIPE_SECRET
-                #session = stripe.checkout.Session.create(
-                session = stripe.Subscription.create(
-                client_reference_id=request.user.id if request.user.is_authenticated else None,
-                success_url=f"https://consultalicitamex.com/" + 'account/register-done/?session_id={CHECKOUT_SESSION_ID}&user_id='+f"{user.id}&plan_type=Basica",
-                cancel_url=f"https://consultalicitamex.com/" + 'cancel/',
-                payment_method_types=['card'],
-                mode='subscription',
-                trial_end = trial_date_end.utcnow().timestamp(),
-                line_items=[
-                        {
-                            'price': settings.STRIPE_BASIC,
-                            'quantity': 1,
-                        }
-                    ]
-                )
-                return render(request, 'account/stripe-checkout.html', {"checkout":session["id"], "public_key": settings.STRIPE_KEY})
+                if request.session.get('subscription_plan') == 'Basica':
+                    group = Group()
+                    company = user_form.data['email'].split("@")[0]
+                    group.company = company
+                    group.save()
+                    user = CustomUser.objects.create_user(username=user_form.data['username'], first_name=user_form.data['first_name'], last_name=user_form.data['last_name'], email=user_form.data['email'], password=user_form.data['password'], group=group)
+                    user.save()
+                    trial_date_end =datetime.now() + timedelta(days=30)
+                    stripe.api_key = settings.STRIPE_SECRET
+                    session = stripe.checkout.Session.create(
+                    client_reference_id=request.user.id if request.user.is_authenticated else None,
+                    #success_url=f"https://consultalicitamex.com/" + 'account/register-done/?session_id={CHECKOUT_SESSION_ID}&group_id='+f"{group.id}&subscription_type=Basica&user_id{user.id}",
+                    #cancel_url=f"https://consultalicitamex.com/" + 'cancel/',
+                    success_url=f"http://127.0.0.1:8000/" + 'account/register-done/?session_id={CHECKOUT_SESSION_ID}&group_id='+f"{group.id}&subscription_type=Basica&user_id={user.id}",
+                    cancel_url=f"http://127.0.0.1:8000/" + 'cancel/',
+                    payment_method_types=['card'],
+                    mode='subscription',
+                    #trial_end = trial_date_end.utcnow().timestamp(),
+                    line_items=[
+                            {
+                                'price': settings.STRIPE_BASIC,
+                                'quantity': 1,
+                            }
+                        ]
+                    )
+                    return render(request, 'account/stripe-checkout.html', {"checkout":session["id"], "public_key": settings.STRIPE_KEY})
             else:
+                print("aca")
+                group = Group()
+                company = user_form.data['email'].split("@")[0]
+                group.company = company
+                group.save()
+                print(request.session.get('subscription_plan'))
                 if request.session.get('subscription_plan') == 'Basica':
                     plan_id = settings.PAYPAL_PLAN_MONTHLY_ID
                     data = {
@@ -259,20 +300,21 @@ def register(request):
                         for link in ret['links']:
                             if link['rel'] == 'approve':
                                 redirect_url = link['href']
-                                user = CustomUser.objects.create_user(username=user_form.data['username'], first_name=user_form.data['first_name'], last_name=user_form.data['last_name'], email=user_form.data['email'], password=user_form.data['password'])
+                                user = CustomUser.objects.create_user(username=user_form.data['username'], first_name=user_form.data['first_name'], last_name=user_form.data['last_name'], email=user_form.data['email'], password=user_form.data['password'],group=group)
                                 user.save()
-                                up = UserPlan()
-                                up.owner_user = user
-                                up.type = request.session.get('subscription_plan')
-                                up.status = "active"
-                                up.plan_active = True
-                                up.save()
+                                group.plan_is_active = True
+                                group.admin_user = user.id
+                                group.subscription_type = "Basica"
+                                group.payment_vendor = "Paypal"
+                                group.subscription_id = ret["id"] #session["subscription"]
+                                group.save()
                     
                         return HttpResponseRedirect(redirect_url)
                     #return HttpResponseRedirect("http://127.0.0.1:8000/")
                     #return render(request, 'account/dashboard.html',{})
 
     else:
+        print("no es valida")
         user_form = UserRegistrationForm()
     return render(request, 'account/register.html', {'user_form': user_form})
 
@@ -324,35 +366,15 @@ class RegisterDonePageView(TemplateView):
     template_name = 'account/register_done.html'
 
 
-
-def registro_exitoso_email(email):
-	mailjet = Client(auth=(settings.MJ_APIKEY_PUBLIC, settings.MJ_APIKEY_PRIVATE), version='v3.1')
-	data = {
-		'Messages': [{
-			"From": {
-				"Email": "norma.contreras@nilaconsulting.com.mx",
-				"Name": "Licitamex"
-			},
-			"To": [{
-				"Email": email,
-				"Name": "You"
-			}],
-			"Subject": "Registro Exitoso",
-			"HTMLPart": f"""<h3>Gracias por registrarte en LICITAMEX.</h3>
-			<br/>Empieza a usar tu cuenta aqui.<br/>
-			<a href=\"https://consultalicitamex.com/\">consultalicitamex</a>"""
-		}]
-	}
-	mailjet.send.create(data=data)
-
 def RegisterDone(request):
     type = request.GET.get('type')
     if type == "paypal":
         return render(request, "account/register_done.html")
     print("probando")
-    user_id = request.GET.get('user_id')
+    group_id = request.GET.get('group_id')
     session_id = request.GET.get('session_id')
-    plan_type = request.GET.get('plan_type')
+    subscription_type = request.GET.get('subscription_type')
+    user_id = request.GET.get('user_id')
     print("viendo el  id", user_id)
     print("viendo el  session_id", session_id)
     stripe.api_key = settings.STRIPE_SECRET
@@ -360,13 +382,15 @@ def RegisterDone(request):
     print(session)
     if session["payment_status"] in ["paid", "unpaid"]:
         print("si callo")
+        group = Group.objects.get(pk=group_id)
+        group.plan_is_active = True
+        group.admin_user = user_id
+        group.subscription_type = subscription_type
+        group.subscription_id = session["subscription"]
+        group.payment_vendor = "Stripe"
+        group.save()
         user = CustomUser.objects.get(pk=user_id)
-        up = UserPlan()
-        up.owner_user = user
-        up.type = plan_type
-        up.status = "active"
-        up.plan_active = True
-        up.save()
+
         registro_exitoso_email(user.email)
     return render(request, "account/register_done.html")
 

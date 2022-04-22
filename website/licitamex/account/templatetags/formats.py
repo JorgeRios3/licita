@@ -1,4 +1,5 @@
 from django import template
+from ..models import UsuarioPermisos, CustomUser, Permiso
 
 register = template.Library()
 
@@ -20,3 +21,14 @@ def empty_val(val):
     if val == None:
         return ""
     return val
+
+
+@register.filter
+def user_has_permission(usuario, permisos):
+    cu = CustomUser.objects.get(pk=int(usuario))
+    usuario_permisos = UsuarioPermisos.objects.filter(usuario=cu)
+    print("viendo usuario jajaja ", usuario, permisos, usuario_permisos)
+    for x in usuario_permisos:
+        if x.permiso.permiso in permisos.split(","):
+            return True
+    return False

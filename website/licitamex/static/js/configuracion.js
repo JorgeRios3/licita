@@ -127,6 +127,45 @@ function change_status_filtro(id, status){
 
 }
 
+function DeletePermisionUser(id){
+    console.log("viendo el id ",id);
+    let cookie = getCookie('csrftoken');
+    fetch('http://localhost:8000/account/delete_user_permision',{ method: 'POST',
+        headers: {'X-CSRFToken': cookie},
+        mode: 'same-origin',
+        cache: 'default',
+        body: JSON.stringify({"permiso_id":id})
+    }).then(res => {
+        window.location.reload()
+    })
+}
+
+function validate_selection(){
+    var usuario = document.getElementById("selected_usuario").value;
+    var permiso = document.getElementById("selected_permiso").value;
+    console.log("si entro en los 2 selects", usuario, permiso);
+    if(usuario == "" || permiso == ""){
+        $("#btn_agregar_permiso").addClass("hide_add_permiso");
+    } else {
+        $("#btn_agregar_permiso").removeClass("hide_add_permiso");
+    }
+}
+
+function agregar_permisoUsuario(){
+    var usuario = document.getElementById("selected_usuario").value;
+    var permiso = document.getElementById("selected_permiso").value;
+    console.log("en agregar", usuario, permiso);
+    let cookie = getCookie('csrftoken');
+    fetch('http://localhost:8000/account/add_user_permision',{ method: 'POST',
+        headers: {'X-CSRFToken': cookie},
+        mode: 'same-origin',
+        cache: 'default',
+        body: JSON.stringify({"usuario_id": usuario, "permiso_id":permiso})
+    }).then(res => {
+        window.location.reload()
+    })
+}
+
 function deleteGroupUser(id){
     let cookie = getCookie('csrftoken');
     fetch('http://localhost:8000/account/delete_group_user',{ method: 'POST',

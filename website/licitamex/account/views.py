@@ -9,7 +9,7 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.core.mail import send_mail, BadHeaderError
 from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm, ContactForm, ChangePasswordForm, NewUserForm
-from .models import UsuarioLicitaciones, CustomUser, Group
+from .models import UsuarioLicitaciones, CustomUser, Group, UsuarioPermisos, Permiso
 from django.contrib.auth.models import User
 import paypalrestsdk
 import json
@@ -17,7 +17,7 @@ from paypalrestsdk.notifications import WebhookEvent
 from .dynamo_functions import fetch_items_table, fetch_dependencias
 from .licitaciones import get_user_licitaciones
 from .filtros import get_user_filtros
-from .utils import compare_user, group_users
+from .utils import compare_user
 #from django.http import JsonResponse
 from django.views.decorators.cache import never_cache
 import stripe
@@ -30,6 +30,7 @@ from django.contrib.auth import logout
 import requests
 from requests.auth import HTTPBasicAuth
 from .utils import account_is_active
+from .configuracion_data import data_configuracion
 
 
 
@@ -117,19 +118,14 @@ def borrar_cuenta(request):
     else:
         return render(request, 'account/borrar_cuenta.html', {})
 
+
 @login_required
 @account_is_active
 def configuracion(request):
-    is_admin=False
-    usuario_filtros = get_user_filtros(request.user.id)
-    form = NewUserForm()
-    usuarios = group_users(request.user.id)
-    user = CustomUser.objects.filter(pk=request.user.id)
-    group = Group.objects.filter(pk=user[0].group.id)
-    if int(group[0].admin_user) == int(request.user.id):
-        is_admin=True
-    print("viendo group ", group[0].admin_user)
-    return render(request, 'account/configuracion.html', {"filtros":usuario_filtros, "form":form, "usuarios":usuarios, "group":group[0], "is_admin":is_admin})
+    data = data_configuracion(request)
+    return render(request, 'account/configuracion.html', {"filtros":data["filtros"], 
+    "form":data["form"], "usuarios":data["usuarios"], "group":data["group"], 
+    "is_admin":data["is_admin"], "permisos_usuarios":data["permisos_usuarios"], "permisos":data["permisos"]})
 
 
 @login_required
@@ -147,7 +143,9 @@ def licitaciones(request):
 
 
 def my_login(request):
+    print("en login")
     user = authenticate(username=request.POST.get("username"), password=request.POST.get("password"))
+    print("viendo user ",user)
     if user is None:
         return render(request, 'account/login.html',{"errror":"error"})
     group = Group.objects.filter(owner_user=user.group)
@@ -240,6 +238,13 @@ def register(request):
                     group.save()
                     user = CustomUser.objects.create_user(username=user_form.data['username'], first_name=user_form.data['first_name'], last_name=user_form.data['last_name'], email=user_form.data['email'], password=user_form.data['password'], group=group)
                     user.save()
+                    permiso = Permiso.objects.filter(permiso='administrador')
+                    permiso = permiso[0]
+                    up = UsuarioPermisos()
+                    up.usuario=user
+                    up.permiso = permiso
+                    up.group = group
+                    up.save()
                     trial_date_end =datetime.now() + timedelta(days=30)
                     stripe.api_key = settings.STRIPE_SECRET
                     session = stripe.checkout.Session.create(
@@ -308,6 +313,13 @@ def register(request):
                                 group.payment_vendor = "Paypal"
                                 group.subscription_id = ret["id"] #session["subscription"]
                                 group.save()
+                                permiso = Permiso.objects.filter(permiso='administrador')
+                                permiso = permiso[0]
+                                up = UsuarioPermisos()
+                                up.usuario=user
+                                up.permiso = permiso
+                                up.group = group
+                                up.save()
                     
                         return HttpResponseRedirect(redirect_url)
                     #return HttpResponseRedirect("http://127.0.0.1:8000/")
@@ -390,7 +402,6 @@ def RegisterDone(request):
         group.payment_vendor = "Stripe"
         group.save()
         user = CustomUser.objects.get(pk=user_id)
-
         registro_exitoso_email(user.email)
     return render(request, "account/register_done.html")
 

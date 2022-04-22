@@ -6,9 +6,8 @@ from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.http import JsonResponse
-from .models import CatalogoFiltros, GrupoFiltros
 from django.core import serializers
-from .models import CustomUser
+from .models import CustomUser, UsuarioPermisos, Permiso
 from .forms import NewUserForm
 from .utils import make_url, group_users
 import re
@@ -53,5 +52,8 @@ def add_user(request):
             user.email = user_form.data['email']
             user.group = rule_user.group
             user.save()
+            permiso = Permiso.objects.get(pk=2) 
+            up = UsuarioPermisos(usuario=user, permiso=permiso, group=user.group)
+            up.save()
             invitacion_usuario_email(user.email, rule_user.group.company)
             return HttpResponseRedirect(make_url("account/configuracion"))

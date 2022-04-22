@@ -19,6 +19,15 @@ class CustomUser(AbstractUser):
     reset_passowrd_hash = models.CharField(max_length=100, null=True)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
 
+class Permiso(models.Model):
+    nombre = models.CharField(max_length=50, blank=True, null=True)
+    permiso = models.CharField(max_length=50, blank=True, null=True)
+
+
+class UsuarioPermisos(models.Model):
+    usuario = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    permiso = models.ForeignKey(Permiso, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, default=1)
 
 
 class UsuarioLicitaciones(models.Model):

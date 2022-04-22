@@ -10,7 +10,6 @@
 <button id="modal_boton" style="display:none" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
   Launch demo modal
 </button>
-
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -51,6 +50,10 @@
     <a class="btn btn-primary" style="text-decoration:none;" data-toggle="collapse" href="#collapsecuenta" role="button" aria-expanded="false" aria-controls="collapsecuenta">
       Cuenta
     </a>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+    <a class="btn btn-primary" style="text-decoration:none;" data-toggle="collapse" href="#collapsepermisos" role="button" aria-expanded="false" aria-controls="collapsecuenta">
+      Permisos
+    </a>
   </div>
   {% if errors %}
   <ul>
@@ -61,6 +64,52 @@
     {% endfor %}
   </ul>
   {% endif %}
+  <div class="collapse" id="collapsepermisos" style="padding-top:40px">
+    <div class="row">
+      <div class="col-sm-12 col-md-4" style="margin-bottom: 10px;">
+        <div class="col" id="comprador_container">
+          <div class="col">
+            <table id="tabla_permisos" class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Usuario</th>
+                  <th scope="col">Permiso</th>
+                  <th scope="col">Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for x in permisos_usuarios %}
+                <tr>
+                  <td>{{x.usuario}}</td>
+                  <td>{{x.permiso.nombre}}</td>
+                  <td><div class="btn btn-danger" onClick="DeletePermisionUser({{x.id}})">Borrar</div></td>
+                </tr>
+                {% endfor %}
+                <tr>
+                  <td><select onchange="validate_selection(this)" style="border-radius:5px; background-color:rgb(32,42,50); color:white;border-radius:5px; background-color:rgb(32,42,50); color:white; padding-right:20px; border-radius:5px; background-color:rgb(32,42,50); color:white; padding-left:10px" id="selected_usuario">
+                    <option value="">Selecciona Usuario</option>
+                    {% for x in usuarios %}
+                    <option value="{{x.id}}">{{x}}</option>
+                    {% endfor %}
+                  </select></td>
+                  <td>
+                    <select onchange="validate_selection()" style="border-radius:5px; background-color:rgb(32,42,50); color:white;border-radius:5px; background-color:rgb(32,42,50); color:white; border-radius:5px; background-color:rgb(32,42,50); color:white; padding-left:10px" id="selected_permiso">
+                      <option value="">Selecciona Permiso</option>
+                    {% for x in permisos %}
+                    <option value="{{x.id}}">{{x.nombre}}</option>
+                    {% endfor %}
+                  </select>
+                  </td>
+                  <td><div id="btn_agregar_permiso" onClick="agregar_permisoUsuario()" class="btn btn-info hide_add_permiso">Agregar</div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr/>
+  </div>
   <div class="collapse" id="collapsecuenta" style="padding-top:40px">
     <div class="row">
       <div class="col-sm-12 col-md-4" style="margin-bottom: 10px;">
@@ -262,23 +311,31 @@
                 <td class="baloo-font" style="font-size:1.1em">{{x.articulo|empty_val}}</td>
                 <td><div class="dropdown">
                   {% if x.activado %}
+                  {% if request.user.id|user_has_permission:"administrador,gerente,editarFiltros" %}
                   <button class="btn btn-info dropdown-toggle baloo-font" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Activo
                   </button>
+                  {% else %}
+                  <div>Activo</div>
+                  {% endif %}
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item baloo-font" onClick="change_status_filtro({{x.id}}, 'Desactivar')" >Desactivar</a>
                     <a class="dropdown-item baloo-font" onClick="change_status_filtro({{x.id}}, 'Eliminar')">Eliminar</a>
                   </div>
                   {% else %}
+                  {% if request.user.id|user_has_permission:"administrador,gerente,editarFiltros" %}
                   <button class="btn btn-danger dropdown-toggle baloo-font" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Inactivo
                   </button>
+                  {% else %}
+                  <div>Inactivo</div> 
+                  {% endif %}
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item baloo-font" onClick="change_status_filtro({{x.id}}, 'Activar')">Activar</a>
                     <a class="dropdown-item baloo-font" onClick="change_status_filtro({{x.id}}, 'Eliminar')">Eliminar</a>
                   </div>
                   {% endif %}
-                </div></td>
+                </div></td>        
               </tr>
               {% endfor %}
             </tbody>

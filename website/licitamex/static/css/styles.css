@@ -67,6 +67,10 @@ body, p {
 	font: 400 0.875rem/1.375rem "Raleway", sans-serif;
 }
 
+.hide_add_permiso{
+	display:none;
+}
+
 .baloo-font {
 	font-family: "baloo" !important;
 }

@@ -94,11 +94,21 @@
                             </td>
                             <td class="baloo-font">
                                 {% if x.selected %}
+                                {% if request.user.id|user_has_permission:"administrador,gerente,actualizarEstatusLicitacion" %}
                                 <div id="desactivar_licitacion{{x.id|format_id_rows}}" class="btn btn-danger" onClick="desactivar_licitacion({{x.id}})">Desactivar</div>
                                 <div id="loader{{x.id|format_id_rows}}" class="loader hide-element"></div>
                                 {% else %}
+                                <div>Activo</div>
+                                {% endif %}
+                                {% else %}
+                                {% if request.user.id|user_has_permission:"administrador,gerente,actualizarEstatusLicitacion" %}
                                 <div id="loader{{x.id|format_id_rows}}" class="loader hide-element"></div>
                                 <div id="activar_licitacion{{x.id|format_id_rows}}" class="btn btn-info" onClick="activar_licitacion({{x.id}}, '{{x.descripcion}}', '{{x.entidad}}')">Activar</div>
+                                {% else %}
+                                <div>
+                                    Inactivo
+                                </div>
+                                {% endif %}
                                 {% endif %}
                             </td>
 

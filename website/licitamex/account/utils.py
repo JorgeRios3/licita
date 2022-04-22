@@ -1,7 +1,5 @@
 from django.conf import settings
 from .models import CustomUser, Group
-from functools import wraps
-from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
 
@@ -9,6 +7,7 @@ from django.shortcuts import render
 def group_users(id):
     user = CustomUser.objects.get(pk=id)
     return CustomUser.objects.filter(group=user.group)
+
 
 
 
@@ -32,7 +31,7 @@ def make_url(url):
 def account_is_active(view_func):
     def wrap(request, *args, **kwargs):
         print("simon", request.user.id)
-        group = Group.objects.filter(pk=request.user.id)
+        group = Group.objects.filter(pk=request.user.group.id)
         group = group[0]
         if group.plan_is_active:
             return view_func(request, *args, **kwargs)

@@ -8,7 +8,10 @@ from django.template.response import TemplateResponse
 from django.http import JsonResponse
 from .models import CatalogoFiltros, GrupoFiltros
 from django.core import serializers
-from .models import CustomUser
+from .models import CustomUser, Group,Permiso,UsuarioPermisos
+from .configuracion_data import data_configuracion
+from django.views.decorators.cache import never_cache
+
 
 
 def get_user_filtros(user_id):
@@ -51,13 +54,41 @@ def add_filtro(request):
 
     return render(request, 'account/configuracion.html', {"filtros":usuario_filtros})
 
+@never_cache
+def delete_user_permision(request):
+    post_data = json.loads(request.body.decode("utf-8"))
+    print("viendo el data  ", post_data)
+    up = UsuarioPermisos.objects.get(pk=post_data["permiso_id"])
+    up.delete()
+    data = data_configuracion(request)
+    return render(request, 'account/configuracion.html', {"filtros":data["filtros"], 
+    "form":data["form"], "usuarios":data["usuarios"], "group":data["group"], 
+    "is_admin":data["is_admin"], "permisos_usuarios":data["permisos_usuarios"], "permisos":data["permisos"]})
+
+@never_cache
+def add_user_permision(request):
+    post_data = json.loads(request.body.decode("utf-8"))
+    print("viendo el data  ", post_data)
+    cu = CustomUser.objects.filter(pk=int(post_data["usuario_id"]))
+    print("viendo el cu ", cu)
+    permiso = Permiso.objects.filter(pk=int(post_data["permiso_id"]))
+    up = UsuarioPermisos(usuario=cu[0], permiso=permiso[0], group=cu[0].group)
+    up.save()
+    data = data_configuracion(request)
+    return render(request, 'account/configuracion.html', {"filtros":data["filtros"], 
+    "form":data["form"], "usuarios":data["usuarios"], "group":data["group"], 
+    "is_admin":data["is_admin"], "permisos_usuarios":data["permisos_usuarios"], "permisos":data["permisos"]})
 
 def delete_group_user(request):
     post_data = json.loads(request.body.decode("utf-8"))
     cu = CustomUser.objects.filter(pk=post_data.get("id", 0))
     group = cu[0].group
     cu.delete()
-    return render(request, 'account/configuracion.html', {})
+    data = data_configuracion(request)
+    return render(request, 'account/configuracion.html', {"filtros":data["filtros"], 
+    "form":data["form"], "usuarios":data["usuarios"], "group":data["group"], 
+    "is_admin":data["is_admin"], "permisos_usuarios":data["permisos_usuarios"], "permisos":data["permisos"]})
+
 
 
 def change_status_filtro(request):

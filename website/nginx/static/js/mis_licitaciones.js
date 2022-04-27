@@ -1,5 +1,28 @@
 LICITACION_ID=null;
 
+
+function checkForm(form){
+    val = document.getElementById("cancel_terms");
+    if(!val.checked) {
+      alert("Selecciona la casilla para poder cancelar");
+    }else{
+        console.log("bien")
+        let cookie = getCookie('csrftoken');
+        fetch('https://consultalicitamex.com/borrar_cuenta',{ method: 'POST',
+        headers: {'X-CSRFToken': cookie},
+        mode: 'same-origin',
+        cache: 'default',
+        body: JSON.stringify({"delete":true})
+        }).then(res => {
+            if(res.status == 200){
+                console.log("termino");
+                window.location.replace("http://localhost:8000/");
+            }
+        })
+    }
+  }
+
+
 function change_status(licitacion_id, status){
     console.log("entro aqui ", status);
     if (status=="Eliminar"){
@@ -14,7 +37,7 @@ function change_status(licitacion_id, status){
 
 function call_change_status_licitacion(licitacion_id, status){
     let cookie = getCookie('csrftoken');
-    fetch('https://consultalicitamex.com/account/change_status_licitacion',{ method: 'POST',
+    fetch('https://consultalicitamex.com/change_status_licitacion',{ method: 'POST',
         headers: {'X-CSRFToken': cookie},
         mode: 'same-origin',
         cache: 'default',
@@ -35,7 +58,7 @@ function call_change_status_licitacion(licitacion_id, status){
 function aceptar_borrar(){
     console.log("falta chamba aqui", LICITACION_ID);
     let cookie = getCookie('csrftoken');
-    fetch('https://consultalicitamex.com/account/delete_licitacion',{ method: 'POST',
+    fetch('https://consultalicitamex.com/delete_licitacion',{ method: 'POST',
         headers: {'X-CSRFToken': cookie},
         mode: 'same-origin',
         cache: 'default',
@@ -60,7 +83,7 @@ function agregar_comentario(id){
     if (val === ""){
         return;
     }
-    fetch('https://consultalicitamex.com/account/licitacion/'+id,{ method: 'POST',
+    fetch('https://consultalicitamex.com/licitacion/'+id,{ method: 'POST',
         headers: {'X-CSRFToken': cookie},
         mode: 'same-origin',
         cache: 'default',
@@ -83,7 +106,7 @@ function guardar_datos_comprador(id){
     comprador_telefono = $("#comprador_telefono").val();
     comprador_email = $("#comprador_email").val();
     comprador_direccion = $("#comprador_direccion").val();
-    fetch('https://consultalicitamex.com/account/licitacion/'+id,{ method: 'POST',
+    fetch('https://consultalicitamex.com/licitacion/'+id,{ method: 'POST',
         headers: {'X-CSRFToken': cookie},
         mode: 'same-origin',
         cache: 'default',

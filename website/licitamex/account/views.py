@@ -249,10 +249,10 @@ def register(request):
                     stripe.api_key = settings.STRIPE_SECRET
                     session = stripe.checkout.Session.create(
                     client_reference_id=request.user.id if request.user.is_authenticated else None,
-                    #success_url=f"https://consultalicitamex.com/" + 'account/register-done/?session_id={CHECKOUT_SESSION_ID}&group_id='+f"{group.id}&subscription_type=Basica&user_id{user.id}",
-                    #cancel_url=f"https://consultalicitamex.com/" + 'cancel/',
-                    success_url=f"http://127.0.0.1:8000/" + 'account/register-done/?session_id={CHECKOUT_SESSION_ID}&group_id='+f"{group.id}&subscription_type=Basica&user_id={user.id}",
-                    cancel_url=f"http://127.0.0.1:8000/" + 'cancel/',
+                    success_url=f"https://consultalicitamex.com/" + 'account/register-done/?session_id={CHECKOUT_SESSION_ID}&group_id='+f"{group.id}&subscription_type=Basica&user_id{user.id}",
+                    cancel_url=f"https://consultalicitamex.com/" + 'cancel/',
+                    #success_url=f"http://127.0.0.1:8000/" + 'account/register-done/?session_id={CHECKOUT_SESSION_ID}&group_id='+f"{group.id}&subscription_type=Basica&user_id={user.id}",
+                    #cancel_url=f"http://127.0.0.1:8000/" + 'cancel/',
                     payment_method_types=['card'],
                     mode='subscription',
                     #trial_end = trial_date_end.utcnow().timestamp(),
@@ -280,7 +280,7 @@ def register(request):
                             "given_name": user_form.data['first_name'],
                             "surname": user_form.data['last_name']
                             },
-                            "email_address": user_form.data['email']
+                            "email_address": user_form.data['email'].strip()
                         },
                         "custom_id": user_form.data['username'],
                         "application_context": {

@@ -38,7 +38,7 @@ function keyupFunction_buscar_filtro(){
 function search_filtro_configuracion(){
     let cookie = getCookie('csrftoken');
     var nombre = document.getElementById("search_filtro_valor").value;
-    fetch('https://consultalicitamex.com/account/search_filtro_by_name?nombre='+nombre, { method: 'GET',
+    fetch('https://consultalicitamex.com/search_filtro_by_name?nombre='+nombre, { method: 'GET',
         headers: {'X-CSRFToken': cookie},
         mode: 'same-origin',
         cache: 'default',
@@ -61,7 +61,7 @@ function search_filtro_configuracion(){
 function search_mi_portal_licitaciones(){
     let cookie = getCookie('csrftoken');
     var nombre = document.getElementById("search_mi_portal_lcitacion").value;
-    fetch('https://consultalicitamex.com/account/search_mi_portallicitacion_by_name?nombre='+nombre, { method: 'GET',
+    fetch('https://consultalicitamex.com/search_mi_portallicitacion_by_name?nombre='+nombre, { method: 'GET',
         headers: {'X-CSRFToken': cookie},
         mode: 'same-origin',
         cache: 'default',
@@ -89,7 +89,7 @@ function seleccionar_dependencia(dependencia_valor){
 function make_search_query(){
     let cookie = getCookie('csrftoken');
     var nombre = document.getElementById("search_licitacion").value;
-    let url = 'https://consultalicitamex.com/account/search_licitacion_by_name?nombre='+nombre
+    let url = 'https://consultalicitamex.com/search_licitacion_by_name?nombre='+nombre
     if(dependencia !== 'todas'){
         url = url+"&dependencia="+dependencia
     }
@@ -117,7 +117,7 @@ function activar_licitacion(id, description, entidad){
     let cookie = getCookie('csrftoken');
     $("#activar_licitacionr"+id.toString().split(".")[0]).addClass("hide-element");
     $("#loaderr"+id.toString().split(".")[0]).removeClass("hide-element");
-    fetch('https://consultalicitamex.com/account/activate_licitacion',{ method: 'POST',
+    fetch('https://consultalicitamex.com/activate_licitacion',{ method: 'POST',
         headers: {'X-CSRFToken': cookie},
         mode: 'same-origin',
         cache: 'default',
@@ -137,7 +137,7 @@ function desactivar_licitacion(id){
     let cookie = getCookie('csrftoken');
     $("#desactivar_licitacionr"+id.toString().split(".")[0]).addClass("hide-element");
     $("#loaderr"+id.toString().split(".")[0]).removeClass("hide-element");
-    fetch('https://consultalicitamex.com/account/inactive_licitacion',{ method: 'POST',
+    fetch('https://consultalicitamex.com/inactive_licitacion',{ method: 'POST',
         headers: {'X-CSRFToken': cookie},
         mode: 'same-origin',
         cache: 'default',

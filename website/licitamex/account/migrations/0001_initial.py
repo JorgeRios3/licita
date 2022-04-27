@@ -6,8 +6,7 @@ import django.contrib.auth.validators
 from django.db import migrations, models
 import django.db.models.deletion
 import django.utils.timezone
-from ..data_tables.catalogo import probando
-
+from ..data_tables.catalogo import probando, aqui
 
 
 class Migration(migrations.Migration):
@@ -110,5 +109,5 @@ class Migration(migrations.Migration):
             name='user_permissions',
             field=models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.Permission', verbose_name='user permissions'),
         ),
-        migrations.RunPython(probando)
+        migrations.RunPython(probando)    
     ]

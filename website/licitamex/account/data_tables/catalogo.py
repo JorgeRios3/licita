@@ -1,4 +1,4 @@
-from account.models import CatalogoFiltros
+from account.models import CatalogoFiltros, Permiso
 import csv
 import os
 
@@ -13,3 +13,16 @@ def probando(uno, dos):
             cf.articulo = row[2].strip()
             cf.save()
     print("termino de agregar los valores")
+
+
+def aqui(uno, dos):
+    permisos = [{"label":"permisos administrador", "permiso":"administrador"},
+    {"label":"permisos gerente", "permiso":"gerente"},
+    {"label":"actualizar estatus licitacion", "permiso":"actualizarEstatusLicitacion"},
+    {"label":"Editar Filtros", "permiso":"editarFiltros"}]
+    for x in permisos:
+        p = Permiso()
+        p.nombre=x["label"]
+        p.permiso=x["permiso"]
+        p.save()
+

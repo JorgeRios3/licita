@@ -2,6 +2,8 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
+from ..data_tables.catalogo import aqui
+
 
 
 class Migration(migrations.Migration):
@@ -16,4 +18,5 @@ class Migration(migrations.Migration):
             name='group',
             field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='account.group'),
         ),
+        migrations.RunPython(aqui)
     ]

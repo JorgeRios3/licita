@@ -50,6 +50,7 @@ def add_user(request):
             user.first_name = user_form.data['first_name']
             user.last_name = user_form.data['last_name']
             user.email = user_form.data['email']
+            user.set_password(user_form.data['password'])
             user.group = rule_user.group
             user.save()
             permiso = Permiso.objects.get(pk=2) 

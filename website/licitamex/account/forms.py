@@ -66,12 +66,13 @@ class UserRegistrationForm(forms.ModelForm):
 class NewUserForm(forms.ModelForm):
     class Meta:
         model = CustomUser
-        fields = ('username', 'first_name', 'last_name', 'email')
+        fields = ('username', 'first_name', 'last_name', 'email', "password")
         widgets = {
            "username": forms.TextInput(attrs={'class': 'basic-input', "placeholder":"Usuario", 'required': 'true' }),
            "first_name": forms.TextInput(attrs={'class': 'basic-input', "placeholder":"Nombres", 'required': 'true' }),
            "last_name": forms.TextInput(attrs={'class': 'basic-input', "placeholder":"Apellidos", 'required': 'true' }),
            "email": forms.TextInput(attrs={'class': 'basic-input', "placeholder":"Email", 'required': 'true'}),
+           "password": forms.PasswordInput(attrs={'class': 'basic-input', "placeholder":"Contraseña", 'required': 'true' }),
         }
 
         def clean(self):

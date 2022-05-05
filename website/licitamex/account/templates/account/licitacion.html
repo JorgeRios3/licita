@@ -48,6 +48,7 @@
     </div>
     <div class="row">
         <div class="col">
+            {% if request.user.id|user_has_permission:"administrador,gerente,editarDetalleLicitacion" %}
             <textarea rows="4" cols="50" id="new_comment">
             </textarea>
             <div class="row">
@@ -67,6 +68,7 @@
                     </form>
                 </div>
             </div>
+            {% endif %}
             <div class="row">
                 <div class="col">
                     {% if licitacion.quotation != "" %}
@@ -130,9 +132,11 @@
                     {% endif %}
                 </div>
             </div>
+            {% if request.user.id|user_has_permission:"administrador,gerente,editarDetalleLicitacion" %}
             <div class="col">
                 <div class="btn btn-secondary orange-button" style="margin-bottom: 50px; font-size:1.4em; height: 38px;" id="guardar_datos_comprador" onClick="guardar_datos_comprador({{id}})">Guardar</div>
             </div>
+            {% endif %}
         </div>
     </div>
 </div>

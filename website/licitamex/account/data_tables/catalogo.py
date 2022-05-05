@@ -19,7 +19,8 @@ def aqui(uno, dos):
     permisos = [{"label":"permisos administrador", "permiso":"administrador"},
     {"label":"permisos gerente", "permiso":"gerente"},
     {"label":"actualizar estatus licitacion", "permiso":"actualizarEstatusLicitacion"},
-    {"label":"Editar Filtros", "permiso":"editarFiltros"}]
+    {"label":"Editar Filtros", "permiso":"editarFiltros"},
+    {"label":"Editar Detalle Licitacion", "permiso":"editarDetalleLicitacion"}]
     for x in permisos:
         p = Permiso()
         p.nombre=x["label"]

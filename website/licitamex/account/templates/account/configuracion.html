@@ -239,6 +239,19 @@
               </div>
                 
               </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Contraseña</label>
+                  {{ form.visible_fields.4 }}
+                  <div class="help-block with-errors"></div>
+                  {% for error in form.visible_fields.4.errors %}
+                      <span class="help-block">{{ error }}</span>
+                  {% endfor %}
+              </div>
+              </div>
+
             </div>       
             <button type="submit" class="btn btn-dark orange-button" style="height:35px!important; width:120px!important;">Crear</button>
         </form>
